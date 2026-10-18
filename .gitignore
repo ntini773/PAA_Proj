@@ -1,0 +1,11 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+results/*.npy
+results/nsys_tmp/
+*.nsys-rep
+*.sqlite
+__pycache__/
+external_tests_inspired/launch_vs_fusion
+results.tgz
