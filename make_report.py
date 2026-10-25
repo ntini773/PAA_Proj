@@ -23,6 +23,10 @@ for s in sorted({k[0] for k in by}):
     sb = f"{b['step_gpu_ms_median']/st['step_gpu_ms_median']:.2f}x" if b and st else "-"
     out.append(f"| {s}px | {(s//16)**2} | {f(b)} | {f(st)} | {f(fu)} | {sp} | {sb} | {fu['peak_mem_gb']:.1f} |" if fu else f"| {s}px | | {f(b)} | {f(st)} | - | {sp} | {sb} | |")
 out.append("\n('x' > 1 means the first is faster. stock vs bf16 > 1 means NVFP4 beats bf16.)\n")
+import subprocess, sys
+bt = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "breakdown_table.py"),
+                     os.path.join(R, "breakdown.jsonl")], capture_output=True, text=True).stdout
+out.append("## 1b. Where one denoise step goes (per part)\n\n" + (bt or "(not run)") + "\n")
 out.append("## 2. Image equality stock vs fused\n```\n" + rd("images.log") + "\n```\n")
 out.append("## 3. Boundary microbenchmark (Triton), ms per call\n```\n" + rd("tier1.log") + "\n```\n")
 out.append("## 4. ncu: GPU time + DRAM per boundary\n```\n" + rd("ncu_summary.log") + "\n```\n")

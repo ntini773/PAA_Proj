@@ -1,6 +1,8 @@
 """Scaling experiment: PixArt-Sigma DiT, one mode per process.
 
   --mode bf16   : no quantization (reference)
+  --mode fp16   : no quantization, float16 weights/activations
+  --mode fp8    : torchao FP8 (per-row dynamic activation + weight)
   --mode stock  : torchao NVFP4 (unfused quant path)
   --mode fused  : torchao NVFP4 + our fused quant kernel spliced in
 
@@ -34,23 +36,28 @@ REPO = {256: "PixArt-alpha/PixArt-Sigma-XL-2-256x256",
 
 def load_pipe(mode, size):
     kw = {}
-    if mode != "bf16":
+    dt = torch.float16 if mode == "fp16" else torch.bfloat16
+    if mode in ("stock", "fused"):
         cfg = NVFP4DynamicActivationNVFP4WeightConfig(
             use_dynamic_per_tensor_scale=True, use_triton_kernel=False)
         kw["quantization_config"] = TorchAoConfig(cfg)
+    elif mode == "fp8":
+        from torchao.quantization import Float8DynamicActivationFloat8WeightConfig, PerRow
+        kw["quantization_config"] = TorchAoConfig(
+            Float8DynamicActivationFloat8WeightConfig(granularity=PerRow()))
     tr = PixArtTransformer2DModel.from_pretrained(
         REPO[size], subfolder="transformer",
-        torch_dtype=torch.bfloat16, **kw)
+        torch_dtype=dt, **kw)
     pipe = PixArtSigmaPipeline.from_pretrained(
         "PixArt-alpha/PixArt-Sigma-XL-2-1024-MS", transformer=tr,
-        text_encoder=None, tokenizer=None, torch_dtype=torch.bfloat16).to("cuda")
+        text_encoder=None, tokenizer=None, torch_dtype=dt).to("cuda")
     return pipe
 
 
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--size", type=int, default=256)
-    p.add_argument("--mode", choices=["bf16", "stock", "fused"], required=True)
+    p.add_argument("--mode", choices=["bf16", "fp16", "fp8", "stock", "fused"], required=True)
     p.add_argument("--batch", type=int, default=1)
     p.add_argument("--steps", type=int, default=14)
     p.add_argument("--reps", type=int, default=3)
@@ -106,6 +113,7 @@ def main():
                tokens=(a.size // 16) ** 2,
                step_gpu_ms_median=statistics.median(fwd_ms),
                step_gpu_ms_min=min(fwd_ms),
+               step_gpu_ms_all=[round(v, 2) for v in fwd_ms],   # every denoise step, all reps
                wall_s_median=statistics.median(walls),
                peak_mem_gb=torch.cuda.max_memory_allocated() / 2**30,
                fused_calls=counter["n"] if counter else None,
