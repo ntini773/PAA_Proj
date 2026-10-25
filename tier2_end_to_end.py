@@ -169,7 +169,9 @@ def install_fused_quant():
     counter = {"n": 0, "fallback": 0}
 
     # shapes our two-level kernel is validated bit-exact on (DiT hidden dim)
-    OK_K = {1152}
+    # EXTRA_OK_K=4608,4096 widens the fused path to the MLP second layer / caption
+    # projection (default: only the validated 1152). Verify images stay identical.
+    OK_K = {1152} | {int(v) for v in os.environ.get("EXTRA_OK_K", "").split(",") if v.strip()}
 
     def patched(data_hp, block_size=16, per_tensor_scale=None,
                 act_per_tensor_scale=None, is_swizzled_scales=False,

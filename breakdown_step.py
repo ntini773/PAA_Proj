@@ -44,13 +44,28 @@ def ev():
     return e
 
 
-def timed(cat, fn):
+current_site = [None]     # which layer type (self_qkv, mlp_fc2, ...) is running its Linear right now
+
+
+def site_of(name):
+    """Group the 10 quantized Linear layers of a block (+ the rest) into layer types."""
+    for suffix, site in ((".attn1.to_q", "self_qkv"), (".attn1.to_k", "self_qkv"), (".attn1.to_v", "self_qkv"),
+                         (".attn1.to_out.0", "self_out"), (".attn2.to_q", "cross_q"),
+                         (".attn2.to_k", "cross_kv"), (".attn2.to_v", "cross_kv"),
+                         (".attn2.to_out.0", "cross_out"), (".ff.net.0.proj", "mlp_fc1"), (".ff.net.2", "mlp_fc2")):
+        if name.endswith(suffix):
+            return site
+    return "other_linear"
+
+
+def timed(cat, fn, per_site=False):
     def wrapper(*a, **k):
         if not state["on"]:
             return fn(*a, **k)
         s = ev()
         out = fn(*a, **k)
-        items.append((cat, s, ev()))
+        c = f"{cat}@{current_site[0]}" if per_site and current_site[0] else cat
+        items.append((c, s, ev()))
         return out
     return wrapper
 
@@ -91,15 +106,33 @@ def main():
     def mm(*args, **kwargs):
         calls["scaled_mm"] += 1
         return _mm(*args, **kwargs)
-    torch._scaled_mm = timed("gemm", mm)
+    torch._scaled_mm = timed("gemm", mm, per_site=True)
     cur = nvfp4_mod.NVFP4Tensor.to_nvfp4
-    nvfp4_mod.NVFP4Tensor.to_nvfp4 = staticmethod(timed("quant_fn", cur))
+    nvfp4_mod.NVFP4Tensor.to_nvfp4 = staticmethod(timed("quant_fn", cur, per_site=True))
 
-    for _, m in tr.named_modules():
+    fused_by_site = collections.Counter()
+
+    def hook_linear(mod, site):
+        stack = []
+        def pre(m, args, kwargs):
+            if state["on"]:
+                current_site[0] = site
+                stack.append((ev(), counter["n"] if counter else 0))
+        def post(m, args, kwargs, out):
+            if state["on"] and stack:
+                s0, n0 = stack.pop()
+                items.append((f"linear_total@{site}", s0, ev()))
+                if counter:
+                    fused_by_site[site] += counter["n"] - n0
+                current_site[0] = None
+        mod.register_forward_pre_hook(pre, with_kwargs=True)
+        mod.register_forward_hook(post, with_kwargs=True)
+
+    for name, m in tr.named_modules():
         if isinstance(m, nn.LayerNorm):
-            hook_module(m, "layernorm")
+            hook_module(m, f"layernorm@{name.split('.')[-1]}")      # norm1 / norm2 / norm_out
         elif isinstance(m, nn.Linear):
-            hook_module(m, "linear_total")
+            hook_linear(m, site_of(name))
     hook_module(tr, "step")
 
     # LN + AdaLN modulate cost at the two fused-boundary spots of every block:
@@ -113,7 +146,7 @@ def main():
     def span_end(key):
         def pre(m, args, kwargs):
             if state["on"] and key in spot_start:
-                items.append(("ln_mod", spot_start.pop(key), ev()))
+                items.append((f"ln_mod@spot{key[1]}", spot_start.pop(key), ev()))
         return pre
     for name, m in tr.named_modules():
         if not name.startswith("transformer_blocks."):
@@ -153,10 +186,14 @@ def main():
         state["on"] = False
 
         tot = collections.Counter()
+        cnt = collections.Counter()
         for cat, s, e in items:
             tot[cat] += s.elapsed_time(e)
+            cnt[cat] += 1
         n = a.passes
         ms = {k: v / n for k, v in tot.items()}
+        for b in ("layernorm", "linear_total", "gemm", "quant_fn", "ln_mod"):   # totals over all sites
+            ms[b] = sum(v for k, v in tot.items() if k == b or k.startswith(b + "@")) / n
         step = ms["step"]
         if a.mode == "bf16":
             ms["gemm"] = ms.get("linear_total", 0.0)     # all Linear time is the matmul
@@ -169,11 +206,27 @@ def main():
         if a.mode != "bf16" and calls["scaled_mm"] == 0:
             print("WARNING: torch._scaled_mm was never called; gemm time is missing and "
                   "quant_overhead includes it. Read the top-kernels list instead.")
+        sites, ln_sites = {}, {}
+        for k in tot:
+            if k.startswith("linear_total@"):
+                site = k.split("@", 1)[1]
+                lin = tot[k] / n
+                q = tot.get(f"quant_fn@{site}", 0.0) / n
+                gm = tot.get(f"gemm@{site}", 0.0) / n
+                if a.mode == "bf16":
+                    gm, q = lin, 0.0
+                sites[site] = dict(calls_per_step=cnt[k] / n,
+                                   fused_calls_per_step=(fused_by_site[site] / n if counter else None),
+                                   linear_ms=round(lin, 3), quant_ms=round(q, 3), gemm_ms=round(gm, 3),
+                                   overhead_ms=round(0.0 if a.mode == "bf16" else max(lin - q - gm, 0.0), 3))
+            elif k.startswith("layernorm@") or k.startswith("ln_mod@"):
+                ln_sites[k] = dict(calls_per_step=cnt[k] / n, ms=round(tot[k] / n, 3))
         order = ["layernorm", "attn_core", "gemm", "quant_fn", "quant_overhead", "rest"]
         res = dict(mode=a.mode, size=a.size, batch=a.batch, tokens=(a.size // 16) ** 2,
                    step_ms=step, parts_ms={k: round(ms.get(k, 0.0), 3) for k in order},
                    parts_pct={k: round(100 * ms.get(k, 0.0) / step, 1) for k in order},
                    ln_mod_ms=round(ms.get("ln_mod", 0.0), 3),
+                   sites=sites, ln_sites=ln_sites,
                    scaled_mm_calls_per_step=calls["scaled_mm"] / n,
                    fused_calls=counter["n"] if counter else None,
                    fallback_calls=counter["fallback"] if counter else None)
