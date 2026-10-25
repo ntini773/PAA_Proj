@@ -11,10 +11,10 @@ for r in rows:                       # keep the latest run per (size, mode, batc
 parts = ["layernorm", "attn_core", "gemm", "quant_fn", "quant_overhead", "rest"]
 names = {"layernorm": "LayerNorm", "attn_core": "Attention core", "gemm": "GEMM",
          "quant_fn": "Quantize kernel", "quant_overhead": "Quantize overhead", "rest": "Rest (modulate, GELU, copies)"}
-mode_name = {"bf16": "bf16", "stock": "NVFP4 stock", "fused": "NVFP4 fused"}
+mode_name = {"bf16": "bf16", "stock": "NVFP4 stock", "fused": "NVFP4 fused", "fused_wide": "NVFP4 fused + MLP2"}
 print("| image | mode | step ms | " + " | ".join(names[p] + " ms (%)" for p in parts) + " |")
 print("|---|---|---|" + "---|" * len(parts))
-for (size, mode, b), r in sorted(last.items(), key=lambda kv: (kv[0][0], ["bf16", "stock", "fused"].index(kv[0][1]), kv[0][2])):
+for (size, mode, b), r in sorted(last.items(), key=lambda kv: (kv[0][0], ["bf16", "stock", "fused", "fused_wide"].index(kv[0][1]), kv[0][2])):
     cells = [f"{r['parts_ms'][p]:.1f} ({r['parts_pct'][p]:.0f}%)" for p in parts]
     print(f"| {size}px B{b} | {mode_name[mode]} | {r['step_ms']:.1f} | " + " | ".join(cells) + " |")
 
@@ -23,7 +23,7 @@ print("### The unfused chain: LayerNorm + AdaLN modulate vs quantize, and GPU id
 print()
 print("| image | mode | step ms | LN + modulate (2 spots/block) ms (%) | quantize total ms (%) | GPU kernels busy ms (%) | idle / launch gaps % |")
 print("|---|---|---|---|---|---|---|")
-for (size, mode, b), r in sorted(last.items(), key=lambda kv: (kv[0][0], ["bf16", "stock", "fused"].index(kv[0][1]), kv[0][2])):
+for (size, mode, b), r in sorted(last.items(), key=lambda kv: (kv[0][0], ["bf16", "stock", "fused", "fused_wide"].index(kv[0][1]), kv[0][2])):
     q = r["parts_ms"]["quant_fn"] + r["parts_ms"]["quant_overhead"]
     lm = r.get("ln_mod_ms", 0.0)
     busy = r.get("kernel_busy_ms")

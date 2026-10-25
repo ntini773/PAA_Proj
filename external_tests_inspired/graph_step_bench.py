@@ -28,7 +28,7 @@ from tier2_end_to_end import install_fused_quant
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--size", type=int, default=256)
-    p.add_argument("--mode", choices=["bf16", "stock", "fused"], required=True)
+    p.add_argument("--mode", choices=["bf16", "stock", "fused", "fused_wide"], required=True)
     p.add_argument("--batch", type=int, default=1, help="images; CFG doubles it inside")
     p.add_argument("--iters", type=int, default=50)
     a = p.parse_args()
@@ -39,7 +39,9 @@ def main():
             use_dynamic_per_tensor_scale=True, use_triton_kernel=False))
     tr = PixArtTransformer2DModel.from_pretrained(
         REPO[a.size], subfolder="transformer", torch_dtype=torch.bfloat16, **kw).to("cuda").eval()
-    counter = install_fused_quant() if a.mode == "fused" else None
+    if a.mode == "fused_wide":
+        os.environ["EXTRA_OK_K"] = "4608,4096"
+    counter = install_fused_quant() if a.mode in ("fused", "fused_wide") else None
 
     B2 = 2 * a.batch
     lat = a.size // 8

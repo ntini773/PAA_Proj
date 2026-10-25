@@ -4,7 +4,8 @@
   --mode fp16   : no quantization, float16 weights/activations
   --mode fp8    : torchao FP8 (per-row dynamic activation + weight)
   --mode stock  : torchao NVFP4 (unfused quant path)
-  --mode fused  : torchao NVFP4 + our fused quant kernel spliced in
+  --mode fused  : torchao NVFP4 + our fused quant kernel spliced in (1152-wide layers only)
+  --mode fused_wide : same, also the 4608-wide MLP layer and 4096-wide caption layer
 
 Reports GPU time per transformer forward (CUDA events, = 1 denoise step incl.
 CFG batch of 2), wall time per image, peak memory, fused/fallback call counts.
@@ -37,7 +38,7 @@ REPO = {256: "PixArt-alpha/PixArt-Sigma-XL-2-256x256",
 def load_pipe(mode, size):
     kw = {}
     dt = torch.float16 if mode == "fp16" else torch.bfloat16
-    if mode in ("stock", "fused"):
+    if mode in ("stock", "fused", "fused_wide"):
         cfg = NVFP4DynamicActivationNVFP4WeightConfig(
             use_dynamic_per_tensor_scale=True, use_triton_kernel=False)
         kw["quantization_config"] = TorchAoConfig(cfg)
@@ -57,7 +58,7 @@ def load_pipe(mode, size):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--size", type=int, default=256)
-    p.add_argument("--mode", choices=["bf16", "fp16", "fp8", "stock", "fused"], required=True)
+    p.add_argument("--mode", choices=["bf16", "fp16", "fp8", "stock", "fused", "fused_wide"], required=True)
     p.add_argument("--batch", type=int, default=1)
     p.add_argument("--steps", type=int, default=14)
     p.add_argument("--reps", type=int, default=3)
@@ -76,7 +77,9 @@ def main():
     emb = {"pe": mk(), "pm": ones(), "ne": mk(), "nm": ones()}
 
     pipe = load_pipe(a.mode, a.size)
-    counter = install_fused_quant() if a.mode == "fused" else None
+    if a.mode == "fused_wide":      # also fuse the 4608-wide MLP layer and the 4096-wide caption layer
+        os.environ["EXTRA_OK_K"] = "4608,4096"
+    counter = install_fused_quant() if a.mode in ("fused", "fused_wide") else None
 
     fwd_ms, ev = [], []
     def pre(m, args, kwargs=None):
@@ -86,7 +89,10 @@ def main():
     pipe.transformer.register_forward_pre_hook(pre, with_kwargs=True)
     pipe.transformer.register_forward_hook(post, with_kwargs=True)
     if a.compile:
-        pipe.transformer.compile_repeated_blocks(fullgraph=False)
+        try:
+            pipe.transformer.compile_repeated_blocks(fullgraph=False)
+        except ValueError:              # PixArt defines no _repeated_blocks: compile the whole transformer
+            pipe.transformer = torch.compile(pipe.transformer)
 
     def gen(steps):
         g = torch.Generator(device="cuda").manual_seed(a.seed)

@@ -85,7 +85,7 @@ def hook_module(mod, cat):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--size", type=int, default=256)
-    p.add_argument("--mode", choices=["bf16", "stock", "fused"], required=True)
+    p.add_argument("--mode", choices=["bf16", "stock", "fused", "fused_wide"], required=True)
     p.add_argument("--batch", type=int, default=1)
     p.add_argument("--passes", type=int, default=5)
     p.add_argument("--no-profiler", action="store_true")
@@ -97,7 +97,9 @@ def main():
             use_dynamic_per_tensor_scale=True, use_triton_kernel=False))
     tr = PixArtTransformer2DModel.from_pretrained(
         REPO[a.size], subfolder="transformer", torch_dtype=torch.bfloat16, **kw).to("cuda").eval()
-    counter = install_fused_quant() if a.mode == "fused" else None
+    if a.mode == "fused_wide":
+        os.environ["EXTRA_OK_K"] = "4608,4096"
+    counter = install_fused_quant() if a.mode in ("fused", "fused_wide") else None
 
     # ---- timing wrappers (installed after the fused patch so they wrap it) ----
     calls = collections.Counter()
