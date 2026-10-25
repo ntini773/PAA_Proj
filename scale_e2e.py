@@ -89,10 +89,10 @@ def main():
     pipe.transformer.register_forward_pre_hook(pre, with_kwargs=True)
     pipe.transformer.register_forward_hook(post, with_kwargs=True)
     if a.compile:
-        try:
-            pipe.transformer.compile_repeated_blocks(fullgraph=False)
-        except ValueError:              # PixArt defines no _repeated_blocks: compile the whole transformer
-            pipe.transformer = torch.compile(pipe.transformer)
+        # Compile only the 28 blocks. Compiling the whole transformer failed in the
+        # timestep embedder (NVFP4Tensor linear on fake tensors, "data pointer" error).
+        for blk in pipe.transformer.transformer_blocks:
+            blk.compile(fullgraph=False)
 
     def gen(steps):
         g = torch.Generator(device="cuda").manual_seed(a.seed)
