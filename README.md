@@ -24,6 +24,8 @@ Server: `team13@10.4.25.63`, repo at `~/PAA_Proj`. Python: `.pixi/envs/default/b
 |---|---|---|
 | `nohup bash run_full_2h.sh > run.log 2>&1 &` then `tail -f results/progress.log` | Every stage below, in order. One copy at a time. | ~10 min on a clean GPU (up to ~2 h worst case) |
 | `bash run_breakdown_only.sh` | Only stage B (per-part breakdown, now with per-layer-type tables) | ~5 min |
+| `bash layer_shapes_ncu.sh` | Stage L: same measurement for the 4608-wide MLP layer and the text K/V layers | ~4 min |
+| `bash run_next.sh` | Wide-fusion test (EXTRA_OK_K) + readout of old results | ~6 min |
 | `bash boundary_ncu.sh` | Stage K: per-stage GPU time + DRAM traffic of the LN -> modulate -> quantize boundary | ~10-15 min |
 | `.pixi/envs/default/bin/python make_report.py` | Builds `results/REPORT.md` from the results files | seconds |
 | `tar czf results.tgz results run.log` | Pack results to copy back | seconds |
@@ -50,6 +52,7 @@ EXTRA_OK_K=4608,4096 $PY scale_e2e.py --size 1024 --mode fused       # widen fus
 | H | CUDA C++ fusion vs launch cost | Fusion or launch overhead? | `external_tests_inspired/launch_vs_fusion.cu` | Ran 2026-10-24: fusion 2.9x to 5.0x, graph 1.0x |
 | I | `torch.compile` stock vs fused | Does a compiled baseline close the gap? | `scale_e2e.py --compile` | **Failed** (exit 1). Read `results/logs/compile_stock_256.log` |
 | K | LayerNorm / AdaLN modulate / quantize, stage by stage: GPU time and DRAM traffic, unfused vs fused | What does each of the 3 stages cost, and what is left after fusion? | `boundary_stages.py`, `boundary_ncu.sh`, `summarize_boundary.py` | **Written, not run.** `bash boundary_ncu.sh` (~10-15 min) |
+| L | Stage split + DRAM for the layer shapes not covered by K: MLP 2nd layer (4608 wide), text K/V (300 rows) | Is the biggest unfused layer also the biggest per-call cost? Is our kernel exact at 4608? | `layer_shapes_ncu.sh`, `summarize_shapes.py` | **Written, not run.** `bash layer_shapes_ncu.sh` (~4 min) |
 | J | Widen fusion to K=4608 / 4096 | Does covering the MLP 2nd layer remove the biggest leftover? | `EXTRA_OK_K=...` | **Next, not run** |
 
 ## 4. Results so far (clean GPU, 2026-10-25, one denoise step, batch 1)

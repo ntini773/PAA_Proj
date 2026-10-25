@@ -26,8 +26,8 @@ H, EPS = 1152, 1e-6
 STAGES = ["ln", "mod", "amax", "quant_unfused", "quant_fused", "full_fused", "quant_mslk"]
 
 
-def build(size, batch):
-    B2, N = 2 * batch, (size // 16) ** 2
+def build(size, batch, tokens=None):
+    B2, N = 2 * batch, (tokens if tokens else (size // 16) ** 2)
     g = torch.Generator("cuda").manual_seed(0)
     bf = torch.bfloat16
     x = torch.randn(B2, N, H, device="cuda", dtype=bf, generator=g)
@@ -92,13 +92,14 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--size", type=int, default=256)
     p.add_argument("--batch", type=int, default=1)
+    p.add_argument("--tokens", type=int, default=None, help="override tokens per image (text K/V layers: 300)")
     p.add_argument("--hidden", type=int, default=1152, help="other DiT widths: 1536 (SD3.5-M), 2432 (SD3.5-L), 3072 (Flux)")
     p.add_argument("--mode", choices=["time", "ncu"], default="time")
     p.add_argument("--stage", choices=STAGES)
     a = p.parse_args()
     global H
     H = a.hidden
-    fns, chains, info = build(a.size, a.batch)
+    fns, chains, info = build(a.size, a.batch, a.tokens)
 
     if a.mode == "ncu":
         if a.stage not in fns:
@@ -113,7 +114,7 @@ def main():
         torch.cuda.nvtx.range_pop()
         return
 
-    res = dict(size=a.size, batch=a.batch, hidden=H, **info)
+    res = dict(size=a.size, batch=a.batch, hidden=H, tokens_override=a.tokens, **info)
     res["stage_ms"] = {k: round(gpu_ms(f), 4) for k, f in fns.items()}
     res["chain_ms"] = {k: round(gpu_ms(f), 4) for k, f in chains.items()}
     try:                                   # fused quant must equal torchao's quantize bit for bit
@@ -125,7 +126,7 @@ def main():
         res["diff_error"] = f"{type(ex).__name__}: {str(ex)[:120]}"
     print(json.dumps(res))
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
-    name = "boundary_time.jsonl" if H == 1152 else "boundary_time_hidden.jsonl"
+    name = "boundary_time.jsonl" if (H == 1152 and not a.tokens) else "boundary_time_hidden.jsonl"
     with open(os.path.join(HERE, "results", name), "a") as f:
         f.write(json.dumps(res) + "\n")
 
