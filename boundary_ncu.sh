@@ -10,10 +10,10 @@ OUT=results/boundary; mkdir -p $OUT
 for S in ${SIZES:-256 512 1024}; do
   echo "[$(date +%H:%M:%S)] size $S: event timing"
   $PY boundary_stages.py --size $S --mode time 2>&1 | grep '^{'
-  for ST in ln mod amax quant_unfused quant_fused full_fused; do
+  for ST in ln mod amax quant_unfused quant_fused full_fused quant_mslk; do
     echo "[$(date +%H:%M:%S)] size $S: ncu $ST"
     $NCU --nvtx --nvtx-include "STAGE_${ST}/" \
-      --metrics gpu__time_duration.sum,dram__bytes_read.sum,dram__bytes_write.sum \
+      --metrics gpu__time_duration.sum,dram__bytes.sum,dram__bytes_read.sum,dram__bytes_write.sum \
       --csv --page raw \
       $PY boundary_stages.py --size $S --mode ncu --stage $ST \
       > $OUT/ncu_${S}_${ST}.csv 2> $OUT/ncu_${S}_${ST}.err

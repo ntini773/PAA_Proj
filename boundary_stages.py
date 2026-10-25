@@ -23,7 +23,7 @@ from torchao.prototype.mx_formats.utils import to_blocked
 from fused_adaln_nvfp4 import fused_nvfp4_quantize, fused_ln_adaln_nvfp4
 
 H, EPS = 1152, 1e-6
-STAGES = ["ln", "mod", "amax", "quant_unfused", "quant_fused", "full_fused"]
+STAGES = ["ln", "mod", "amax", "quant_unfused", "quant_fused", "full_fused", "quant_mslk"]
 
 
 def build(size, batch):
@@ -58,6 +58,13 @@ def build(size, batch):
         "full_fused": lambda: fused_ln_adaln_nvfp4(x2, sc_rows, sh_rows, EPS),
     }
 
+    try:                       # torchao's own optimized quantize kernel (needs the `mslk` package)
+        NVFP4Tensor.to_nvfp4(xm2, block_size=16, per_tensor_scale=pts, is_swizzled_scales=True, use_triton_kernel=True)
+        fns["quant_mslk"] = lambda: NVFP4Tensor.to_nvfp4(xm2, block_size=16, per_tensor_scale=pts,
+                                                         is_swizzled_scales=True, use_triton_kernel=True)
+    except Exception as ex:
+        print(f"quant_mslk not available: {type(ex).__name__}: {str(ex)[:100]}", file=sys.stderr)
+
     def chain(q):
         n = F.layer_norm(x, (H,), eps=EPS)
         m = n * (1 + scale) + shift
@@ -85,12 +92,17 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--size", type=int, default=256)
     p.add_argument("--batch", type=int, default=1)
+    p.add_argument("--hidden", type=int, default=1152, help="other DiT widths: 1536 (SD3.5-M), 2432 (SD3.5-L), 3072 (Flux)")
     p.add_argument("--mode", choices=["time", "ncu"], default="time")
     p.add_argument("--stage", choices=STAGES)
     a = p.parse_args()
+    global H
+    H = a.hidden
     fns, chains, info = build(a.size, a.batch)
 
     if a.mode == "ncu":
+        if a.stage not in fns:
+            sys.exit(f"stage {a.stage} not available")
         fn = fns[a.stage]
         for _ in range(3):
             fn()
@@ -101,7 +113,7 @@ def main():
         torch.cuda.nvtx.range_pop()
         return
 
-    res = dict(size=a.size, batch=a.batch, **info)
+    res = dict(size=a.size, batch=a.batch, hidden=H, **info)
     res["stage_ms"] = {k: round(gpu_ms(f), 4) for k, f in fns.items()}
     res["chain_ms"] = {k: round(gpu_ms(f), 4) for k, f in chains.items()}
     try:                                   # fused quant must equal torchao's quantize bit for bit
@@ -113,7 +125,8 @@ def main():
         res["diff_error"] = f"{type(ex).__name__}: {str(ex)[:120]}"
     print(json.dumps(res))
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
-    with open(os.path.join(HERE, "results", "boundary_time.jsonl"), "a") as f:
+    name = "boundary_time.jsonl" if H == 1152 else "boundary_time_hidden.jsonl"
+    with open(os.path.join(HERE, "results", name), "a") as f:
         f.write(json.dumps(res) + "\n")
 
 
