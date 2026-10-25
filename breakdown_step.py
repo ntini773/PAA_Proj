@@ -102,6 +102,32 @@ def main():
             hook_module(m, "linear_total")
     hook_module(tr, "step")
 
+    # LN + AdaLN modulate cost at the two fused-boundary spots of every block:
+    # time from the start of norm1 (norm2) to the start of the first Linear that consumes it.
+    spot_start = {}
+    def span_start(key):
+        def pre(m, args, kwargs):
+            if state["on"]:
+                spot_start[key] = ev()
+        return pre
+    def span_end(key):
+        def pre(m, args, kwargs):
+            if state["on"] and key in spot_start:
+                items.append(("ln_mod", spot_start.pop(key), ev()))
+        return pre
+    for name, m in tr.named_modules():
+        if not name.startswith("transformer_blocks."):
+            continue
+        idx = name.split(".")[1]
+        if name.endswith(".norm1"):
+            m.register_forward_pre_hook(span_start((idx, 1)), with_kwargs=True)
+        elif name.endswith(".attn1.to_q"):
+            m.register_forward_pre_hook(span_end((idx, 1)), with_kwargs=True)
+        elif name.endswith(".norm2"):
+            m.register_forward_pre_hook(span_start((idx, 2)), with_kwargs=True)
+        elif name.endswith(".ff.net.0.proj"):
+            m.register_forward_pre_hook(span_end((idx, 2)), with_kwargs=True)
+
     B2 = 2 * a.batch
     lat = a.size // 8
     g = torch.Generator("cuda").manual_seed(0)
@@ -147,6 +173,7 @@ def main():
         res = dict(mode=a.mode, size=a.size, batch=a.batch, tokens=(a.size // 16) ** 2,
                    step_ms=step, parts_ms={k: round(ms.get(k, 0.0), 3) for k in order},
                    parts_pct={k: round(100 * ms.get(k, 0.0) / step, 1) for k in order},
+                   ln_mod_ms=round(ms.get("ln_mod", 0.0), 3),
                    scaled_mm_calls_per_step=calls["scaled_mm"] / n,
                    fused_calls=counter["n"] if counter else None,
                    fallback_calls=counter["fallback"] if counter else None)
@@ -167,10 +194,14 @@ def main():
                     rows.append((t_us, e.count, e.key))
             total = sum(r[0] for r in rows) or 1.0
             rows.sort(reverse=True)
+            res["kernel_busy_ms"] = round(total / 2 / 1000.0, 3)       # sum of GPU kernel time per step
+            res["kernel_busy_pct"] = round(100 * (total / 2 / 1000.0) / step, 1)
             res["top_kernels"] = [dict(pct=round(100 * r[0] / total, 1), us_per_step=round(r[0] / 2, 1),
                                        count_per_step=r[1] / 2, name=r[2][:110]) for r in rows[:15]]
 
     print(json.dumps({k: v for k, v in res.items() if k != "top_kernels"}))
+    if "kernel_busy_ms" in res:
+        print(f"GPU kernels busy {res['kernel_busy_ms']:.1f} ms of {step:.1f} ms step ({res['kernel_busy_pct']}%)")
     if "top_kernels" in res:
         print("top kernels (% of GPU kernel time):")
         for k in res["top_kernels"]:
