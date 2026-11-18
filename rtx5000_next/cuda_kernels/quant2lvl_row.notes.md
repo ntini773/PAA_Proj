@@ -1,0 +1,13 @@
+# quant2lvl_row notes
+- Launch: 1-D grid, 256 threads/CTA, one thread per 16-element block, flattened over M*(K/16) blocks.
+- No rows-per-CTA template: flat indexing packs small-K rows (K=1152: 72 blocks/row) with no idle lanes and no pow2 padding.
+- Loads: 2x uint4 (__ldg) per block; bf16->fp32 by bit shift (exact). Stores: one 8-byte packed word + 1 scale byte per block, all coalesced.
+- Math: __fdiv_rn/__fmul_rn only, no fast-math. fmaxf/fminf clamp order matches Triton (max then min).
+- Scale: bs=amax/6; sbs=bs/pts; clamp [2^-6,448]; cvt e4m3 RNE SATFINITE; recip=(1/pts)/scale_f32.
+- E2M1: same 7-threshold ladder as _e2m1_encode (> 0.25, >= 0.75, > 1.25, >= 1.75, > 2.5, >= 3.5, > 5.0).
+- Output: logical row-major packed [M,K/2] uint8, scales [M,K/16] e4m3fn; low nibble = even element.
+- Risks: NaN/Inf inputs (fmaxf drops NaN; Triton tl.max may propagate) are not matched.
+- Risk: nvcc must not use --use_fast_math; default build already avoids FMA issues (no FMA candidates: only mul then clamp).
+- Risk: x data_ptr must be 16-byte aligned (checked; sliced views with odd offsets will fail the check).
+- Risk: pts==0 or denormal yields inf/NaN in both implementations; behavior not compared.
+- Not yet run against Triton; byte-exact check pending (compile-check only).

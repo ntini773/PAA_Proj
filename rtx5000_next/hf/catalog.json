@@ -1,0 +1,44 @@
+{
+  "pixart_sigma": {
+    "repos": {"256": "PixArt-alpha/PixArt-Sigma-XL-2-256x256", "512": "PixArt-alpha/PixArt-Sigma-XL-2-512-MS", "1024": "PixArt-alpha/PixArt-Sigma-XL-2-1024-MS"},
+    "classes": ["PixArtTransformer2DModel"],
+    "cfg_batch": 2, "vae_factor": 8,
+    "note": "current model, 0.6B, T5-XXL text encoder"
+  },
+  "dit_xl2": {
+    "repos": {"256": "facebook/DiT-XL-2-256", "512": "facebook/DiT-XL-2-512"},
+    "classes": ["DiTTransformer2DModel", "Transformer2DModel"],
+    "cfg_batch": 2, "vae_factor": 8,
+    "note": "class-conditional, no text encoder, 28 blocks, width 1152, AdaLN-Zero. Smallest download"
+  },
+  "sana_600m": {
+    "repos": {"512": "Efficient-Large-Model/Sana_600M_512px_diffusers", "1024": "Efficient-Large-Model/Sana_600M_1024px_diffusers"},
+    "classes": ["SanaTransformer2DModel"],
+    "cfg_batch": 2, "vae_factor": 32,
+    "note": "linear attention, conv FFN (not NVFP4 linear), Gemma-2-2B text encoder, DC-AE"
+  },
+  "sana_1600m": {
+    "repos": {"512": "Efficient-Large-Model/Sana_1600M_512px_diffusers", "1024": "Efficient-Large-Model/Sana_1600M_1024px_diffusers"},
+    "classes": ["SanaTransformer2DModel"],
+    "cfg_batch": 2, "vae_factor": 32,
+    "note": "larger Sana"
+  },
+  "sd35_medium": {
+    "repos": {"512": "stabilityai/stable-diffusion-3.5-medium", "1024": "stabilityai/stable-diffusion-3.5-medium"},
+    "classes": ["SD3Transformer2DModel"],
+    "cfg_batch": 2, "vae_factor": 8,
+    "note": "MMDiT, gated (accept licence on HF), download transformer only (skip T5 and CLIP)"
+  },
+  "sd35_large": {
+    "repos": {"512": "stabilityai/stable-diffusion-3.5-large", "1024": "stabilityai/stable-diffusion-3.5-large"},
+    "classes": ["SD3Transformer2DModel"],
+    "cfg_batch": 2, "vae_factor": 8,
+    "note": "8B MMDiT, gated, large"
+  },
+  "flux_schnell": {
+    "repos": {"512": "black-forest-labs/FLUX.1-schnell", "1024": "black-forest-labs/FLUX.1-schnell"},
+    "classes": ["FluxTransformer2DModel"],
+    "cfg_batch": 1, "vae_factor": 8,
+    "note": "12B, width 3072, no CFG. bf16 transformer about 24 GB"
+  }
+}

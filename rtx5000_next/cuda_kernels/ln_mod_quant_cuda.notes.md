@@ -1,0 +1,14 @@
+# ln_mod_quant_cuda notes
+- API: `ln_mod_quant(x, scale_rows, shift_rows, eps) -> [packed uint8 (M,H/2), scale float8_e4m3fn (M,H/16)]` (same order as `fused_ln_adaln_nvfp4`).
+- Inputs: bf16 CUDA (M,H). scale/shift may be row-expanded (stride(0)==0); other layouts are made contiguous. H%16==0, H<=16384.
+- Launch: grid=M (one CTA per row), block=round_up(H/16, 32) threads (H=768:64, 1152:96, 1536:96, 2048:128, 3072:192, 4608:288). No power-of-2 padding.
+- Thread t owns elements [16t, 16t+16): two 16B loads for x, scale, shift; 8B store of packed, 1B store of scale.
+- Row stays in registers (v[16]); shared memory is only 32 floats for reductions.
+- Reductions: per-thread sequential sum, warp xor-butterfly, warps summed in order 0..n-1. Fixed order, deterministic. Two-pass variance (centered), as in the Triton kernel.
+- All math uses __fadd_rn/__fmul_rn/__fdiv_rn (no FMA). rstd = rsqrtf(var+eps), eps cast to fp32. Modulate rounded to bf16 once.
+- Scale: amax/6 clamped to [2^-6, 448], RN to e4m3 (SATFINITE), inv = 1/decode(e4m3), codes via threshold ladder (RNE ties), low nibble = even element.
+- Risk: sum order differs from Triton tree reduce and from torch mean/var (Welford). A 1-ULP mean/rstd difference can flip rare e2m1 codes or e4m3 scales.
+- Risk: Triton may fuse FMA or use approximate division in its own kernel; this kernel does not. Rare mismatches vs Triton are possible there.
+- Risk: NaN/Inf inputs are not handled like Triton (fmaxf ignores NaN).
+- No multi-row CTA for small H (kept simple); H=768 uses 64-thread CTAs.
+- Not compiled/tested: nvcc here is 11.5 and no torch build was run. Compile with torch cpp_extension `load(..., extra_cuda_cflags=["-O3","--fmad=false"])`.
