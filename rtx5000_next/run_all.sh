@@ -34,6 +34,7 @@ stage_prof() {
 stage_roofline() {
   t R01 $PY bench/peaks.py
   t R02 $PY analysis/roofline_pixart.py
+  t R03 $PY analysis/roofline_whole_forward.py
 }
 stage_embeds() { t T01 $PY prompts/make_prompt_embeds.py; }
 stage_precision() {
