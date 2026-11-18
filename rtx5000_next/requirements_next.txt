@@ -1,0 +1,5 @@
+sentencepiece
+protobuf
+ninja
+matplotlib
+lpips

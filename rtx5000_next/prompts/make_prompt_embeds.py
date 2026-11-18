@@ -27,6 +27,10 @@ def main():
 
     src = a.t5 or REPO
     sub = (lambda s: {}) if a.t5 else (lambda s: dict(subfolder=s))
+    try:
+        import sentencepiece  # noqa: F401  (T5Tokenizer needs it)
+    except ImportError:
+        raise SystemExit("sentencepiece missing: pip install -r requirements_next.txt")
     tok = T5Tokenizer.from_pretrained(src, **sub("tokenizer"))
     te = T5EncoderModel.from_pretrained(src, torch_dtype=torch.bfloat16, **sub("text_encoder")).cuda().eval()
 

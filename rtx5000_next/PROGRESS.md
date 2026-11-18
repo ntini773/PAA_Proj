@@ -6,6 +6,10 @@ Counts: <!-- counts -->0 done, 0 failed, 0 todo<!-- /counts -->
 
 ## How to run
 
+Extra packages that `pixi.toml` does not have: `sentencepiece` (T5 tokenizer, needed by `embeds`), `ninja` (needed by `kernels`), `matplotlib` (plots), `lpips` (optional, image metric).
+Install: `$PY -m pip install -r rtx5000_next/requirements_next.txt`. If the pixi env has no pip: `pixi run pip install -r requirements_next.txt`, or `uv pip install --python $PY -r requirements_next.txt`.
+The `kernels` stage also needs `nvcc` on PATH (the server has 13.3) or `CUDA_HOME` set.
+
 ```bash
 nvidia-smi                                   # GPU must be idle
 export PY=.pixi/envs/default/bin/python      # the pixi python
@@ -13,7 +17,7 @@ bash run_all.sh hf                           # N01 N02: model checks, no weights
 bash run_all.sh kernels                      # K01-K03: builds the CUDA kernels, checks bytes against Triton
 bash run_all.sh time                         # S01: step time, CPU launch time, CUDA Graph for every config
 bash run_all.sh prof                         # P01-P04: nsys, ncu, analysis
-bash run_all.sh embeds                       # T01: 6 real prompts -> prompts/embeds_pixart.pt (needs the T5 download, about 9 GB)
+bash run_all.sh embeds                       # T01: 6 real prompts -> prompts/embeds_pixart.pt (downloads the T5-XXL encoder from the PixArt-Sigma repo, 10 to 20 GB depending on stored dtype; check disk)
 bash run_all.sh precision                    # Q01-Q03 (6 prompts each)
 bash run_all.sh models                       # M01-M04: new models (downloads transformers only)
 bash run_all.sh plots                        # V01: results/figures/*.png
