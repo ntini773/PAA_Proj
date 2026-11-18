@@ -1,9 +1,12 @@
 import json
+import logging
 import os
 import pathlib
 import statistics
 import sys
 import time
+
+logging.getLogger("torch.utils._pytree").setLevel(logging.ERROR)  # torchao import notice, harmless
 
 ROOT = pathlib.Path(__file__).resolve().parent
 RESULTS = ROOT / "results"

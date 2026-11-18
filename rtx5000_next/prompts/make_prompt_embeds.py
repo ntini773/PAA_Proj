@@ -8,8 +8,10 @@ Same max length (300) as PixArt-Sigma. The file is about 15 MB; copy it back to 
 """
 import argparse
 import json
+import logging
 import pathlib
 
+logging.getLogger("torch.utils._pytree").setLevel(logging.ERROR)  # torchao import notice, harmless
 import torch
 from transformers import T5EncoderModel, T5Tokenizer
 
@@ -31,8 +33,8 @@ def main():
         import sentencepiece  # noqa: F401  (T5Tokenizer needs it)
     except ImportError:
         raise SystemExit("sentencepiece missing: pip install -r requirements_next.txt")
-    tok = T5Tokenizer.from_pretrained(src, **sub("tokenizer"))
-    te = T5EncoderModel.from_pretrained(src, torch_dtype=torch.bfloat16, **sub("text_encoder")).cuda().eval()
+    tok = T5Tokenizer.from_pretrained(src, legacy=True, **sub("tokenizer"))  # legacy=True is the default behaviour, set to silence the notice
+    te = T5EncoderModel.from_pretrained(src, dtype=torch.bfloat16, **sub("text_encoder")).cuda().eval()
 
     def enc(text):
         ids = tok(text, padding="max_length", max_length=a.max_len, truncation=True, return_tensors="pt")
