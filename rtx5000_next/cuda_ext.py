@@ -3,7 +3,7 @@ import os
 
 from common import ROOT
 
-CUDA_FLAGS = ["-O3", "-std=c++17", "--fmad=false", "-lineinfo"]
+CUDA_FLAGS = ["-O3", "-std=c++20", "--fmad=false", "-lineinfo"]  # this torch nightly requires C++20
 
 
 @functools.lru_cache(maxsize=None)
@@ -13,5 +13,5 @@ def load_ext(name):
     build = ROOT / "build" / name
     build.mkdir(parents=True, exist_ok=True)
     return load(name=name, sources=[str(ROOT / "cuda_kernels" / f"{name}.cu")],
-                extra_cflags=["-O3", "-std=c++17"], extra_cuda_cflags=CUDA_FLAGS,
+                extra_cflags=["-O3", "-std=c++20"], extra_cuda_cflags=CUDA_FLAGS,
                 build_directory=str(build), verbose=False)
