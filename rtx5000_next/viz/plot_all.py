@@ -202,7 +202,7 @@ def precision():
         save(fig, f"precision_{p.stem}.png")
     ip = sorted((R / "precision").glob("images_*.json"))
     for p in ip:
-        d = json.loads(p.read_text())
+        d = json.loads(p.read_text()).get("mean", {})
         names = [k for k in d if "mae" in d[k]]
         fig, ax = plt.subplots(figsize=(7, 4))
         ax.bar(names, [d[k]["mae"] for k in names], color="#60a5fa")
