@@ -54,9 +54,17 @@ def main():
         counter = qb.install(a.backend, ok_k, use_op=use_op, count=not a.compile)
     if a.nvtx and not a.compile and a.mode in ("stock", "fused"):
         qb.wrap_nvtx("quantize")
+        def block_push(i):  # hooks must return None: a returned value replaces the block output or its args
+            def hook(m, args, kwargs):
+                torch.cuda.nvtx.range_push(f"blk{i}")
+            return hook
+
+        def block_pop(m, args, kwargs, out):
+            torch.cuda.nvtx.range_pop()
+
         for i, b in enumerate(r.blocks):
-            b.register_forward_pre_hook(lambda m, args, kwargs, i=i: torch.cuda.nvtx.range_push(f"blk{i}"), with_kwargs=True)
-            b.register_forward_hook(lambda m, args, kwargs, out, i=i: torch.cuda.nvtx.range_pop(), with_kwargs=True)
+            b.register_forward_pre_hook(block_push(i), with_kwargs=True)
+            b.register_forward_hook(block_pop, with_kwargs=True)
     if a.compile:
         for b in r.blocks:
             b.compile(fullgraph=False)

@@ -22,6 +22,8 @@ Most of this code was written without being able to run it (no sm_120 nvcc local
 | 12 | 10-xx (earlier work) | fp16 runs | NaN images | fp16 range too small for these activations | Precision ablation runs in bf16 | server | Pick the dtype from the activation range, not from habit. |
 | 13 | 11-18 | N01 output for `dit_xl2` | `params B = 0.0` and `bf16 GB = 0.0` | Parameter count could not be read from this repo's config (open) | Not fixed. DiT-XL/2 was dropped from the plan | server | A zero in a size table is a failed read, not a small model. Print "unknown". |
 
+| 14 | 11-18 | `step_target.py` `--nvtx` block hooks (P01) | 12 of 22 nsys runs failed: `RuntimeError: forward pre-hook must return None or a tuple ..., but got -1`. All non-compiled `stock` and `fused*` configs, including `free_bound`, at both sizes. bf16, fp8 and the compiled configs were fine | The hooks were lambdas that returned the value of `nvtx.range_push` and `range_pop`. A hook's return value is used: a pre-hook's replaces the block arguments, a forward hook's replaces the block output. The code path only runs for `--nvtx` with `stock` or `fused` and no compile, so no other test touched it | Hooks are now functions that return nothing | server | A hook or callback must return `None` unless it means to change data. Never write a lambda whose value is a side-effect call. Run the `--nvtx` path once before launching a 25 minute batch. |
+
 ## Open risks (code that has not run)
 
 | Area | Risk | How it will show |
@@ -45,3 +47,5 @@ Most of this code was written without being able to run it (no sm_120 nvcc local
 8. Verify a number with the tool. Do not copy it from a comment.
 9. When you change a data shape, grep all its readers in the same commit.
 10. A warning is a to-do. Explicit options beat defaults.
+11. Run a batch script on its smallest case first (one config, one size). A bug in a shared path then costs seconds, not the whole batch.
+12. A callback returns `None` unless it means to change data.
