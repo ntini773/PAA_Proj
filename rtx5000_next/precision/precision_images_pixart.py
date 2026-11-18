@@ -5,6 +5,7 @@ One image set per prompt: results/precision/images/p<i>_<variant>_<size>.png. Me
     python precision/precision_images_pixart.py --size 1024 --embeds prompts/embeds_pixart.pt
 """
 import argparse
+import functools
 import gc
 import json
 import pathlib
@@ -22,16 +23,20 @@ from scale_e2e import load_pipe
 VARIANTS = {"bf16": (False, False), "w4a16": (True, False), "w16a4": (False, True), "w4a4_emulated": (True, True)}
 
 
+@functools.lru_cache(maxsize=1)
+def lpips_net():
+    import lpips  # first use downloads the AlexNet backbone (torchvision); prefetch: python -c "import lpips; lpips.LPIPS(net='alex')"
+    return lpips.LPIPS(net="alex", verbose=False).cuda()
+
+
 def metrics(x, ref):
     mse = float(((x - ref) ** 2).mean())
     out = dict(mae=float(np.abs(x - ref).mean()), psnr=float("inf") if mse == 0 else 10 * np.log10(1 / mse))
     try:
-        import lpips
-        net = lpips.LPIPS(net="alex", verbose=False).cuda()
         t = lambda v: torch.from_numpy(v).permute(2, 0, 1)[None].cuda().float() * 2 - 1
-        out["lpips"] = float(net(t(x), t(ref)))
-    except Exception:
-        pass
+        out["lpips"] = float(lpips_net()(t(x), t(ref)))
+    except Exception as e:
+        print("lpips skipped:", repr(e))
     return out
 
 
