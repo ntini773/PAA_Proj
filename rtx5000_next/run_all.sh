@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bash run_all.sh [stage ...]    stages: hf kernels time prof embeds precision plots models   (default: all except models, in this order)
+# bash run_all.sh [stage ...]    stages: hf kernels time prof roofline embeds precision plots models   (default: all except models, in this order)
 # Each test writes results/.done/<ID> or results/.fail/<ID>; PROGRESS.md is refreshed after every test.
 # Env: PY=python-to-use  MODEL=pixart_sigma  SIZES="256 512 1024"  CONFIGS="..."  ITERS=30
 cd "$(dirname "$0")"
@@ -31,6 +31,10 @@ stage_prof() {
   t P03 $PY analysis/analyze_nsys.py
   t P04 $PY analysis/analyze_ncu.py
 }
+stage_roofline() {
+  t R01 $PY bench/peaks.py
+  t R02 $PY analysis/roofline_pixart.py
+}
 stage_embeds() { t T01 $PY prompts/make_prompt_embeds.py; }
 stage_precision() {
   local e=${EMBEDS:-prompts/embeds_pixart.pt}
@@ -47,6 +51,6 @@ stage_models() {
 }
 stage_plots() { t V01 $PY viz/plot_all.py; }
 
-stages=${*:-hf kernels time prof embeds precision plots}
+stages=${*:-hf kernels time prof roofline embeds precision plots}
 for s in $stages; do "stage_$s"; done
 $PY progress_report.py

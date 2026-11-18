@@ -17,6 +17,7 @@ bash run_all.sh hf                           # N01 N02: model checks, no weights
 bash run_all.sh kernels                      # K01-K03: builds the CUDA kernels, checks bytes against Triton
 bash run_all.sh time                         # S01: step time, CPU launch time, CUDA Graph for every config
 bash run_all.sh prof                         # P01-P04: nsys, ncu, analysis
+bash run_all.sh roofline                     # R01 (idle GPU, about 2 min) and R02 (needs P03): results/figures/roofline_pixart_<size>.png
 bash run_all.sh embeds                       # T01: 6 real prompts -> prompts/embeds_pixart.pt (downloads the T5-XXL encoder from the PixArt-Sigma repo, 10 to 20 GB depending on stored dtype; check disk)
 bash run_all.sh precision                    # Q01-Q03 (6 prompts each)
 bash run_all.sh models                       # M01-M03: Sana 0.6B, SD3.5 Medium, FLUX.1-schnell (after PixArt; downloads transformers only)
@@ -52,6 +53,8 @@ The scripts find the older code (`fused_adaln_nvfp4.py`, `scale_e2e.py`, `tier2_
 | P02 | ncu per layer (qkv, fc1, fc2, cross K/V): DRAM vs ideal, throughput | H1 H2 | `profiling/ncu_layer.sh` | todo |
 | P03 | Summarize nsys | H2 | `analysis/analyze_nsys.py` | todo |
 | P04 | Summarize ncu | H1 | `analysis/analyze_ncu.py` | todo |
+| R01 | Measured limits of the GPU: copy GB/s, bf16 and NVFP4 GEMM TFLOP/s, attention TFLOP/s. Needs an idle GPU, about 2 min | H1 H6 | `bench/peaks.py` | todo |
+| R02 | Whole-step roofline for PixArt from nsys times and analytic FLOPs and bytes (no GPU; needs P03 and R01) | H1 H2 H6 | `analysis/roofline_pixart.py` | todo |
 | Q01 | Precision ablation w4a16 / w16a4 / w4a4 at 512 px, validated against real NVFP4 | H7 | `precision/precision_ablation.py --validate-stock` | todo |
 | Q02 | Same at 1024 px | H7 | `precision/precision_ablation.py --size 1024` | todo |
 | Q03 | PixArt images for each variant (needs real embeds for a meaningful image) | H7 | `precision/precision_images_pixart.py` | todo |
