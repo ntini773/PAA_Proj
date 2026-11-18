@@ -19,7 +19,7 @@ bash run_all.sh time                         # S01: step time, CPU launch time, 
 bash run_all.sh prof                         # P01-P04: nsys, ncu, analysis
 bash run_all.sh embeds                       # T01: 6 real prompts -> prompts/embeds_pixart.pt (downloads the T5-XXL encoder from the PixArt-Sigma repo, 10 to 20 GB depending on stored dtype; check disk)
 bash run_all.sh precision                    # Q01-Q03 (6 prompts each)
-bash run_all.sh models                       # M01-M04: new models (downloads transformers only)
+bash run_all.sh models                       # M01-M03: Sana 0.6B, SD3.5 Medium, FLUX.1-schnell (after PixArt; downloads transformers only)
 bash run_all.sh plots                        # V01: results/figures/*.png
 ```
 Env knobs: `MODEL`, `SIZES="256 512 1024"`, `CONFIGS="stock fused_triton"`, `ITERS`, `EMBEDS=embeds.pt`, `NVFP4_CODE=<folder with fused_adaln_nvfp4.py>`.
@@ -36,7 +36,7 @@ The scripts find the older code (`fused_adaln_nvfp4.py`, `scale_e2e.py`, `tier2_
 | H5 | 256 and 512 px are CPU-launch bound; CUDA Graph fixes it | S01, P01 | step_time_by_config, kernels_and_gpu_busy |
 | H6 | With free quantization the step is bounded by GEMM + attention + glue | S01 (free_bound) | speed_of_light_free_quantize |
 | H7 | Activation quantization, not weight quantization, dominates the error | Q01, Q02, Q03 | precision_* |
-| H8 | The result holds on other models | M01-M04 | step_time_by_config |
+| H8 | The result holds on other models | M01-M03 | step_time_by_config |
 
 ## Tests
 
@@ -55,10 +55,9 @@ The scripts find the older code (`fused_adaln_nvfp4.py`, `scale_e2e.py`, `tier2_
 | Q01 | Precision ablation w4a16 / w16a4 / w4a4 at 512 px, validated against real NVFP4 | H7 | `precision/precision_ablation.py --validate-stock` | todo |
 | Q02 | Same at 1024 px | H7 | `precision/precision_ablation.py --size 1024` | todo |
 | Q03 | PixArt images for each variant (needs real embeds for a meaningful image) | H7 | `precision/precision_images_pixart.py` | todo |
-| M01 | DiT-XL/2 512: download, smoke, matrix, precision | H8 | `bench/new_model_suite.sh dit_xl2 512` | todo |
-| M02 | Sana 0.6B 1024 | H8 | `bench/new_model_suite.sh sana_600m 1024` | todo |
-| M03 | SD3.5 Medium 1024 (gated: accept licence, set HF_TOKEN) | H8 | `bench/new_model_suite.sh sd35_medium 1024` | todo |
-| M04 | FLUX.1-schnell 1024 (about 24 GB bf16 transformer) | H8 | `bench/new_model_suite.sh flux_schnell 1024` | todo |
+| M01 | Sana 0.6B 1024 (download 3.7 GB): download, smoke, matrix, precision | H8 | `bench/new_model_suite.sh sana_600m 1024` | todo |
+| M02 | SD3.5 Medium 1024 (download 5.1 GB, gated, access confirmed by N01) | H8 | `bench/new_model_suite.sh sd35_medium 1024` | todo |
+| M03 | FLUX.1-schnell 1024 (download 24 GB) | H8 | `bench/new_model_suite.sh flux_schnell 1024` | todo |
 | V01 | All figures | all | `viz/plot_all.py` | todo |
 | T01 | Encode 6 real prompts with T5 once, save `prompts/embeds_pixart.pt` (about 15 MB, keep it). Edit `prompts/prompts.json` to change the prompts. Q01-Q03 use it automatically | H7 | `prompts/make_prompt_embeds.py` | todo |
 

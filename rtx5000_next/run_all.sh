@@ -41,10 +41,9 @@ stage_precision() {
   t Q03 $PY precision/precision_images_pixart.py --size 1024 $ea
 }
 stage_models() {
-  t M01 bash bench/new_model_suite.sh dit_xl2 512
-  t M02 bash bench/new_model_suite.sh sana_600m 1024
-  t M03 bash bench/new_model_suite.sh sd35_medium 1024
-  t M04 bash bench/new_model_suite.sh flux_schnell 1024
+  t M01 bash bench/new_model_suite.sh sana_600m 1024
+  t M02 bash bench/new_model_suite.sh sd35_medium 1024
+  t M03 bash bench/new_model_suite.sh flux_schnell 1024
 }
 stage_plots() { t V01 $PY viz/plot_all.py; }
 
