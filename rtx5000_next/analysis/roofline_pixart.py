@@ -71,9 +71,15 @@ def main():
     ap.add_argument("--quant-flops-per-elem", type=float, default=12.0)
     a = ap.parse_args()
 
-    peaks = json.loads((ROOT / "results" / "peaks.json").read_text())
+    peaks_p = ROOT / "results" / "peaks.json"
+    nsys_p = ROOT / "results" / "analysis" / "nsys_summary.csv"
+    if not peaks_p.exists():
+        raise SystemExit(f"missing {peaks_p}: run bench/peaks.py (R01) first")
+    if not nsys_p.exists():
+        raise SystemExit(f"missing {nsys_p}: run profiling/nsys_step.sh (P01), then analysis/analyze_nsys.py (P03)")
+    peaks = json.loads(peaks_p.read_text())
     bw = peaks["copy_gbs"]
-    runs = list(csv.DictReader(open(ROOT / "results" / "analysis" / "nsys_summary.csv")))
+    runs = list(csv.DictReader(open(nsys_p)))
     pts = []
     for row in runs:
         size = int(row["size"])
