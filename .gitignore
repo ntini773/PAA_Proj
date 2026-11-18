@@ -9,3 +9,7 @@ results/nsys_tmp/
 __pycache__/
 external_tests_inspired/launch_vs_fusion
 results.tgz
+
+server_results/
+all_results.tgz
+results_*.tgz
