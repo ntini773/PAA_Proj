@@ -1,0 +1,21 @@
+W1120 02:06:54.876000 463675 site-packages/torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W1120 02:06:54.938000 463675 site-packages/torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.43it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.61it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.58it/s]
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 53.69it/s]
+| bf16 | 88 | 6177 | 441.9 | 428 | 5 | 6699 | 1675 |
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 51.44it/s]
+| bf16+compile | 88 | 5968 | 427.2 | 424 | 48 | 6529 | 1632 |
+Traceback (most recent call last):
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/bench/pipeline_e2e.py", line 87, in <module>
+    main()
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/bench/pipeline_e2e.py", line 59, in main
+    b = vr.build(name, a.size)
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/variants.py", line 178, in build
+    v = parse(name)
+        ^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/variants.py", line 70, in parse
+    assert v.base in ("bf16", "fp8", "stock", "stock_tk", "w4a16", "module"), f"unknown base in {name}"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: unknown base in stock_compile
