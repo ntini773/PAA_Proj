@@ -7,6 +7,9 @@ for _c in "$PY" python python3 "$_pyenv_root/../.pixi/envs/default/bin/python" "
     PY=$(command -v "$_c"); export PY; break
   fi
 done
+# Put the python's own bin first on PATH (what `pixi run` does): torch's CUDA-extension build needs the `ninja` executable
+# that sits next to this python, and nsys/ncu children inherit the same PATH.
+export PATH="$(dirname "$PY"):$PATH"
 if ! "$PY" -c "import torch" > /dev/null 2>&1; then
   echo "No python with torch found. Run through pixi (pixi run bash $0) or set PY=/path/to/python." >&2
   exit 2
