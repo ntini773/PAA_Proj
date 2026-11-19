@@ -1,0 +1,4 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.69it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  5.04it/s]
+286 layers; wrote /data/cs3406/team13/PAA_Proj/rtx5000_next/results/static_scales_256.json
+largest amax drift across denoise steps (max/min): [('transformer_blocks.27.attn2.to_out.0', 236.8), ('transformer_blocks.26.attn2.to_out.0', 64.4), ('transformer_blocks.17.attn2.to_out.0', 36.9), ('transformer_blocks.16.attn2.to_out.0', 29.3), ('transformer_blocks.15.attn2.to_out.0', 21.0)]

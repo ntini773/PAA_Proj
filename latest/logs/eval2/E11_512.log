@@ -1,103 +1,11 @@
 Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
-Fetching 1 files:   0%|          | 0/1 [00:00<?, ?it/s]Fetching 1 files: 100%|██████████| 1/1 [00:00<00:00, 34100.03it/s]
+Fetching 1 files:   0%|          | 0/1 [00:00<?, ?it/s]Fetching 1 files: 100%|██████████| 1/1 [00:00<00:00, 30840.47it/s]
 Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.33it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.96it/s]
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  4.18it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  6.22it/s]
 /data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
   warnings.warn(
 /data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
-bf16                                             392.8 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 30.0
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:02,  1.39s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.15it/s]
-stock                                           1422.3 ms/img  LPIPS 0.3691  SSIM 0.532  CLIP 29.3
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:02,  1.49s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.01it/s]
-w4a16                                            330.4 ms/img  LPIPS 0.2829  SSIM 0.619  CLIP 29.6
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:03,  1.65s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.82it/s]
-module+be=cuda_swizzled                          256.8 ms/img  LPIPS 0.3827  SSIM 0.519  CLIP 29.4
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:02,  1.43s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.09it/s]
-module+be=cuda_swizzled+static+concat            235.3 ms/img  LPIPS 0.4191  SSIM 0.503  CLIP 28.0
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:03,  1.53s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.96it/s]
-module+be=cuda_swizzled+selective                257.2 ms/img  LPIPS 0.3198  SSIM 0.601  CLIP 28.6
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:03,  1.50s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.99it/s]
-bf16+trim                                        247.3 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 30.0
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:03,  1.50s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.99it/s]
-bf16+xcudnn                                      249.5 ms/img  LPIPS 0.0748  SSIM 0.860  CLIP 30.0
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:03,  1.50s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.99it/s]
-bf16+trim+xcudnn                                 241.5 ms/img  LPIPS 0.0748  SSIM 0.860  CLIP 30.0
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:02,  1.21s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.47it/s]
-bf16+kvds2                                       534.7 ms/img  LPIPS 0.8338  SSIM 0.074  CLIP 9.7
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.19it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.55it/s]
-bf16+dfa0.05                                     582.4 ms/img  LPIPS 0.1015  SSIM 0.829  CLIP 29.6
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:02,  1.29s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.31it/s]
-bf16+dfa0.1                                      288.0 ms/img  LPIPS 0.1306  SSIM 0.805  CLIP 29.8
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:00,  2.17it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  6.48it/s]
-bf16+dfa0.2                                      600.5 ms/img  LPIPS 0.3015  SSIM 0.654  CLIP 29.5
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.46it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.36it/s]
-bf16+licfg0.2-0.8                                223.4 ms/img  LPIPS 0.1760  SSIM 0.757  CLIP 29.5
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.10it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.31it/s]
-bf16+licfg0.3-0.7                                398.0 ms/img  LPIPS 0.3562  SSIM 0.585  CLIP 28.5
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.37it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.10it/s]
-module+be=cuda_swizzled+static+concat+trim+xcudnn    215.5 ms/img  LPIPS 0.4015  SSIM 0.508  CLIP 28.2
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.12it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.35it/s]
-module+be=cuda_swizzled+static+concat+trim+xcudnn+dfa0.1    504.6 ms/img  LPIPS 0.3939  SSIM 0.529  CLIP 28.4
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.65it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.93it/s]
-module+be=cuda_swizzled+static+concat+trim+xcudnn+licfg0.2-0.8    275.1 ms/img  LPIPS 0.3867  SSIM 0.539  CLIP 30.0
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:01<00:02,  1.42s/it]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.10it/s]
-module+be=cuda_swizzled+static+concat+trim+xcudnn+dfa0.1+licfg0.2-0.8    393.8 ms/img  LPIPS 0.3866  SSIM 0.540  CLIP 29.2
-Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  33%|███▎      | 1/3 [00:00<00:01,  1.43it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.28it/s]
-Traceback (most recent call last):
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/quality/run_quality.py", line 141, in <module>
-    main()
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/quality/run_quality.py", line 107, in main
-    g = ref if name == a.reference else generate(name, a.size, items, a.steps)
-                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/quality/run_quality.py", line 41, in generate
-    b.run(items, steps=2, output="latent")
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/variants.py", line 153, in run
-    return cfg_interval.sample(self.pipe, items, self.size, steps=steps, seeds=seeds, guidance=guidance,
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/cfg_interval.py", line 70, in sample
-    out = tr(x, encoder_hidden_states=enc_cfg if use_cfg else pe, encoder_attention_mask=mask_cfg if use_cfg else pm,
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/transformers/pixart_transformer_2d.py", line 330, in forward
-    hidden_states = block(
-                    ^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/attention.py", line 1005, in forward
-    attn_output = self.attn1(
-                  ^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/attention_processor.py", line 607, in forward
-    return self.processor(
-           ^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/attention_patch.py", line 115, in __call__
-    out = sdpa(q, k, v, mask, self.cfg, self.is_self)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/attention_patch.py", line 77, in sdpa
-    return _sage(q, k, v, backend)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/attention_patch.py", line 47, in _sage
-    return sageattn(q, k, v, tensor_layout="HND", is_causal=False)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/sageattention/core.py", line 82, in sageattn
-    assert headdim in [64, 96, 128], "headdim should be in [64, 96, 128]."
-           ^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: headdim should be in [64, 96, 128].
+bf16                                             559.9 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 30.0
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  3.40it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  5.08it/s]
+stock                                           1929.1 ms/img  LPIPS 0.3691  SSIM 0.532  CLIP 29.3
