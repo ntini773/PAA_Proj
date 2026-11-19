@@ -25,7 +25,7 @@ bash run_eval2.sh          # all stages in order, each to completion; resume wit
 | E07 | Step time, attention options on the best stack | text trim, cuDNN, Sage, K/V pooling, each against the same stack | `profiling/run_step_matrix.sh` with EVAL2_ATTENTION | DONE 11-20 02:05 |
 | E08 | Per-stage timing: GPU busy, gaps, kernel counts, CPU launch time | tells launch-bound stages from memory-bound ones | `timing/profile_stages.py`, `analysis/analyze_stages.py` | DONE 11-20 02:06 |
 | E09 | nsys with stage ranges and kernel launch tables | the independent check of E08 (`nvtx_gpu_proj_sum`, `cuda_kern_exec_sum`) | `profiling/nsys_step.sh` | DONE 11-20 02:09 |
-| E10 | DiTFastAttn plans at three error thresholds | the attention compression itself | `ditfast/make_plans.py` | DONE 11-20 01:29 |
+| E10 | DiTFastAttn plans at three error thresholds | the attention compression itself | `ditfast/make_plans.py` | DONE 11-20 02:29 |
 | E11 | Real-prompt quality of every variant, with time per image | the speed-vs-quality trade-off for each optimization | `quality/run_quality.py` | FAILED 11-20 01:52 |
 | E12 | End-to-end time: T5, steps, VAE for the headline variants | what a user waits for | `bench/pipeline_e2e.py` | FAILED 11-20 02:07 |
 | E13 | Traffic ledger and whole-forward roofline | memory-movement budget and distance from the roofs | `analysis/traffic_ledger.py`, `analysis/roofline_whole_forward.py` | DONE 11-20 02:07 |
