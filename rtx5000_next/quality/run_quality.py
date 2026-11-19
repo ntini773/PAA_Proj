@@ -108,7 +108,7 @@ def main():
         try:  # one variant that cannot run (missing package, unsupported shape) must not lose the others
             g = ref if name == a.reference else generate(name, a.size, items, a.steps)
             rows, summary = ev.evaluate(g["images"], ref["images"], prompts, clip)
-        except Exception as e:
+        except (Exception, SystemExit) as e:  # SystemExit: variants.py exits with a message when a plan or static-scale file is missing
             failed.append((name, f"{type(e).__name__}: {str(e)[:200]}"))
             print(f"{name:45s} FAILED  {failed[-1][1]}")
             gc.collect()
