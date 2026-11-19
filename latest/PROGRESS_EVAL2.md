@@ -2,7 +2,7 @@
 
 Plan, reasons and findings: [../eval2-pipeline.md](../eval2-pipeline.md). Bugs: [BUGS.md](BUGS.md). Commands: [../commands.md](../commands.md).
 `run_eval2.sh` writes the markers; `python progress_report.py` refreshes the Status column (this file is separate from PROGRESS.md on purpose, so the server's local edits to PROGRESS.md never block a `git pull`).
-Counts: <!-- counts -->6 done, 1 failed, 8 todo<!-- /counts -->
+Counts: <!-- counts -->7 done, 1 failed, 7 todo<!-- /counts -->
 
 ## Order on the server
 
@@ -21,7 +21,7 @@ bash run_eval2.sh          # all stages in order, each to completion; resume wit
 | E03 | Real w4a16 vs w4a4: transformer error and image quality | the quality price of the activation quantize step with no emulation | `precision/real_w4a16_vs_w4a4.py` | DONE 11-20 01:37 |
 | E04 | Static activation scales per size (and amax drift across denoise steps) | removes the amax pass (memory traffic); drift shows where it is unsafe | `calibrate_static_scales.py` | DONE 11-20 01:28 |
 | E05 | Step time, fair baselines: bf16, fp8, stock, stock_tk, all compiled | the speedup claim needs compiled baselines and torchao's own fused kernel | `profiling/run_step_matrix.sh` with EVAL2_BASELINES | DONE 11-20 01:59 |
-| E06 | Step time, module stack: dynamic, no-share, static, concat, selective, CUDA kernel | tests that the fused kernel really runs in the compiled graph and what each memory-traffic lever buys | `profiling/run_step_matrix.sh` with EVAL2_MODULE | todo |
+| E06 | Step time, module stack: dynamic, no-share, static, concat, selective, CUDA kernel | tests that the fused kernel really runs in the compiled graph and what each memory-traffic lever buys | `profiling/run_step_matrix.sh` with EVAL2_MODULE | DONE 11-20 02:03 |
 | E07 | Step time, attention options on the best stack | text trim, cuDNN, Sage, K/V pooling, each against the same stack | `profiling/run_step_matrix.sh` with EVAL2_ATTENTION | todo |
 | E08 | Per-stage timing: GPU busy, gaps, kernel counts, CPU launch time | tells launch-bound stages from memory-bound ones | `timing/profile_stages.py`, `analysis/analyze_stages.py` | todo |
 | E09 | nsys with stage ranges and kernel launch tables | the independent check of E08 (`nvtx_gpu_proj_sum`, `cuda_kern_exec_sum`) | `profiling/nsys_step.sh` | todo |
