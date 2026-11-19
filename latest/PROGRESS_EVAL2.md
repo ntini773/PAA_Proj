@@ -30,4 +30,4 @@ bash run_eval2.sh          # all stages in order, each to completion; resume wit
 | E12 | End-to-end time: T5, steps, VAE for the headline variants | what a user waits for | `bench/pipeline_e2e.py` | FAILED 11-20 02:07 |
 | E13 | Traffic ledger and whole-forward roofline | memory-movement budget and distance from the roofs | `analysis/traffic_ledger.py`, `analysis/roofline_whole_forward.py` | DONE 11-20 02:07 |
 | E14 | Smoke of Sana 0.6B, SD3.5 Medium, FLUX | finds adapter bugs before the next window | `model_smoke.py` | todo |
-| E15 | Package results | one file to copy back | `tar` | DONE 11-20 02:10 |
+| E15 | Package results | one file to copy back | `tar` | DONE 11-20 02:54 |
