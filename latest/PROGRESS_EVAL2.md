@@ -2,7 +2,7 @@
 
 Plan, reasons and findings: [../eval2-pipeline.md](../eval2-pipeline.md). Bugs: [BUGS.md](BUGS.md). Commands: [../commands.md](../commands.md).
 `run_eval2.sh` writes the markers; `python progress_report.py` refreshes the Status column (this file is separate from PROGRESS.md on purpose, so the server's local edits to PROGRESS.md never block a `git pull`).
-Counts: <!-- counts -->10 done, 2 failed, 3 todo<!-- /counts -->
+Counts: <!-- counts -->11 done, 2 failed, 2 todo<!-- /counts -->
 
 ## Order on the server
 
@@ -30,4 +30,4 @@ bash run_eval2.sh          # all stages in order, each to completion; resume wit
 | E12 | End-to-end time: T5, steps, VAE for the headline variants | what a user waits for | `bench/pipeline_e2e.py` | FAILED 11-20 02:07 |
 | E13 | Traffic ledger and whole-forward roofline | memory-movement budget and distance from the roofs | `analysis/traffic_ledger.py`, `analysis/roofline_whole_forward.py` | DONE 11-20 02:07 |
 | E14 | Smoke of Sana 0.6B, SD3.5 Medium, FLUX | finds adapter bugs before the next window | `model_smoke.py` | todo |
-| E15 | Package results | one file to copy back | `tar` | todo |
+| E15 | Package results | one file to copy back | `tar` | DONE 11-20 02:08 |
