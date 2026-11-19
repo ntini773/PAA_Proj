@@ -25,8 +25,9 @@ say "3/4 E13 (ledger, roofline) and E15 (package)"
 for s in E13 E15; do bash run_eval2.sh --only $s; done
 
 if [ -z "$SKIP_EXTRAS" ]; then
-  say "4/4 extras: E09 (nsys), E14 (new-model smoke), E15 again"
-  for s in E09 E14 E15; do bash run_eval2.sh --only $s; done
+  # E14 (new-model smoke: Sana, SD3.5, FLUX) is left out on purpose for this window; add it with WITH_MODELS=1
+  say "4/4 extras: E09 (nsys), ${WITH_MODELS:+E14 (new-model smoke), }E15 again"
+  for s in E09 ${WITH_MODELS:+E14} E15; do bash run_eval2.sh --only $s; done
 fi
 
 say "finished"

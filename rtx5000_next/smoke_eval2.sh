@@ -72,7 +72,7 @@ step "run_quality (stock, module)" logs/smoke/quality.log $PY quality/run_qualit
 
 echo "== new models (forward in bf16 / stock / fused at their smallest size)"
 for m in sana_600m sd35_medium flux_schnell; do
-  [ -n "$SKIP_MODELS" ] && { warn "model_smoke $m skipped (SKIP_MODELS=1)"; continue; }
+  [ -z "$WITH_MODELS" ] && { warn "model_smoke $m skipped (new models are off for this window; WITH_MODELS=1 turns them on)"; continue; }
   step "model_smoke $m" logs/smoke/model_$m.log $PY model_smoke.py --model $m --size 1024
 done
 

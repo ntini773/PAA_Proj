@@ -28,7 +28,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-STAGES="E01 E02 E03 E04 E05 E06 E07 E08 E09 E10 E11 E12 E13 E14 E15"
+STAGES="E01 E02 E03 E04 E05 E06 E07 E08 E09 E10 E11 E12 E13 ${WITH_MODELS:+E14} E15"   # E14 (new models) only with WITH_MODELS=1
 desc() { case $1 in
   E01) echo "calibration prompt embeddings (T5 encode of prompts_calib.json)  ~5 min";;
   E02) echo "microbenchmarks: FP4 GEMM shapes, attention backends  ~5 min";;
