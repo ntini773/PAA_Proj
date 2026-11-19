@@ -5,3 +5,5 @@ __pycache__/
 *.nsys-rep
 *.ncu-rep
 *.sqlite
+prompts/embeds_pixart.pt
+results.tgz
