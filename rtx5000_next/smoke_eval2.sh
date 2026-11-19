@@ -25,9 +25,13 @@ print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0
 assert torch.cuda.is_available()
 EOF
 for tool in nvcc nsys ncu; do command -v $tool > /dev/null && ok "$tool found" || warn "$tool not found (needed for CUDA kernels / nsys / ncu stages)"; done
-$PY -c "import sageattention" 2> /dev/null && ok "sageattention (Sage2) installed" || warn "sageattention not installed: bf16+sage2 variants skipped (pip install sageattention --no-build-isolation)"
+if $PY -c "import sageattention as s; assert hasattr(s, 'sageattn')" 2> /dev/null; then
+  if $PY -c "import sageattention as s; assert hasattr(s, 'sageattn_qk_int8_pv_fp8_cuda')" 2> /dev/null; then ok "sageattention 2.x installed (INT8/FP8 kernels)"
+  else warn "sageattention is the old 1.x (Triton INT8): the sage2 variants run but are slower than real Sage 2.x"; fi
+else warn "sageattention not importable: bf16+sage2 variants will fail (pip install sageattention --no-build-isolation)"; fi
 $PY -c "import sageattn3" 2> /dev/null && ok "sageattn3 (Sage FP4) installed" || warn "sageattn3 not installed: sage3 variants skipped"
-$PY -c "import mslk" 2> /dev/null && ok "mslk installed (stock_tk usable)" || warn "mslk not installed: stock_tk configs will fail (pip install --pre mslk)"
+# torchao needs mslk.quantize.triton.fp4_quantize; the 'mslk 0.0.0' wheel on PyPI is an empty placeholder and does not have it
+$PY -c "from mslk.quantize.triton.fp4_quantize import triton_quantize_nvfp4" 2> /dev/null && ok "mslk with the NVFP4 Triton kernel (stock_tk usable)" || warn "mslk missing or an empty placeholder: stock_tk configs will fail, everything else is unaffected"
 [ -f prompts/embeds_pixart.pt ] && ok "prompts/embeds_pixart.pt (eval prompts)" || fail "prompts/embeds_pixart.pt missing: run 'bash run_all.sh embeds'"
 [ -f prompts/embeds_calib.pt ] && ok "prompts/embeds_calib.pt (calibration prompts)" || warn "prompts/embeds_calib.pt missing: stage E01 creates it"
 nvidia-smi --query-gpu=name,memory.used,utilization.gpu --format=csv,noheader | sed 's/^/      GPU: /'
