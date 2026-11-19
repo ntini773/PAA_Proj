@@ -1,0 +1,10 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 31.42it/s]
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-29b3.qdstrm'
+[1/1] [0%                          ] module_triton_512.nsys-repProcessing events...
+[1/1] [0%                          ] module_triton_512.nsys-rep[1/1] [====27%                     ] module_triton_512.nsys-rep[1/1] [==18%                       ] module_triton_512.nsys-rep[1/1] [13%                         ] module_triton_512.nsys-rep[1/1] [====26%                     ] module_triton_512.nsys-rep[1/1] [==21%                       ] module_triton_512.nsys-rep[1/1] [=====30%                    ] module_triton_512.nsys-rep[1/1] [========40%                 ] module_triton_512.nsys-rep[1/1] [===========50%              ] module_triton_512.nsys-rep[1/1] [========================100%] module_triton_512.nsys-rep[1/1] [========================100%] module_triton_512.nsys-rep
+{'model': 'pixart_sigma', 'size': 512, 'batch': 1, 'mode': 'variant', 'backend': None, 'width': None, 'compile': False, 'tokens': 1024, 'rows': 2048, 'config': 'module_triton', 'variant': 'module+be=triton', 'gpu_ms': {'n': 5, 'median': 66.21199798583984, 'min': 65.83948516845703, 'p10': 65.83948516845703, 'p90': 68.35337829589844, 'max': 68.35337829589844, 'std': 0.9137123914661763}, 'cpu_launch_ms': 66.20374205522239, 'peak_mem_gb': 0.5817832946777344}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/module_triton_512.nsys-rep

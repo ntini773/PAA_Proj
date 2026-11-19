@@ -1,0 +1,10 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 51.69it/s]
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-08b5.qdstrm'
+[1/1] [0%                          ] bf16_compile_512.nsys-repProcessing events...
+[1/1] [0%                          ] bf16_compile_512.nsys-rep[1/1] [9%                          ] bf16_compile_512.nsys-rep[1/1] [============54%             ] bf16_compile_512.nsys-rep[1/1] [========================100%] bf16_compile_512.nsys-rep[1/1] [========================100%] bf16_compile_512.nsys-rep
+{'model': 'pixart_sigma', 'size': 512, 'batch': 1, 'mode': 'variant', 'backend': None, 'width': None, 'compile': False, 'tokens': 1024, 'rows': 2048, 'config': 'bf16_compile', 'variant': 'bf16+compile', 'gpu_ms': {'n': 5, 'median': 22.08563232421875, 'min': 22.08415985107422, 'p10': 22.08415985107422, 'p90': 22.725120544433594, 'max': 22.725120544433594, 'std': 0.25650334711314066}, 'cpu_launch_ms': 6.608488038182259, 'peak_mem_gb': 1.385045051574707}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/bf16_compile_512.nsys-rep

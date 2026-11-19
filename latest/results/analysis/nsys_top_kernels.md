@@ -23,6 +23,30 @@
 | 0.49 | 88 | elementwise | `void at::native::elementwise_kernel<(int)128, (int)4, void at::native::gpu_kernel_impl_noc` |
 | 0.39 | 57 | layernorm | `void at::native::<unnamed>::vectorized_layer_norm_kernel<c10::BFloat16, float, (bool)0>(in` |
 
+### bf16_compile_1024
+| ms/step | calls/step | class | kernel |
+|---|---|---|---|
+| 32.65 | 28 | attention | `void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (` |
+| 23.31 | 169 | bf16_gemm | `void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_64x64_32x6_tn_align8>(` |
+| 13.89 | 28 | bf16_gemm | `void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_64x128_64x3_tn_align8>` |
+| 12.40 | 28 | bf16_gemm | `void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_128x256_32x3_tn_align8` |
+| 10.84 | 28 | attention | `fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass:` |
+| 1.99 | 28 | attention | `triton_poi_fused__scaled_dot_product_efficient_attention_clone_constant_pad_nd_expand_slic` |
+| 1.85 | 28 | inductor | `triton_poi_fused_gelu_view_4` |
+| 1.03 | 28 | inductor | `triton_red_fused_add_div_mul_native_layer_norm_split_unsqueeze_view_3` |
+
+### bf16_compile_512
+| ms/step | calls/step | class | kernel |
+|---|---|---|---|
+| 7.86 | 169 | bf16_gemm | `void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_64x64_32x6_tn_align8>(` |
+| 3.85 | 85 | bf16_gemm | `void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_128x64_64x3_tn_align8>` |
+| 2.95 | 28 | bf16_gemm | `void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_256x128_32x3_tn_align8` |
+| 2.69 | 28 | attention | `fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass:` |
+| 2.42 | 28 | attention | `void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (` |
+| 0.30 | 27 | inductor | `triton_poi_fused_gelu_view_4` |
+| 0.23 | 27 | inductor | `triton_red_fused_add_div_mul_native_layer_norm_split_unsqueeze_view_3` |
+| 0.21 | 27 | inductor | `triton_red_fused_add_mul_native_layer_norm_split_unsqueeze_view_0` |
+
 ### fp8_1024
 | ms/step | calls/step | class | kernel |
 |---|---|---|---|
@@ -214,6 +238,54 @@
 | 0.35 | 189 | inductor | `triton_poi_fused___lshift_____rshift____scaled_mm__to_copy__unsafe_view_bitwise_or_clamp_c` |
 | 0.31 | 189 | inductor | `triton_poi_fused___lshift_____rshift____scaled_mm__to_copy__unsafe_view_bitwise_or_clamp_c` |
 | 0.30 | 108 | attention | `triton_poi_fused__scaled_dot_product_flash_attention__to_copy_add_div_mul_transpose_view_5` |
+
+### module_best_compile_1024
+| ms/step | calls/step | class | kernel |
+|---|---|---|---|
+| 31.74 | 28 | attention | `void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (` |
+| 9.99 | 28 | attention | `fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass:` |
+| 9.98 | 174 | fp4_gemm | `cutlass3x_sm120_bstensorop_s16864gemm_block_scaled_ue4m3xe2m1_ue4m3xe2m1_f32_bf16_bf16_128` |
+| 3.89 | 28 | fp4_gemm | `cutlass3x_sm120_bstensorop_s16864gemm_block_scaled_ue4m3xe2m1_ue4m3xe2m1_f32_bf16_bf16_128` |
+| 3.04 | 202 | other | `quant_kernel(const __nv_bfloat16 *, const float *, unsigned char *, unsigned char *, float` |
+| 1.72 | 28 | inductor | `triton_poi_fused__to_copy_add_cuda_swizzled_gelu_mul_view_10` |
+| 0.87 | 28 | inductor | `triton_red_fused__to_copy_add_cuda_swizzled_div_mul_native_layer_norm_split_unsqueeze_view` |
+| 0.75 | 28 | inductor | `triton_red_fused_add_cuda_swizzled_mul_native_layer_norm_split_unsqueeze_view_0` |
+
+### module_best_compile_512
+| ms/step | calls/step | class | kernel |
+|---|---|---|---|
+| 4.14 | 202 | fp4_gemm | `cutlass3x_sm120_bstensorop_s16864gemm_block_scaled_ue4m3xe2m1_ue4m3xe2m1_f32_bf16_bf16_128` |
+| 2.65 | 28 | attention | `fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass:` |
+| 2.37 | 28 | attention | `void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (` |
+| 0.86 | 202 | other | `quant_kernel(const __nv_bfloat16 *, const float *, unsigned char *, unsigned char *, float` |
+| 0.37 | 27 | inductor | `triton_poi_fused__to_copy_add_cuda_swizzled_gelu_mul_view_10` |
+| 0.24 | 27 | inductor | `triton_red_fused__to_copy_add_cuda_swizzled_div_mul_native_layer_norm_split_unsqueeze_view` |
+| 0.19 | 27 | inductor | `triton_red_fused_add_cuda_swizzled_mul_native_layer_norm_split_unsqueeze_view_0` |
+| 0.09 | 27 | inductor | `triton_poi_fused__to_copy_add_mul_split_unsqueeze_view_11` |
+
+### module_triton_1024
+| ms/step | calls/step | class | kernel |
+|---|---|---|---|
+| 30.74 | 28 | attention | `void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (` |
+| 10.07 | 258 | fp4_gemm | `cutlass3x_sm120_bstensorop_s16864gemm_block_scaled_ue4m3xe2m1_ue4m3xe2m1_f32_bf16_bf16_128` |
+| 9.91 | 374 | elementwise | `void at::native::elementwise_kernel<(int)128, (int)4, void at::native::gpu_kernel_impl_noc` |
+| 9.89 | 399 | elementwise | `void at::native::elementwise_kernel<(int)128, (int)4, void at::native::gpu_kernel_impl_noc` |
+| 9.48 | 28 | attention | `fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass:` |
+| 6.26 | 202 | our_quant | `_fused_quant2lvl_kernel` |
+| 4.39 | 202 | elementwise | `void at::native::vectorized_elementwise_kernel<(int)4, at::native::AbsFunctor<c10::BFloat1` |
+| 3.97 | 28 | fp4_gemm | `cutlass3x_sm120_bstensorop_s16864gemm_block_scaled_ue4m3xe2m1_ue4m3xe2m1_f32_bf16_bf16_128` |
+
+### module_triton_512
+| ms/step | calls/step | class | kernel |
+|---|---|---|---|
+| 4.81 | 286 | fp4_gemm | `cutlass3x_sm120_bstensorop_s16864gemm_block_scaled_ue4m3xe2m1_ue4m3xe2m1_f32_bf16_bf16_128` |
+| 2.55 | 28 | attention | `fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass:` |
+| 2.42 | 374 | elementwise | `void at::native::elementwise_kernel<(int)128, (int)4, void at::native::gpu_kernel_impl_noc` |
+| 2.38 | 28 | attention | `void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (` |
+| 2.36 | 399 | elementwise | `void at::native::elementwise_kernel<(int)128, (int)4, void at::native::gpu_kernel_impl_noc` |
+| 1.66 | 202 | our_quant | `_fused_quant2lvl_kernel` |
+| 1.00 | 202 | reduce | `void at::native::reduce_kernel<(int)512, (int)1, at::native::ReduceOp<c10::BFloat16, at::n` |
+| 0.75 | 401 | copy | `void at::native::elementwise_kernel<(int)128, (int)4, void at::native::gpu_kernel_impl_noc` |
 
 ### stock_1024
 | ms/step | calls/step | class | kernel |

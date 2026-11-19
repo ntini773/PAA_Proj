@@ -1,0 +1,10 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 89.76it/s]
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-3a0c.qdstrm'
+[1/1] [0%                          ] module_best_compile_512.nsys-repProcessing events...
+[1/1] [0%                          ] module_best_compile_512.nsys-rep[1/1] [9%                          ] module_best_compile_512.nsys-rep[1/1] [============54%             ] module_best_compile_512.nsys-rep[1/1] [========================100%] module_best_compile_512.nsys-rep[1/1] [========================100%] module_best_compile_512.nsys-rep
+{'model': 'pixart_sigma', 'size': 512, 'batch': 1, 'mode': 'variant', 'backend': None, 'width': None, 'compile': False, 'tokens': 1024, 'rows': 2048, 'config': 'module_best_compile', 'variant': 'module+be=cuda_swizzled+static+concat+compile', 'gpu_ms': {'n': 5, 'median': 12.758848190307617, 'min': 12.596128463745117, 'p10': 12.596128463745117, 'p90': 14.272128105163574, 'max': 14.272128105163574, 'std': 0.6307865828057799}, 'cpu_launch_ms': 12.659410946071148, 'peak_mem_gb': 0.5854330062866211}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/module_best_compile_512.nsys-rep

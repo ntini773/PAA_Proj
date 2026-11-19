@@ -1,0 +1,13 @@
+memory.used [MiB], utilization.gpu [%]
+2 MiB, 0 %
+[02:08:13] nsys pixart_sigma bf16_compile_512
+[02:08:23] nsys pixart_sigma stock_compile_512
+[02:08:40] nsys pixart_sigma module_best_compile_512
+[02:08:50] nsys pixart_sigma bf16_compile_1024
+[02:09:00] nsys pixart_sigma stock_compile_1024
+[02:09:15] nsys pixart_sigma module_best_compile_1024
+memory.used [MiB], utilization.gpu [%]
+2 MiB, 0 %
+[02:09:26] nsys pixart_sigma module_triton_512
+[02:09:36] nsys pixart_sigma module_triton_1024
+wrote /data/cs3406/team13/PAA_Proj/rtx5000_next/results/analysis/nsys_summary.csv (28 runs) and nsys_top_kernels.md

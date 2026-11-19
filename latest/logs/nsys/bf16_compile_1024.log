@@ -1,0 +1,10 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 20.09it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 20.07it/s]
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-b539.qdstrm'
+[1/1] [0%                          ] bf16_compile_1024.nsys-repProcessing events...
+[1/1] [0%                          ] bf16_compile_1024.nsys-rep[1/1] [5%                          ] bf16_compile_1024.nsys-rep[1/1] [10%                         ] bf16_compile_1024.nsys-rep[1/1] [11%                         ] bf16_compile_1024.nsys-rep[1/1] [============55%             ] bf16_compile_1024.nsys-rep[1/1] [========================100%] bf16_compile_1024.nsys-rep[1/1] [========================100%] bf16_compile_1024.nsys-rep
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'variant', 'backend': None, 'width': None, 'compile': False, 'tokens': 4096, 'rows': 8192, 'config': 'bf16_compile', 'variant': 'bf16+compile', 'gpu_ms': {'n': 5, 'median': 103.19737243652344, 'min': 95.31356811523438, 'p10': 95.31356811523438, 'p90': 104.12979125976562, 'max': 104.12979125976562, 'std': 3.3273324988940307}, 'cpu_launch_ms': 6.950953043997288, 'peak_mem_gb': 1.505589485168457}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/bf16_compile_1024.nsys-rep
