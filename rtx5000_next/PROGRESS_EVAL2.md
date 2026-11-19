@@ -2,7 +2,7 @@
 
 Plan, reasons and findings: [../eval2-pipeline.md](../eval2-pipeline.md). Bugs: [BUGS.md](BUGS.md). Commands: [../commands.md](../commands.md).
 `run_eval2.sh` writes the markers; `python progress_report.py` refreshes the Status column (this file is separate from PROGRESS.md on purpose, so the server's local edits to PROGRESS.md never block a `git pull`).
-Counts: <!-- counts -->0 done, 0 failed, 15 todo<!-- /counts -->
+Counts: <!-- counts -->0 done, 0 failed, 0 todo<!-- /counts -->
 
 ## Order on the server
 

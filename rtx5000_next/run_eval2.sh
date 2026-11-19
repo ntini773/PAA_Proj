@@ -98,5 +98,5 @@ for s in $STAGES; do
   fn=$(echo $s | tr 'E' 'e')
   run $s $fn
 done
-$PY progress_report.py
+[ $DRY -eq 0 ] && $PY progress_report.py
 echo "finished. Failed stages: $(ls results/.fail 2>/dev/null | tr '\n' ' ')"
