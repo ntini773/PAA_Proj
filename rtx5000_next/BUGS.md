@@ -33,6 +33,7 @@ Most of this code was written without being able to run it (no sm_120 nvcc local
 | `quant_backends.py` custom-op wrapper | May still hit a torchao tensor-subclass limit under `torch.compile` | S01, config `fused_triton_op_compile` |
 | `bench/peaks.py` NVFP4 GEMM | Uses a pre-quantized input through `F.linear`. Read in torchao source, not run | R01 (`fp4_tflops` null if it fails) |
 | `analysis/roofline_pixart.py` | The quantize class time includes all non-GEMM, non-attention kernels, so its efficiency is a lower bound | R02 |
+| Emulated NVFP4 vs real torchao (Q01 `--validate-stock`, seen 11-19) | The emulation is not tight. Whole-transformer relative L2 between stock and emulated is 0.06 at t=999..500, 0.09 at t=250 and 0.17 at t=50, while each is about 0.10 to 0.19 from bf16. The emulated error is about half of the real error in size, so the w4a16 / w16a4 split may not transfer to real NVFP4. Cause not yet found (candidates: scale rounding to e4m3, per-tensor scale, rounding ties, weight path) | Write a single-tensor check: emulated fake-quant vs torchao quantize then dequantize on real activations |
 | Precision at real timesteps | Latents are fixed noise, not partly denoised, in Q01 and Q02 | Q03 uses the full pipeline |
 
 ## Rules distilled
