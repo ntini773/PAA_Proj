@@ -93,6 +93,7 @@ def main():
     a.add_argument("--clip", default="openai/clip-vit-large-patch14")
     a.add_argument("--no-clip", action="store_true")
     a.add_argument("--out", default=None)
+    a.add_argument("--extra-ref", default=None, help="also report each variant's distance to this variant (e.g. stock)")
     a = a.parse_args()
 
     items = load_prompt_embeds(a.embeds)[:a.max_prompts]
@@ -103,6 +104,7 @@ def main():
     ref = generate(a.reference, a.size, items, a.steps)
     save(ref["images"], out / a.reference.replace("+", "_"))
     table, sheet, failed = [], {a.reference: ref["images"]}, []
+    allimgs = {a.reference: ref["images"]}   # kept for the second comparison (--extra-ref)
     out.mkdir(parents=True, exist_ok=True)
     for name in [a.reference] + [v for v in a.variants if v != a.reference]:
         try:  # one variant that cannot run (missing package, unsupported shape) must not lose the others
@@ -114,6 +116,7 @@ def main():
             gc.collect()
             torch.cuda.empty_cache()
             continue
+        allimgs[name] = g["images"]
         if name != a.reference:
             save(g["images"], out / name.replace("+", "_"))
             sheet[name] = g["images"]
@@ -124,7 +127,18 @@ def main():
               + (f"  CLIP {s['clip_score'][0]:.1f}" if "clip_score" in s else ""), flush=True)
         (out / "summary.json").write_text(json.dumps(table, default=float))  # written after every variant: a later crash keeps these
     (out / "failed_variants.txt").write_text("\n".join(f"{n}\t{e}" for n, e in failed) + "\n")
+    if a.extra_ref and a.extra_ref in allimgs:  # second distance: to another variant (typically stock NVFP4)
+        for r in table:
+            _, r["vs_extra"] = ev.evaluate(allimgs[r["name"]], allimgs[a.extra_ref], prompts, clip)
+        print(f"also compared with {a.extra_ref}:", {r["name"]: round(r["vs_extra"]["lpips"][0], 3) for r in table})
     (out / "summary.json").write_text(json.dumps(table, default=float))
+    try:
+        write_reports(table, sheet, out, a, items)
+    except Exception as e:  # the json above already holds everything; a report problem must not fail the stage
+        print("report writing failed (summary.json is saved):", type(e).__name__, str(e)[:200])
+
+
+def write_reports(table, sheet, out, a, items):
     with open(out / "summary.csv", "w", newline="") as f:
         w = csv.writer(f)
         keys = list(table[0]["summary"])
