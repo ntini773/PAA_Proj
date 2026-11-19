@@ -1,0 +1,7 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:02<00:00,  1.40it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:02<00:00,  1.40it/s]
+delta 0.05: {'asc': 29, 'full': 362, 'ast': 1}  modeled attention cost 0.96  (8s)
+delta 0.1: {'asc': 47, 'full': 337, 'ast': 3, 'wars': 5}  modeled attention cost 0.92  (3s)
+delta 0.2: {'asc': 116, 'full': 194, 'ast': 16, 'wars': 66}  modeled attention cost 0.67  (3s)
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.95it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.95it/s]

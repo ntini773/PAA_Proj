@@ -1,0 +1,8 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:02<00:00,  1.41it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:02<00:00,  1.41it/s]
+286 layers; wrote /data/cs3406/team13/PAA_Proj/rtx5000_next/results/static_scales_512.json
+largest amax drift across denoise steps (max/min): [('transformer_blocks.27.attn2.to_out.0', 175.8), ('transformer_blocks.26.attn2.to_out.0', 104.2), ('transformer_blocks.17.attn2.to_out.0', 42.2), ('transformer_blocks.16.attn2.to_out.0', 31.9), ('transformer_blocks.23.attn2.to_out.0', 18.8)]
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.86it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  1.85it/s]
+286 layers; wrote /data/cs3406/team13/PAA_Proj/rtx5000_next/results/static_scales_1024.json
+largest amax drift across denoise steps (max/min): [('transformer_blocks.27.attn2.to_out.0', 150.3), ('transformer_blocks.26.attn2.to_out.0', 113.4), ('transformer_blocks.23.attn2.to_out.0', 23.3), ('transformer_blocks.16.attn2.to_out.0', 19.5), ('transformer_blocks.25.attn2.to_out.0', 17.0)]
