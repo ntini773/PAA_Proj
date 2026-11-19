@@ -1,0 +1,34 @@
+{
+ "model": "pixart_sigma",
+ "size": 512,
+ "batch": 1,
+ "mode": "variant",
+ "backend": null,
+ "width": null,
+ "compile": false,
+ "tokens": 1024,
+ "rows": 2048,
+ "config": "module_best_kvds2",
+ "variant": "module+be=cuda_swizzled+static+concat+trim+kvds2+compile",
+ "gpu_ms": {
+  "n": 30,
+  "median": 9.45252799987793,
+  "min": 9.349568367004395,
+  "p10": 9.39465618133545,
+  "p90": 9.594176292419434,
+  "max": 9.83948802947998,
+  "std": 0.09950059453518245
+ },
+ "cpu_launch_ms": 9.437808999791741,
+ "peak_mem_gb": 0.5854330062866211,
+ "graph_ms": {
+  "n": 30,
+  "median": 8.23964786529541,
+  "min": 8.186079978942871,
+  "p10": 8.188159942626953,
+  "p90": 8.28435230255127,
+  "max": 8.362496376037598,
+  "std": 0.04241567734708015
+ },
+ "iters": 30
+}

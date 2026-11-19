@@ -1,0 +1,58 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00, 17.11it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 25.61it/s]
+Traceback (most recent call last):
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/step_target.py", line 188, in <module>
+    main()
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/step_target.py", line 126, in main
+    r.forward()
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/step_target.py", line 52, in forward
+    return self._fwd()
+           ^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/variants.py", line 172, in fwd
+    return tr(x, encoder_hidden_states=enc, encoder_attention_mask=mask, timestep=tt, added_cond_kwargs=added, return_dict=False)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/transformers/pixart_transformer_2d.py", line 330, in forward
+    hidden_states = block(
+                    ^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1781, in _wrapped_call_impl
+    return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_dynamo/eval_frame.py", line 1261, in compile_wrapper
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/attention.py", line 1005, in forward
+    attn_output = self.attn1(
+                  ^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/attention_processor.py", line 607, in forward
+    return self.processor(
+           ^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/attention_patch.py", line 115, in __call__
+    out = sdpa(q, k, v, mask, self.cfg, self.is_self)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/attention_patch.py", line 77, in sdpa
+    return _sage(q, k, v, backend)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/attention_patch.py", line 47, in _sage
+    return sageattn(q, k, v, tensor_layout="HND", is_causal=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/sageattention/core.py", line 82, in sageattn
+    assert headdim in [64, 96, 128], "headdim should be in [64, 96, 128]."
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/sageattention/core.py", line 82, in torch_dynamo_resume_in_sageattn_at_82
+    assert headdim in [64, 96, 128], "headdim should be in [64, 96, 128]."
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: headdim should be in [64, 96, 128].
