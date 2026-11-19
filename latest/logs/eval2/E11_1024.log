@@ -20,3 +20,6 @@ module+be=cuda_swizzled+selective               2321.4 ms/img  LPIPS 0.5250  SSI
 Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.71it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.70it/s]
 bf16+trim                                       1849.6 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 28.9
 Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.33it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.33it/s]
+bf16+xcudnn                                     1776.6 ms/img  LPIPS 0.1033  SSIM 0.817  CLIP 28.7
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 33.05it/s]
+run_eval2.sh: line 90: 503420 Killed                  $PY quality/run_quality.py --size $s --steps $STEPS --embeds $EMBEDS ${CLIP:+--clip $CLIP} $CLIPARG --variants $(quality_variants | tr '\n' ' ')
