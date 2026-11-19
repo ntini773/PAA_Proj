@@ -1,0 +1,95 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 54.95it/s]
+Traceback (most recent call last):
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/step_target.py", line 188, in <module>
+    main()
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/step_target.py", line 126, in main
+    r.forward()
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/step_target.py", line 52, in forward
+    return self._fwd()
+           ^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/variants.py", line 172, in fwd
+    return tr(x, encoder_hidden_states=enc, encoder_attention_mask=mask, timestep=tt, added_cond_kwargs=added, return_dict=False)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/transformers/pixart_transformer_2d.py", line 308, in forward
+    timestep, embedded_timestep = self.adaln_single(
+                                  ^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/normalization.py", line 265, in forward
+    embedded_timestep = self.emb(timestep, **added_cond_kwargs, batch_size=batch_size, hidden_dtype=hidden_dtype)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/embeddings.py", line 2177, in forward
+    timesteps_emb = self.timestep_embedder(timesteps_proj.to(dtype=hidden_dtype))  # (N, D)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/embeddings.py", line 1297, in forward
+    sample = self.linear_1(sample)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchao/utils.py", line 692, in _dispatch__torch_dispatch__
+    return cls._ATEN_OP_TABLE[cls][func](func, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchao/utils.py", line 438, in wrapper
+    return _func(f, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchao/prototype/mx_formats/nvfp4_tensor.py", line 699, in nvfp4_addmm
+    input_tensor = NVFP4Tensor.to_nvfp4(
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchao/prototype/mx_formats/nvfp4_tensor.py", line 165, in to_nvfp4
+    blockwise_scales, data_lp = mslk_quantize_nvfp4(data_hp, per_tensor_scale)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchao/prototype/mx_formats/kernels.py", line 1215, in mslk_quantize_nvfp4
+    return _mslk_quantize_nvfp4_custom_op(x, mslk_global_scale)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_library/custom_ops.py", line 866, in __call__
+    return self._opoverload(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_ops.py", line 916, in __call__
+    return self._op(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_library/custom_ops.py", line 442, in backend_impl
+    result = self._backend_fns[device_type](*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_compile.py", line 54, in inner
+    return disable_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_dynamo/eval_frame.py", line 1548, in _fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_library/custom_ops.py", line 503, in wrapped_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchao/prototype/mx_formats/kernels.py", line 1232, in _mslk_quantize_nvfp4_custom_op
+    assert _mslk_available, (
+           ^^^^^^^^^^^^^^^
+AssertionError: mslk is required for NVFP4 triton quantization. Install from https://github.com/meta-pytorch/MSLK
