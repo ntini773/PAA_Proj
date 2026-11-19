@@ -14,8 +14,9 @@ from kernel_classes import classify, QUANT_PATH
 
 NCU = ROOT / "results" / "ncu"
 OUT = ROOT / "results" / "analysis"
-UNIT = {"nsecond": 1, "usecond": 1e3, "msecond": 1e6, "second": 1e9, "byte": 1, "Kbyte": 1e3, "Mbyte": 1e6, "Gbyte": 1e9,
-        "KB": 1e3, "MB": 1e6, "GB": 1e9}
+# the raw page uses the short time units (ns, us, ms, s); to nanoseconds and bytes
+UNIT = {"ns": 1, "us": 1e3, "ms": 1e6, "s": 1e9, "nsecond": 1, "usecond": 1e3, "msecond": 1e6, "second": 1e9,
+        "byte": 1, "Kbyte": 1e3, "Mbyte": 1e6, "Gbyte": 1e9, "KB": 1e3, "MB": 1e6, "GB": 1e9}
 
 
 def parse(path):
@@ -55,6 +56,9 @@ def main():
         ks = parse(p)
         if not ks:
             continue
+        missing = [m for m in ("gpu__time_duration.sum", "dram__bytes_op_read.sum", "dram__bytes_op_write.sum") if m not in ks[0]]
+        if missing:  # ncu drops unknown metric names without an error
+            sys.exit(f"{p.name} lacks {missing}: run profiling/ncu_reexport.sh")
         meta_p = ROOT / "results" / "meta" / f"{cfg}_{layer}_{size}.json"
         meta = json.loads(meta_p.read_text()) if meta_p.exists() else {}
         shape = meta.get("layer", {}).get("input_shape")
@@ -67,7 +71,7 @@ def main():
             ideal = M * K * 2 + M * K / 2 + M * K / 16
         quant = [k for k in ks if classify(k["Kernel Name"]) in QUANT_PATH]
         gemm = [k for k in ks if k not in quant]
-        dram = lambda k: k.get("dram__bytes_read.sum", 0) + k.get("dram__bytes_write.sum", 0)
+        dram = lambda k: k.get("dram__bytes_op_read.sum", 0) + k.get("dram__bytes_op_write.sum", 0)
         t = lambda k: k.get("gpu__time_duration.sum", 0)
         qt = sum(map(t, quant))
         wavg = lambda key: sum(k.get(key, 0) * t(k) for k in quant) / qt if qt else None
