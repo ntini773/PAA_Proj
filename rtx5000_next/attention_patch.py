@@ -42,11 +42,26 @@ class AttnConfig:
 
 
 def _sage(q, k, v, which):
+    """Sage kernels accept head dim 64, 96 or 128 only; PixArt uses 72. Zero-pad q, k, v to the next supported size.
+    Zero columns add nothing to QK^T and the padded output columns are dropped, so the result is the same attention
+    provided the softmax scale stays 1/sqrt(72) (passed as sm_scale)."""
+    D = q.shape[-1]
+    P = next((p for p in (64, 96, 128) if p >= D), None)
+    if P is None:
+        raise ValueError(f"head dim {D} too large for Sage")
+    scale = D ** -0.5
+    if P != D:
+        pad = (0, P - D)
+        q, k, v = (F.pad(t, pad) for t in (q, k, v))
     if which == "sage2":
         from sageattention import sageattn
-        return sageattn(q, k, v, tensor_layout="HND", is_causal=False)
-    from sageattn3 import sageattn3_blackwell
-    return sageattn3_blackwell(q, k, v)
+        out = sageattn(q, k, v, tensor_layout="HND", is_causal=False, sm_scale=scale)
+    else:
+        from sageattn3 import sageattn3_blackwell
+        out = sageattn3_blackwell(q, k, v)  # no sm_scale argument: used only when D == P (64, 128), else the scale would differ
+        if P != D:
+            raise ValueError("sage3 needs head dim 64 or 128 (no softmax-scale argument, so padding would change the result)")
+    return out[..., :D] if P != D else out
 
 
 def pool_kv(k, v, f):

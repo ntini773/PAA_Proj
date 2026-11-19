@@ -102,10 +102,18 @@ def main():
 
     ref = generate(a.reference, a.size, items, a.steps)
     save(ref["images"], out / a.reference.replace("+", "_"))
-    table, sheet = [], {a.reference: ref["images"]}
+    table, sheet, failed = [], {a.reference: ref["images"]}, []
+    out.mkdir(parents=True, exist_ok=True)
     for name in [a.reference] + [v for v in a.variants if v != a.reference]:
-        g = ref if name == a.reference else generate(name, a.size, items, a.steps)
-        rows, summary = ev.evaluate(g["images"], ref["images"], prompts, clip)
+        try:  # one variant that cannot run (missing package, unsupported shape) must not lose the others
+            g = ref if name == a.reference else generate(name, a.size, items, a.steps)
+            rows, summary = ev.evaluate(g["images"], ref["images"], prompts, clip)
+        except Exception as e:
+            failed.append((name, f"{type(e).__name__}: {str(e)[:200]}"))
+            print(f"{name:45s} FAILED  {failed[-1][1]}")
+            gc.collect()
+            torch.cuda.empty_cache()
+            continue
         if name != a.reference:
             save(g["images"], out / name.replace("+", "_"))
             sheet[name] = g["images"]
@@ -113,9 +121,9 @@ def main():
                           model_batches=g["batches"], report=g["report"], summary=summary, per_prompt=rows))
         s = summary
         print(f"{name:45s} {g['denoise_ms'] / len(items):8.1f} ms/img  LPIPS {s['lpips'][0]:.4f}  SSIM {s['ssim'][0]:.3f}"
-              + (f"  CLIP {s['clip_score'][0]:.1f}" if "clip_score" in s else ""))
-
-    out.mkdir(parents=True, exist_ok=True)
+              + (f"  CLIP {s['clip_score'][0]:.1f}" if "clip_score" in s else ""), flush=True)
+        (out / "summary.json").write_text(json.dumps(table, default=float))  # written after every variant: a later crash keeps these
+    (out / "failed_variants.txt").write_text("\n".join(f"{n}\t{e}" for n, e in failed) + "\n")
     (out / "summary.json").write_text(json.dumps(table, default=float))
     with open(out / "summary.csv", "w", newline="") as f:
         w = csv.writer(f)

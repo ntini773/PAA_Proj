@@ -50,6 +50,29 @@ def test_backend_names():
     check("math backend equals default", torch.allclose(a, b, atol=1e-5))
 
 
+def test_sage_head_dim_padding():
+    """Sage kernels take head dim 64/96/128 only; PixArt has 72. The pad-and-slice wrapper must give the same attention."""
+    import sys
+    import types
+
+    def fake_sageattn(q, k, v, tensor_layout="HND", is_causal=False, sm_scale=None):
+        assert q.shape[-1] in (64, 96, 128), "headdim should be in [64, 96, 128]."  # the real kernel's check
+        return F.scaled_dot_product_attention(q, k, v, scale=sm_scale)
+
+    saved = sys.modules.get("sageattention")
+    sys.modules["sageattention"] = types.SimpleNamespace(sageattn=fake_sageattn)
+    try:
+        q, k, v = qkv(B=2, H=4, N=32, D=72)
+        out = ap._sage(q, k, v, "sage2")
+        check("sage2 wrapper: head dim 72 padded to 96 equals plain attention",
+              out.shape == q.shape and torch.allclose(out, F.scaled_dot_product_attention(q, k, v), atol=1e-5))
+    finally:
+        if saved is None:
+            del sys.modules["sageattention"]
+        else:
+            sys.modules["sageattention"] = saved
+
+
 def test_ast_asc_wars_semantics():
     S = dfa.STATE
     S.reset()
@@ -141,5 +164,5 @@ def test_plan_search_and_run_consistency():
 
 
 if __name__ == "__main__":
-    _boot.run(test_trim_text_is_exact, test_kv_pool_shapes, test_backend_names, test_ast_asc_wars_semantics,
+    _boot.run(test_trim_text_is_exact, test_kv_pool_shapes, test_backend_names, test_sage_head_dim_padding, test_ast_asc_wars_semantics,
               test_empty_plan_equals_plain_attention, test_plan_search_and_run_consistency)
