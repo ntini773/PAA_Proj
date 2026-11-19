@@ -62,6 +62,8 @@ run() {  # run ID command...   (honours --only / --from / --dry-run / done marke
   if "$@" > $log 2>&1; then touch results/.done/$id; rm -f results/.fail/$id
   else touch results/.fail/$id; echo "  FAILED, see $log (last lines:)"; tail -n 5 $log | sed 's/^/    /'; fi
   $PY progress_report.py > /dev/null 2>&1
+  # save the small results to the results-eval2 branch after every stage (never fails the run; NO_SAVE=1 disables)
+  [ -z "$NO_SAVE" ] && bash save_results.sh "$id" >> logs/eval2/save.log 2>&1
 }
 
 e01() { $PY prompts/make_prompt_embeds.py --prompts prompts/prompts_calib.json --out $CALIB; }

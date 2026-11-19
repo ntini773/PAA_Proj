@@ -66,6 +66,20 @@ Use `pixi run` in front of each if `python` is not the pixi python (or set `PY=.
 
 Optional installs for the Sage attention variants (CPU build, may fail with CUDA 13; the stages skip them if absent): `pip install sageattention --no-build-isolation` (Sage2), the `sageattention3_blackwell` folder of https://github.com/thu-ml/SageAttention (Sage FP4). For `stock_tk`: `pip install --pre mslk`.
 
+## Saving results while the runs go (so nothing is lost if the GPU session ends)
+
+`run_eval2.sh` saves after every stage by itself (copies small result files to the git branch `results-eval2` and pushes it). Check that pushing works before the long run:
+
+```bash
+bash save_results.sh --check      # tests read and push access to origin
+bash save_results.sh mylabel      # save now by hand
+SAVE_DIR=/some/other/disk bash save_results.sh mylabel   # also copy to another directory
+NO_SAVE=1 bash run_eval2.sh       # turn the automatic save off
+```
+
+If push access fails, the files stay committed in `../PAA_results_eval2` (a second git worktree) and the next save pushes them. To fix credentials: `git config --global credential.helper store`, then one manual `git push` that asks for a GitHub user name and a personal access token. Big files (`*.nsys-rep`, `*.ncu-rep`, `*.sqlite`, images) are not saved; copy them with the tar from stage E15.
+Read the results on your machine: `git fetch origin results-eval2 && git worktree add ../results_eval2 origin/results-eval2` (folder `latest/`).
+
 ## Local checks (laptop RTX 5060, no nvcc 13)
 
 ```bash
