@@ -1,0 +1,23 @@
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Fetching 1 files:   0%|          | 0/1 [00:00<?, ?it/s]Fetching 1 files: 100%|██████████| 1/1 [00:00<00:00, 44620.26it/s]
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.08it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.08it/s]
+/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+bf16                                              89.6 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 28.9
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.41it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.41it/s]
+stock                                            298.4 ms/img  LPIPS 0.3768  SSIM 0.453  CLIP 27.9
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.95it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.95it/s]
+w4a16                                            352.1 ms/img  LPIPS 0.2834  SSIM 0.551  CLIP 29.1
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.43it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.43it/s]
+module+be=cuda_swizzled                           94.4 ms/img  LPIPS 0.3527  SSIM 0.465  CLIP 28.4
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.92it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.92it/s]
+module+be=cuda_swizzled+static+concat             60.1 ms/img  LPIPS 0.4143  SSIM 0.414  CLIP 27.7
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.98it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.98it/s]
+module+be=cuda_swizzled+static+concat+trim+xcudnn    102.4 ms/img  LPIPS 0.4142  SSIM 0.412  CLIP 27.4
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.66it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:01<00:00,  2.66it/s]
+module+be=cuda_swizzled+static+concat+selective+trim+xcudnn     57.7 ms/img  LPIPS 0.3260  SSIM 0.521  CLIP 29.1
+also compared with stock: {'bf16': 0.377, 'stock': 0.0, 'w4a16': 0.328, 'module+be=cuda_swizzled': 0.326, 'module+be=cuda_swizzled+static+concat': 0.408, 'module+be=cuda_swizzled+static+concat+trim+xcudnn': 0.42, 'module+be=cuda_swizzled+static+concat+selective+trim+xcudnn': 0.327}
+wrote results/quality_final/256
