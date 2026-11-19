@@ -2,7 +2,7 @@
 
 All code in this folder is written but **never run**. First run on the server will find bugs. Paste the failing `logs/<ID>.log`.
 `python progress_report.py` refreshes the Status column from `results/.done/<ID>` and `results/.fail/<ID>`. `run_all.sh` calls it after every test.
-Counts: <!-- counts -->0 done, 0 failed, 0 todo<!-- /counts -->
+Counts: <!-- counts -->17 done, 0 failed, 4 todo<!-- /counts -->
 
 ## How to run
 
@@ -43,27 +43,27 @@ The scripts find the older code (`fused_adaln_nvfp4.py`, `scale_e2e.py`, `tier2_
 
 | ID | Test | Hypothesis | Script | Status |
 |---|---|---|---|---|
-| N01 | Repo access, size, params, fits 48 GB, diffusers class present | H8 | `hf/check_model_repos.py` | todo |
-| N02 | Linear layer widths per model (meta device, config only) | H8 | `hf/probe_model_arch.py` | todo |
-| K01 | CUDA row kernel: bytes vs Triton and torchao, time | H3 | `bench/cuda_vs_triton.py --only cuda_row` | todo |
-| K02 | CUDA swizzled kernel and amax+quantize: bytes, time | H3 | `bench/cuda_vs_triton.py --only cuda_swizzled amax_swizzled` | todo |
-| K03 | CUDA LayerNorm + modulate + quantize: bytes, time | H3 | `bench/cuda_vs_triton.py --only ln_mod_quant` | todo |
-| S01 | Step time matrix: 11 configs x sizes, eager, CPU launch, CUDA Graph | H3 H4 H5 H6 | `profiling/run_step_matrix.sh` | todo |
-| P01 | nsys per config and size: kernels per step, GPU busy, time by category | H2 H3 H5 | `profiling/nsys_step.sh` | todo |
-| P02 | ncu per layer (qkv, fc1, fc2, cross K/V): DRAM vs ideal, throughput | H1 H2 | `profiling/ncu_layer.sh` | todo |
-| P03 | Summarize nsys | H2 | `analysis/analyze_nsys.py` | todo |
-| P04 | Summarize ncu | H1 | `analysis/analyze_ncu.py` | todo |
-| R01 | Measured limits of the GPU: copy GB/s, bf16 and NVFP4 GEMM TFLOP/s, attention TFLOP/s. Needs an idle GPU, about 2 min | H1 H6 | `bench/peaks.py` | todo |
-| R02 | Whole-step roofline for PixArt from nsys times and analytic FLOPs and bytes (no GPU; needs P03 and R01) | H1 H2 H6 | `analysis/roofline_pixart.py` | todo |
+| N01 | Repo access, size, params, fits 48 GB, diffusers class present | H8 | `hf/check_model_repos.py` | DONE 11-18 23:06 |
+| N02 | Linear layer widths per model (meta device, config only) | H8 | `hf/probe_model_arch.py` | DONE 11-18 23:06 |
+| K01 | CUDA row kernel: bytes vs Triton and torchao, time | H3 | `bench/cuda_vs_triton.py --only cuda_row` | DONE 11-18 23:06 |
+| K02 | CUDA swizzled kernel and amax+quantize: bytes, time | H3 | `bench/cuda_vs_triton.py --only cuda_swizzled amax_swizzled` | DONE 11-18 23:06 |
+| K03 | CUDA LayerNorm + modulate + quantize: bytes, time | H3 | `bench/cuda_vs_triton.py --only ln_mod_quant` | DONE 11-18 23:06 |
+| S01 | Step time matrix: 11 configs x sizes, eager, CPU launch, CUDA Graph | H3 H4 H5 H6 | `profiling/run_step_matrix.sh` | DONE 11-18 23:06 |
+| P01 | nsys per config and size: kernels per step, GPU busy, time by category | H2 H3 H5 | `profiling/nsys_step.sh` | DONE 11-18 23:06 |
+| P02 | ncu per layer (qkv, fc1, fc2, cross K/V): DRAM vs ideal, throughput | H1 H2 | `profiling/ncu_layer.sh` | DONE 11-18 23:06 |
+| P03 | Summarize nsys | H2 | `analysis/analyze_nsys.py` | DONE 11-18 23:06 |
+| P04 | Summarize ncu | H1 | `analysis/analyze_ncu.py` | DONE 11-18 23:06 |
+| R01 | Measured limits of the GPU: copy GB/s, bf16 and NVFP4 GEMM TFLOP/s, attention TFLOP/s. Needs an idle GPU, about 2 min | H1 H6 | `bench/peaks.py` | DONE 11-18 23:06 |
+| R02 | Whole-step roofline for PixArt from nsys times and analytic FLOPs and bytes (no GPU; needs P03 and R01) | H1 H2 H6 | `analysis/roofline_pixart.py` | DONE 11-18 23:06 |
 | R03 | Whole-forward roofline for every config and size (eager and CUDA Graph) against the speed-of-light time. No GPU; needs S01 and R01 | H1 H2 H5 H6 | `analysis/roofline_whole_forward.py` | todo |
-| Q01 | Precision ablation w4a16 / w16a4 / w4a4 at 512 px, validated against real NVFP4 | H7 | `precision/precision_ablation.py --validate-stock` | todo |
-| Q02 | Same at 1024 px | H7 | `precision/precision_ablation.py --size 1024` | todo |
-| Q03 | PixArt images for each variant (needs real embeds for a meaningful image) | H7 | `precision/precision_images_pixart.py` | todo |
+| Q01 | Precision ablation w4a16 / w16a4 / w4a4 at 512 px, validated against real NVFP4 | H7 | `precision/precision_ablation.py --validate-stock` | DONE 11-18 23:06 |
+| Q02 | Same at 1024 px | H7 | `precision/precision_ablation.py --size 1024` | DONE 11-18 23:06 |
+| Q03 | PixArt images for each variant (needs real embeds for a meaningful image) | H7 | `precision/precision_images_pixart.py` | DONE 11-18 23:06 |
 | M01 | Sana 0.6B 1024 (download 3.7 GB): download, smoke, matrix, precision | H8 | `bench/new_model_suite.sh sana_600m 1024` | todo |
 | M02 | SD3.5 Medium 1024 (download 5.1 GB, gated, access confirmed by N01) | H8 | `bench/new_model_suite.sh sd35_medium 1024` | todo |
 | M03 | FLUX.1-schnell 1024 (download 24 GB) | H8 | `bench/new_model_suite.sh flux_schnell 1024` | todo |
-| V01 | All figures | all | `viz/plot_all.py` | todo |
-| T01 | Encode 6 real prompts with T5 once, save `prompts/embeds_pixart.pt` (about 15 MB, keep it). Edit `prompts/prompts.json` to change the prompts. Q01-Q03 use it automatically | H7 | `prompts/make_prompt_embeds.py` | todo |
+| V01 | All figures | all | `viz/plot_all.py` | DONE 11-18 23:06 |
+| T01 | Encode 6 real prompts with T5 once, save `prompts/embeds_pixart.pt` (about 15 MB, keep it). Edit `prompts/prompts.json` to change the prompts. Q01-Q03 use it automatically | H7 | `prompts/make_prompt_embeds.py` | DONE 11-18 23:06 |
 
 ## Files to copy back for local analysis and GUI
 

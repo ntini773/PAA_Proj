@@ -58,8 +58,9 @@ run() {  # run ID command...   (honours --only / --from / --dry-run / done marke
   if [ -f results/.done/$id ] && [ -z "$FORCE" ] && [ -z "$ONLY" ]; then echo "[$id] already done (FORCE=1 to rerun)"; return 0; fi
   echo "[$(date +%H:%M:%S)] $id: $(desc $id)"
   if [ $DRY -eq 1 ]; then declare -f "$1" | sed '1,2d;$d' | sed 's/^/    /'; return 0; fi
-  if "$@" > logs/eval2/$id.log 2>&1; then touch results/.done/$id; rm -f results/.fail/$id
-  else touch results/.fail/$id; echo "  FAILED, see logs/eval2/$id.log (last lines:)"; tail -n 5 logs/eval2/$id.log | sed 's/^/    /'; fi
+  local log=logs/eval2/$id${TAG}.log   # TAG lets two copies of one stage (e.g. E11 per size) run side by side
+  if "$@" > $log 2>&1; then touch results/.done/$id; rm -f results/.fail/$id
+  else touch results/.fail/$id; echo "  FAILED, see $log (last lines:)"; tail -n 5 $log | sed 's/^/    /'; fi
   $PY progress_report.py > /dev/null 2>&1
 }
 
