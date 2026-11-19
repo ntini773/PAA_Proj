@@ -1,0 +1,36 @@
+{
+ "model": "pixart_sigma",
+ "size": 1024,
+ "batch": 1,
+ "mode": "fused",
+ "backend": "cuda_swizzled",
+ "width": "wide",
+ "compile": false,
+ "tokens": 4096,
+ "rows": 8192,
+ "config": "fused_cuda_swizzled_qkv",
+ "gpu_ms": {
+  "n": 3,
+  "median": 139.41078186035156,
+  "min": 138.73452758789062,
+  "p10": 138.73452758789062,
+  "p90": 10008.703125,
+  "max": 10008.703125,
+  "std": 4652.588430416102
+ },
+ "cpu_launch_ms": 139.36216197907925,
+ "peak_mem_gb": 0.5931153297424316,
+ "fused_calls": 858,
+ "fallback_calls": 0,
+ "layer": {
+  "name": "transformer_blocks.3.attn1.to_q",
+  "in_features": 1152,
+  "out_features": 1152,
+  "input_shape": [
+   2,
+   4096,
+   1152
+  ]
+ },
+ "iters": 3
+}

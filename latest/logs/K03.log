@@ -1,0 +1,9 @@
+ln_mod_quant 512 1152 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 7.8 us
+ln_mod_quant 2048 1152 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 11.1 us
+ln_mod_quant 8192 1152 {'packed_diff_vs_triton': 4, 'scale_diff_vs_triton': 3} 27.4 us
+ln_mod_quant 600 1152 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 7.6 us
+ln_mod_quant 512 4608 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 11.1 us
+ln_mod_quant 2048 4608 {'packed_diff_vs_triton': 1, 'scale_diff_vs_triton': 0} 24.0 us
+ln_mod_quant 8192 4608 {'packed_diff_vs_triton': 9, 'scale_diff_vs_triton': 2} 195.3 us
+ln_mod_quant 512 1536 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 7.8 us
+ln_mod_quant 4096 3072 {'packed_diff_vs_triton': 5, 'scale_diff_vs_triton': 1} 28.1 us

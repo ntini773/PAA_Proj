@@ -1,0 +1,18 @@
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 1353543 (/data/cs3406/team13/PAA_Proj/.pixi/envs/default/bin/python3.11)
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+==PROF== Profiling "vectorized_elementwise_kernel" - 0: 0%....50%....100% - 38 passes
+==PROF== Profiling "reduce_kernel" - 1: 0%....50%....100% - 38 passes
+==PROF== Profiling "unrolled_elementwise_kernel" - 2: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 3: 0%....50%....100% - 38 passes
+==PROF== Profiling "_fused_quant2lvl_kernel" - 4: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 5: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 6: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 7: 0%....50%....100% - 38 passes
+==PROF== Profiling "cutlass3x_sm120_bstensorop_s1..." - 8: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 9: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 10: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 11: 0%....50%....100% - 38 passes
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'fused', 'backend': 'triton', 'width': 'wide', 'compile': False, 'tokens': 4096, 'rows': 8192, 'config': 'fused_triton_fc1', 'gpu_ms': {'n': 3, 'median': 200.3502655029297, 'min': 185.7423095703125, 'p10': 185.7423095703125, 'p90': 12554.6416015625, 'max': 12554.6416015625, 'std': 5827.3149668327615}, 'cpu_launch_ms': 200.30056405812502, 'peak_mem_gb': 0.5931153297424316, 'fused_calls': 858, 'fallback_calls': 0, 'layer': {'name': 'transformer_blocks.3.ff.net.0.proj', 'in_features': 1152, 'out_features': 4608, 'input_shape': [2, 4096, 1152]}}
+==PROF== Disconnected from process 1353543
+==PROF== Report: /data/cs3406/team13/PAA_Proj/rtx5000_next/results/ncu/fused_triton_fc1_1024.ncu-rep

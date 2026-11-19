@@ -1,0 +1,26 @@
+== test_layer_exact_vs_torchao
+PASS  layer level: module output is bit-identical to torchao NVFP4 (both backends, 4 shapes)
+1/1 checks passed
+== test_model_error_matches_stock_and_compile_engages
+PASS  module stack: one quantize op per site per forward
+PASS  compiled module stack: quantize op runs once per site per forward
+      mean rel L2 vs bf16: {'stock': 0.1194, 'module+be=triton': 0.1202, 'compiled': 0.1196}
+PASS  module+be=triton: error vs bf16 within 30% of stock NVFP4's
+PASS  compiled: error vs bf16 within 30% of stock NVFP4's
+4/4 checks passed
+== test_w4a16_real
+PASS  w4a16: weights-only branch set on NVFP4 layers
+PASS  w4a16 differs from stock w4a4
+      rel L2 vs bf16: w4a16 0.1435  w4a4 0.2150
+PASS  w4a16 is no farther from bf16 than w4a4
+3/3 checks passed
+== test_dfa_licfg_metrics
+      plan counts {'asc': 15, 'full': 153} modeled attention cost 0.96
+PASS  plan has one entry per step and layer
+PASS  DiTFastAttn run produces finite images
+PASS  limited-interval CFG halves the batch outside the band
+PASS  metrics: LPIPS finite and below 1
+PASS  metrics: identical images give LPIPS 0, SSIM 1
+      DFA vs full attention: LPIPS 0.1576 SSIM 0.681
+5/5 checks passed
+GPU CHECKS: ALL PASSED

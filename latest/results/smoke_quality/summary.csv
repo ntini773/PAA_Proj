@@ -1,0 +1,4 @@
+variant,ms_per_image,lpips_mean,lpips_std,psnr_mean,psnr_std,ssim_mean,ssim_std,mae_mean,mae_std,clip_sim_mean,clip_sim_std
+bf16,34.0,0.0,0.0,99.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0
+stock,293.4,0.7529,0.0498,7.8413,0.6623,0.1399,0.0003,0.3208,0.0138,0.9728,0.0056
+module+be=triton,108.3,0.7543,0.0379,7.3931,0.4852,0.0864,0.0086,0.3435,0.0083,0.9718,0.0086

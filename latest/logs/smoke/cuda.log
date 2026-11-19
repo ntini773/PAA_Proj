@@ -1,0 +1,9 @@
+cuda_swizzled 512 1152 {'error': 'RuntimeError: Ninja is required to load C++ extensions (pip install ninja to get it)'} 
+cuda_swizzled 2048 1152 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 9.4 us
+cuda_swizzled 8192 1152 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 16.7 us
+cuda_swizzled 600 1152 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 10.5 us
+cuda_swizzled 512 4608 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 9.4 us
+cuda_swizzled 2048 4608 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 16.4 us
+cuda_swizzled 8192 4608 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 43.6 us
+cuda_swizzled 512 1536 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 14.3 us
+cuda_swizzled 4096 3072 {'packed_diff_vs_triton': 0, 'scale_diff_vs_triton': 0} 22.4 us

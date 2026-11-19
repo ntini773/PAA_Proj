@@ -1,0 +1,239 @@
+[
+ {
+  "model": "pixart_sigma",
+  "size": "256",
+  "repo": "PixArt-alpha/PixArt-Sigma-XL-2-256x256",
+  "status": "ok",
+  "diffusers_class": "PixArtTransformer2DModel",
+  "repo_total_gb": 2.4,
+  "download_gb": 2.4,
+  "transformer_params_b": 0.61,
+  "transformer_dtypes": {
+   "F32": 610856096
+  },
+  "bf16_gb": 1.2,
+  "nvfp4_gb": 0.3,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "pixart_sigma",
+  "size": "512",
+  "repo": "PixArt-alpha/PixArt-Sigma-XL-2-512-MS",
+  "status": "ok",
+  "diffusers_class": "PixArtTransformer2DModel",
+  "repo_total_gb": 2.4,
+  "download_gb": 2.4,
+  "transformer_params_b": 0.61,
+  "transformer_dtypes": {
+   "F32": 610856096
+  },
+  "bf16_gb": 1.2,
+  "nvfp4_gb": 0.3,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "pixart_sigma",
+  "size": "1024",
+  "repo": "PixArt-alpha/PixArt-Sigma-XL-2-1024-MS",
+  "status": "ok",
+  "diffusers_class": "PixArtTransformer2DModel",
+  "repo_total_gb": 21.8,
+  "download_gb": 2.8,
+  "transformer_params_b": 0.61,
+  "transformer_dtypes": {
+   "F32": 610856096
+  },
+  "bf16_gb": 1.2,
+  "nvfp4_gb": 0.3,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "dit_xl2",
+  "size": "256",
+  "repo": "facebook/DiT-XL-2-256",
+  "status": "ok",
+  "diffusers_class": "DiTTransformer2DModel",
+  "repo_total_gb": 3.3,
+  "download_gb": 3.3,
+  "transformer_params_b": 0.0,
+  "transformer_dtypes": {},
+  "bf16_gb": 0.0,
+  "nvfp4_gb": 0.0,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "dit_xl2",
+  "size": "512",
+  "repo": "facebook/DiT-XL-2-512",
+  "status": "ok",
+  "diffusers_class": "DiTTransformer2DModel",
+  "repo_total_gb": 3.3,
+  "download_gb": 3.3,
+  "transformer_params_b": 0.0,
+  "transformer_dtypes": {},
+  "bf16_gb": 0.0,
+  "nvfp4_gb": 0.0,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sana_600m",
+  "size": "512",
+  "repo": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "status": "ok",
+  "diffusers_class": "SanaTransformer2DModel",
+  "repo_total_gb": 16.5,
+  "download_gb": 3.7,
+  "transformer_params_b": 0.59,
+  "transformer_dtypes": {
+   "F32": 591747872
+  },
+  "bf16_gb": 1.2,
+  "nvfp4_gb": 0.3,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sana_600m",
+  "size": "1024",
+  "repo": "Efficient-Large-Model/Sana_600M_1024px_diffusers",
+  "status": "ok",
+  "diffusers_class": "SanaTransformer2DModel",
+  "repo_total_gb": 16.5,
+  "download_gb": 3.7,
+  "transformer_params_b": 0.59,
+  "transformer_dtypes": {
+   "F32": 591747872
+  },
+  "bf16_gb": 1.2,
+  "nvfp4_gb": 0.3,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sana_1600m",
+  "size": "512",
+  "repo": "Efficient-Large-Model/Sana_1600M_512px_diffusers",
+  "status": "ok",
+  "diffusers_class": "SanaTransformer2DModel",
+  "repo_total_gb": 22.6,
+  "download_gb": 7.7,
+  "transformer_params_b": 1.6,
+  "transformer_dtypes": {
+   "F32": 1604462752
+  },
+  "bf16_gb": 3.2,
+  "nvfp4_gb": 0.9,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sana_1600m",
+  "size": "1024",
+  "repo": "Efficient-Large-Model/Sana_1600M_1024px_diffusers",
+  "status": "ok",
+  "diffusers_class": "SanaTransformer2DModel",
+  "repo_total_gb": 25.8,
+  "download_gb": 10.9,
+  "transformer_params_b": 3.21,
+  "transformer_dtypes": {
+   "F32": 1604462752,
+   "F16": 1604462752
+  },
+  "bf16_gb": 6.4,
+  "nvfp4_gb": 1.8,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sd35_medium",
+  "size": "512",
+  "repo": "stabilityai/stable-diffusion-3.5-medium",
+  "status": "ok (gated=auto)",
+  "diffusers_class": "SD3Transformer2DModel",
+  "repo_total_gb": 48.9,
+  "download_gb": 5.1,
+  "transformer_params_b": 2.47,
+  "transformer_dtypes": {
+   "BF16": 2469663936
+  },
+  "bf16_gb": 4.9,
+  "nvfp4_gb": 1.4,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sd35_medium",
+  "size": "1024",
+  "repo": "stabilityai/stable-diffusion-3.5-medium",
+  "status": "ok (gated=auto)",
+  "diffusers_class": "SD3Transformer2DModel",
+  "repo_total_gb": 48.9,
+  "download_gb": 5.1,
+  "transformer_params_b": 2.47,
+  "transformer_dtypes": {
+   "BF16": 2469663936
+  },
+  "bf16_gb": 4.9,
+  "nvfp4_gb": 1.4,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sd35_large",
+  "size": "512",
+  "repo": "stabilityai/stable-diffusion-3.5-large",
+  "status": "ok (gated=auto)",
+  "diffusers_class": "SD3Transformer2DModel",
+  "repo_total_gb": 71.6,
+  "download_gb": 16.5,
+  "transformer_params_b": 8.15,
+  "transformer_dtypes": {
+   "BF16": 8146280768
+  },
+  "bf16_gb": 16.3,
+  "nvfp4_gb": 4.6,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "sd35_large",
+  "size": "1024",
+  "repo": "stabilityai/stable-diffusion-3.5-large",
+  "status": "ok (gated=auto)",
+  "diffusers_class": "SD3Transformer2DModel",
+  "repo_total_gb": 71.6,
+  "download_gb": 16.5,
+  "transformer_params_b": 8.15,
+  "transformer_dtypes": {
+   "BF16": 8146280768
+  },
+  "bf16_gb": 16.3,
+  "nvfp4_gb": 4.6,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "flux_schnell",
+  "size": "512",
+  "repo": "black-forest-labs/FLUX.1-schnell",
+  "status": "ok (gated=auto)",
+  "diffusers_class": "FluxTransformer2DModel",
+  "repo_total_gb": 57.8,
+  "download_gb": 24.0,
+  "transformer_params_b": 11.89,
+  "transformer_dtypes": {
+   "BF16": 11891178560
+  },
+  "bf16_gb": 23.8,
+  "nvfp4_gb": 6.7,
+  "fits_bf16_on_gpu": true
+ },
+ {
+  "model": "flux_schnell",
+  "size": "1024",
+  "repo": "black-forest-labs/FLUX.1-schnell",
+  "status": "ok (gated=auto)",
+  "diffusers_class": "FluxTransformer2DModel",
+  "repo_total_gb": 57.8,
+  "download_gb": 24.0,
+  "transformer_params_b": 11.89,
+  "transformer_dtypes": {
+   "BF16": 11891178560
+  },
+  "bf16_gb": 23.8,
+  "nvfp4_gb": 6.7,
+  "fits_bf16_on_gpu": true
+ }
+]

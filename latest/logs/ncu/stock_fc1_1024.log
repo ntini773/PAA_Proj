@@ -1,0 +1,56 @@
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 1342842 (/data/cs3406/team13/PAA_Proj/.pixi/envs/default/bin/python3.11)
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+==PROF== Profiling "vectorized_elementwise_kernel" - 0: 0%....50%....100% - 38 passes
+==PROF== Profiling "reduce_kernel" - 1: 0%....50%....100% - 39 passes
+==PROF== Profiling "unrolled_elementwise_kernel" - 2: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 3: 0%....50%....100% - 38 passes
+==PROF== Profiling "unrolled_elementwise_kernel" - 4: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 5: 0%....50%....100% - 38 passes
+==PROF== Profiling "reduce_kernel" - 6: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 7: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 8: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 9: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 10: 0%....50%....100% - 38 passes
+==PROF== Profiling "unrolled_elementwise_kernel" - 11: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 12: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 13: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 14: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 15: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 16: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 17: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 18: 0%....50%....100% - 39 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 19: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 20: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 21: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 22: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 23: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 24: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 25: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 26: 0%....50%....100% - 38 passes
+==PROF== Profiling "unrolled_elementwise_kernel" - 27: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 28: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 29: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 30: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 31: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 32: 0%....50%....100% - 38 passes
+==PROF== Profiling "unrolled_elementwise_kernel" - 33: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 34: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 35: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 36: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 37: 0%....50%....100% - 38 passes
+==PROF== Profiling "unrolled_elementwise_kernel" - 38: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 39: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 40: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 41: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 42: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 43: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 44: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 45: 0%....50%....100% - 38 passes
+==PROF== Profiling "cutlass3x_sm120_bstensorop_s1..." - 46: 0%....50%....100% - 38 passes
+==PROF== Profiling "vectorized_elementwise_kernel" - 47: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 48: 0%....50%....100% - 38 passes
+==PROF== Profiling "elementwise_kernel" - 49: 0%....50%....100% - 38 passes
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'stock', 'backend': None, 'width': None, 'compile': False, 'tokens': 4096, 'rows': 8192, 'config': 'stock_fc1', 'gpu_ms': {'n': 3, 'median': 526.9913940429688, 'min': 525.3834228515625, 'p10': 525.3834228515625, 'p90': 48849.83203125, 'max': 48849.83203125, 'std': 22779.984545746927}, 'cpu_launch_ms': 523.7733980175108, 'peak_mem_gb': 1.5833792686462402, 'layer': {'name': 'transformer_blocks.3.ff.net.0.proj', 'in_features': 1152, 'out_features': 4608, 'input_shape': [2, 4096, 1152]}}
+==PROF== Disconnected from process 1342842
+==PROF== Report: /data/cs3406/team13/PAA_Proj/rtx5000_next/results/ncu/stock_fc1_1024.ncu-rep

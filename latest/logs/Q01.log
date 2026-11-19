@@ -1,0 +1,252 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+
+local layer error (relative L2 of Linear output, mean over 286 layers and 5 timesteps)
+  w4a16 (activations kept) 0.0610   w16a4 0.0612   w4a4 0.0866
+  activation error share of the w4a4 squared error: 0.50
+
+| group | layers | w4a16 | w16a4 | w4a4 | act max/rms |
+|---|---|---|---|---|---|
+| caption_projection.linear_2 | 1 | 0.0923 | 0.0921 | 0.1306 | 22 |
+| transformer_blocks.*.attn2.to_v | 28 | 0.0866 | 0.0976 | 0.1303 | 18 |
+| transformer_blocks.*.attn2.to_q | 28 | 0.0887 | 0.0852 | 0.1240 | 54 |
+| caption_projection.linear_1 | 1 | 0.0831 | 0.0842 | 0.1181 | 38 |
+| transformer_blocks.*.attn1.to_v | 28 | 0.0822 | 0.0843 | 0.1178 | 18 |
+| transformer_blocks.*.attn1.to_out.* | 28 | 0.0679 | 0.0680 | 0.0961 | 11 |
+| transformer_blocks.*.attn1.to_q | 28 | 0.0663 | 0.0651 | 0.0930 | 18 |
+| transformer_blocks.*.ff.net.* | 28 | 0.0647 | 0.0632 | 0.0906 | 49 |
+| transformer_blocks.*.attn1.to_k | 28 | 0.0536 | 0.0520 | 0.0748 | 18 |
+| proj_out | 1 | 0.0555 | 0.0490 | 0.0737 | 25 |
+| transformer_blocks.*.ff.net.*.proj | 28 | 0.0495 | 0.0470 | 0.0685 | 21 |
+| adaln_single.emb.timestep_embedder.linear_1 | 1 | 0.0465 | 0.0174 | 0.0560 | 1 |
+| transformer_blocks.*.attn2.to_out.* | 28 | 0.0354 | 0.0352 | 0.0500 | 41 |
+| adaln_single.emb.timestep_embedder.linear_2 | 1 | 0.0199 | 0.0159 | 0.0266 | 15 |
+| transformer_blocks.*.attn2.to_k | 28 | 0.0163 | 0.0183 | 0.0245 | 18 |
+| adaln_single.linear | 1 | 0.0203 | 0.0120 | 0.0235 | 25 |
+
+transformer output relative L2 vs bf16 (mean over 6 prompts)
+| variant | t=999 | t=750 | t=500 | t=250 | t=50 |
+|---|---|---|---|---|---|
+| w4a16 | 0.0759 | 0.0795 | 0.0758 | 0.0924 | 0.1279 |
+| w16a4 | 0.0652 | 0.0651 | 0.0674 | 0.0804 | 0.1499 |
+| w4a4 | 0.1095 | 0.1037 | 0.0929 | 0.1244 | 0.1913 |
+
+w4a4 relative L2 per prompt (mean over timesteps)
+  0.1252  A Japanese girl walking along a path, surrounded by blooming
+  0.1266  A close-up portrait of an elderly fisherman with deep wrinkl
+  0.1237  A busy night market in Tokyo in the rain, neon signs reflect
+  0.1227  A red fox sleeping on a mossy log in a misty pine forest at 
+  0.1247  A futuristic glass city on a cliff above the ocean at sunset
+  0.1232  A wooden table with a bowl of ramen, chopsticks, steam risin
+
+validation against real torchao NVFP4: [
+{
+"prompt": 0,
+"t": 999,
+"stock_vs_bf16": 0.11051180958747864,
+"emulated_vs_bf16": 0.11044904589653015,
+"stock_vs_emulated": 0.058768000453710556
+},
+{
+"prompt": 0,
+"t": 750,
+"stock_vs_bf16": 0.10447525978088379,
+"emulated_vs_bf16": 0.10511691123247147,
+"stock_vs_emulated": 0.0588405467569828
+},
+{
+"prompt": 0,
+"t": 500,
+"stock_vs_bf16": 0.09125462174415588,
+"emulated_vs_bf16": 0.093009814620018,
+"stock_vs_emulated": 0.06176270917057991
+},
+{
+"prompt": 0,
+"t": 250,
+"stock_vs_bf16": 0.12245722115039825,
+"emulated_vs_bf16": 0.12518981099128723,
+"stock_vs_emulated": 0.08648431301116943
+},
+{
+"prompt": 0,
+"t": 50,
+"stock_vs_bf16": 0.19172224402427673,
+"emulated_vs_bf16": 0.19237957894802094,
+"stock_vs_emulated": 0.17274311184883118
+},
+{
+"prompt": 1,
+"t": 999,
+"stock_vs_bf16": 0.11359555274248123,
+"emulated_vs_bf16": 0.10897428542375565,
+"stock_vs_emulated": 0.060000937432050705
+},
+{
+"prompt": 1,
+"t": 750,
+"stock_vs_bf16": 0.10994195193052292,
+"emulated_vs_bf16": 0.10988621413707733,
+"stock_vs_emulated": 0.05920441448688507
+},
+{
+"prompt": 1,
+"t": 500,
+"stock_vs_bf16": 0.09741421043872833,
+"emulated_vs_bf16": 0.09788046032190323,
+"stock_vs_emulated": 0.06596994400024414
+},
+{
+"prompt": 1,
+"t": 250,
+"stock_vs_bf16": 0.12102177739143372,
+"emulated_vs_bf16": 0.12476009875535965,
+"stock_vs_emulated": 0.08637312054634094
+},
+{
+"prompt": 1,
+"t": 50,
+"stock_vs_bf16": 0.19049885869026184,
+"emulated_vs_bf16": 0.19165867567062378,
+"stock_vs_emulated": 0.17178060114383698
+},
+{
+"prompt": 2,
+"t": 999,
+"stock_vs_bf16": 0.11504518240690231,
+"emulated_vs_bf16": 0.11068478971719742,
+"stock_vs_emulated": 0.06334200501441956
+},
+{
+"prompt": 2,
+"t": 750,
+"stock_vs_bf16": 0.10479483753442764,
+"emulated_vs_bf16": 0.10313771665096283,
+"stock_vs_emulated": 0.05852874740958214
+},
+{
+"prompt": 2,
+"t": 500,
+"stock_vs_bf16": 0.08979350328445435,
+"emulated_vs_bf16": 0.0911649689078331,
+"stock_vs_emulated": 0.06102824956178665
+},
+{
+"prompt": 2,
+"t": 250,
+"stock_vs_bf16": 0.11858923733234406,
+"emulated_vs_bf16": 0.12265412509441376,
+"stock_vs_emulated": 0.0858132392168045
+},
+{
+"prompt": 2,
+"t": 50,
+"stock_vs_bf16": 0.19205337762832642,
+"emulated_vs_bf16": 0.19110289216041565,
+"stock_vs_emulated": 0.17577874660491943
+},
+{
+"prompt": 3,
+"t": 999,
+"stock_vs_bf16": 0.10433778166770935,
+"emulated_vs_bf16": 0.10639249533414841,
+"stock_vs_emulated": 0.06180979311466217
+},
+{
+"prompt": 3,
+"t": 750,
+"stock_vs_bf16": 0.10191089659929276,
+"emulated_vs_bf16": 0.10244143009185791,
+"stock_vs_emulated": 0.05657562240958214
+},
+{
+"prompt": 3,
+"t": 500,
+"stock_vs_bf16": 0.08951910585165024,
+"emulated_vs_bf16": 0.09241880476474762,
+"stock_vs_emulated": 0.06288408488035202
+},
+{
+"prompt": 3,
+"t": 250,
+"stock_vs_bf16": 0.12114584445953369,
+"emulated_vs_bf16": 0.12076552212238312,
+"stock_vs_emulated": 0.08584114164113998
+},
+{
+"prompt": 3,
+"t": 50,
+"stock_vs_bf16": 0.19113272428512573,
+"emulated_vs_bf16": 0.1916292905807495,
+"stock_vs_emulated": 0.17303045094013214
+},
+{
+"prompt": 4,
+"t": 999,
+"stock_vs_bf16": 0.11221010237932205,
+"emulated_vs_bf16": 0.10954566299915314,
+"stock_vs_emulated": 0.0627647265791893
+},
+{
+"prompt": 4,
+"t": 750,
+"stock_vs_bf16": 0.1048206239938736,
+"emulated_vs_bf16": 0.10427573323249817,
+"stock_vs_emulated": 0.057038888335227966
+},
+{
+"prompt": 4,
+"t": 500,
+"stock_vs_bf16": 0.09038811177015305,
+"emulated_vs_bf16": 0.09147679060697556,
+"stock_vs_emulated": 0.06169547513127327
+},
+{
+"prompt": 4,
+"t": 250,
+"stock_vs_bf16": 0.12019971758127213,
+"emulated_vs_bf16": 0.12758053839206696,
+"stock_vs_emulated": 0.08774132281541824
+},
+{
+"prompt": 4,
+"t": 50,
+"stock_vs_bf16": 0.19082151353359222,
+"emulated_vs_bf16": 0.19065971672534943,
+"stock_vs_emulated": 0.17202843725681305
+},
+{
+"prompt": 5,
+"t": 999,
+"stock_vs_bf16": 0.10833446681499481,
+"emulated_vs_bf16": 0.11109408736228943,
+"stock_vs_emulated": 0.060899198055267334
+},
+{
+"prompt": 5,
+"t": 750,
+"stock_vs_bf16": 0.0989488735795021,
+"emulated_vs_bf16": 0.09727828949689865,
+"stock_vs_emulated": 0.06002519279718399
+},
+{
+"prompt": 5,
+"t": 500,
+"stock_vs_bf16": 0.09012116491794586,
+"emulated_vs_bf16": 0.0915529653429985,
+"stock_vs_emulated": 0.06406088173389435
+},
+{
+"prompt": 5,
+"t": 250,
+"stock_vs_bf16": 0.12328807264566422,
+"emulated_vs_bf16": 0.12559236586093903,
+"stock_vs_emulated": 0.08622243255376816
+},
+{
+"prompt": 5,
+"t": 50,
+"stock_vs_bf16": 0.18904373049736023,
+"emulated_vs_bf16": 0.19060057401657104,
+"stock_vs_emulated": 0.17347943782806396
+}
+]

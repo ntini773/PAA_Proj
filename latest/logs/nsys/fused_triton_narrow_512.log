@@ -1,0 +1,9 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-689a.qdstrm'
+[1/1] [0%                          ] fused_triton_narrow_512.nsys-repProcessing events...
+[1/1] [0%                          ] fused_triton_narrow_512.nsys-rep[1/1] [14%                         ] fused_triton_narrow_512.nsys-rep[1/1] [11%                         ] fused_triton_narrow_512.nsys-rep[1/1] [==21%                       ] fused_triton_narrow_512.nsys-rep[1/1] [=====31%                    ] fused_triton_narrow_512.nsys-rep[1/1] [========41%                 ] fused_triton_narrow_512.nsys-rep[1/1] [===========50%              ] fused_triton_narrow_512.nsys-rep[1/1] [========================100%] fused_triton_narrow_512.nsys-rep[1/1] [========================100%] fused_triton_narrow_512.nsys-rep
+{'model': 'pixart_sigma', 'size': 512, 'batch': 1, 'mode': 'fused', 'backend': 'triton', 'width': 'narrow', 'compile': False, 'tokens': 1024, 'rows': 2048, 'config': 'fused_triton_narrow', 'gpu_ms': {'n': 5, 'median': 76.8076171875, 'min': 74.18975830078125, 'p10': 74.18975830078125, 'p90': 77.11727905273438, 'max': 77.11727905273438, 'std': 1.0999793924937427}, 'cpu_launch_ms': 76.7731280066073, 'peak_mem_gb': 0.6657156944274902, 'fused_calls': 1280, 'fallback_calls': 150}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/fused_triton_narrow_512.nsys-rep

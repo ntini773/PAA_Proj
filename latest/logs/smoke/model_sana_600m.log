@@ -1,0 +1,49 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Cancellation requested; stopping current tasks.
+Traceback (most recent call last):
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 629, in xet_get
+    download_files(
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/model_smoke.py", line 45, in <module>
+    main()
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/model_smoke.py", line 24, in main
+    r = build(a.model, a.size, 1, "bf16")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/model_adapters.py", line 98, in build
+    tr = _load(model, size, quant)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/rtx5000_next/model_adapters.py", line 45, in _load
+    return cls.from_pretrained(repo, subfolder="transformer", torch_dtype=torch.bfloat16, **kw).to("cuda").eval()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/models/modeling_utils.py", line 1217, in from_pretrained
+    resolved_model_file = _get_model_file(
+                          ^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/diffusers/utils/hub_utils.py", line 308, in _get_model_file
+    model_file = hf_hub_download(
+                 ^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1171, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1723, in _download_to_tmp_and_move
+    xet_get(
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 624, in xet_get
+    with progress_cm as progress:
+  File "/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/tqdm/std.py", line 1138, in __exit__
+    def __exit__(self, exc_type, exc_value, traceback):
+
+KeyboardInterrupt

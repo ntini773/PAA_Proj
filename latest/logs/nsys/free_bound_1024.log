@@ -1,0 +1,9 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-dab1.qdstrm'
+[1/1] [0%                          ] free_bound_1024.nsys-repProcessing events...
+[1/1] [0%                          ] free_bound_1024.nsys-rep[1/1] [=17%                        ] free_bound_1024.nsys-rep[1/1] [======33%                   ] free_bound_1024.nsys-rep[1/1] [==========48%               ] free_bound_1024.nsys-rep[1/1] [===========51%              ] free_bound_1024.nsys-rep[1/1] [========================100%] free_bound_1024.nsys-rep[1/1] [========================100%] free_bound_1024.nsys-rep
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'fused', 'backend': 'free', 'width': 'wide', 'compile': False, 'tokens': 4096, 'rows': 8192, 'config': 'free_bound', 'gpu_ms': {'n': 5, 'median': 86.17340850830078, 'min': 85.7146224975586, 'p10': 85.7146224975586, 'p90': 86.349853515625, 'max': 86.349853515625, 'std': 0.21912297206000173}, 'cpu_launch_ms': 61.128481989726424, 'peak_mem_gb': 0.6145954132080078, 'fused_calls': 1430, 'fallback_calls': 0}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/free_bound_1024.nsys-rep

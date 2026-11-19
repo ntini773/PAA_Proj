@@ -1,0 +1,24 @@
+W1118 21:07:32.833000 1131920 site-packages/torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+torch 2.15.0.dev20260819+cu130  diffusers 0.37.1  free disk at /data/cs3406/team13/.cache/huggingface: 2576 GB
+HF user: Nitin773
+
+| model | size | status | class | repo GB | download GB | params B | bf16 GB | nvfp4 GB | fits 48GB bf16 |
+|---|---|---|---|---|---|---|---|---|---|
+| pixart_sigma | 256 | ok | PixArtTransformer2DModel | 2.4 | 2.4 | 0.61 | 1.2 | 0.3 | True |
+| pixart_sigma | 512 | ok | PixArtTransformer2DModel | 2.4 | 2.4 | 0.61 | 1.2 | 0.3 | True |
+| pixart_sigma | 1024 | ok | PixArtTransformer2DModel | 21.8 | 2.8 | 0.61 | 1.2 | 0.3 | True |
+| dit_xl2 | 256 | ok | DiTTransformer2DModel | 3.3 | 3.3 | 0.0 | 0.0 | 0.0 | True |
+| dit_xl2 | 512 | ok | DiTTransformer2DModel | 3.3 | 3.3 | 0.0 | 0.0 | 0.0 | True |
+| sana_600m | 512 | ok | SanaTransformer2DModel | 16.5 | 3.7 | 0.59 | 1.2 | 0.3 | True |
+| sana_600m | 1024 | ok | SanaTransformer2DModel | 16.5 | 3.7 | 0.59 | 1.2 | 0.3 | True |
+| sana_1600m | 512 | ok | SanaTransformer2DModel | 22.6 | 7.7 | 1.6 | 3.2 | 0.9 | True |
+| sana_1600m | 1024 | ok | SanaTransformer2DModel | 25.8 | 10.9 | 3.21 | 6.4 | 1.8 | True |
+| sd35_medium | 512 | ok (gated=auto) | SD3Transformer2DModel | 48.9 | 5.1 | 2.47 | 4.9 | 1.4 | True |
+| sd35_medium | 1024 | ok (gated=auto) | SD3Transformer2DModel | 48.9 | 5.1 | 2.47 | 4.9 | 1.4 | True |
+| sd35_large | 512 | ok (gated=auto) | SD3Transformer2DModel | 71.6 | 16.5 | 8.15 | 16.3 | 4.6 | True |
+| sd35_large | 1024 | ok (gated=auto) | SD3Transformer2DModel | 71.6 | 16.5 | 8.15 | 16.3 | 4.6 | True |
+| flux_schnell | 512 | ok (gated=auto) | FluxTransformer2DModel | 57.8 | 24.0 | 11.89 | 23.8 | 6.7 | True |
+| flux_schnell | 1024 | ok (gated=auto) | FluxTransformer2DModel | 57.8 | 24.0 | 11.89 | 23.8 | 6.7 | True |
+
+15/15 usable; details in results/hf_check.json

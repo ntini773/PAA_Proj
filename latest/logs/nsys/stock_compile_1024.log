@@ -1,0 +1,11 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_functorch/_aot_autograd/autograd_cache.py:707: UserWarning: NVFP4Tensor does not implement _stable_hash_for_caching. For PT2-compatible tensor subclasses, it is recommended to implement _stable_hash_for_caching(self) -> str for stable AOT autograd caching.
+  warn_once(
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-4ef0.qdstrm'
+[1/1] [0%                          ] stock_compile_1024.nsys-repProcessing events...
+[1/1] [0%                          ] stock_compile_1024.nsys-rep[1/1] [5%                          ] stock_compile_1024.nsys-rep[1/1] [=======36%                  ] stock_compile_1024.nsys-rep[1/1] [===========52%              ] stock_compile_1024.nsys-rep[1/1] [========================100%] stock_compile_1024.nsys-rep[1/1] [========================100%] stock_compile_1024.nsys-rep
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'stock', 'backend': None, 'width': None, 'compile': True, 'tokens': 4096, 'rows': 8192, 'config': 'stock_compile', 'gpu_ms': {'n': 5, 'median': 76.3602523803711, 'min': 74.07462310791016, 'p10': 74.07462310791016, 'p90': 77.68924713134766, 'max': 77.68924713134766, 'std': 1.3443314294484536}, 'cpu_launch_ms': 38.16577699035406, 'peak_mem_gb': 0.6611819267272949}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/stock_compile_1024.nsys-rep

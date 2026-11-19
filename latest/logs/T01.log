@@ -1,0 +1,11 @@
+W1118 21:30:58.328000 1178588 site-packages/torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+You are using the default legacy behaviour of the <class 'transformers.models.t5.tokenization_t5.T5Tokenizer'>. This is expected, and simply means that the `legacy` (previous) behavior will be used so nothing changes for you. If you want to use the new behaviour, set `legacy=False`. This should only be set if you understand what it means, and thoroughly read the reason why this was added as explained in https://github.com/huggingface/transformers/pull/24565
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.11s/it]
+ 27 tokens  A Japanese girl walking along a path, surrounded by blooming oriental 
+ 36 tokens  A close-up portrait of an elderly fisherman with deep wrinkles, weathe
+ 29 tokens  A busy night market in Tokyo in the rain, neon signs reflected on wet 
+ 29 tokens  A red fox sleeping on a mossy log in a misty pine forest at dawn, high
+ 26 tokens  A futuristic glass city on a cliff above the ocean at sunset, flying v
+ 34 tokens  A wooden table with a bowl of ramen, chopsticks, steam rising, and a h
+saved /data/cs3406/team13/PAA_Proj/rtx5000_next/prompts/embeds_pixart.pt 6 prompts

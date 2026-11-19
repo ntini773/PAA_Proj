@@ -1,0 +1,11 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+/data/cs3406/team13/PAA_Proj/.pixi/envs/default/lib/python3.11/site-packages/torch/_functorch/_aot_autograd/autograd_cache.py:707: UserWarning: NVFP4Tensor does not implement _stable_hash_for_caching. For PT2-compatible tensor subclasses, it is recommended to implement _stable_hash_for_caching(self) -> str for stable AOT autograd caching.
+  warn_once(
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-1abd.qdstrm'
+[1/1] [0%                          ] fused_triton_op_compile_1024.nsys-repProcessing events...
+[1/1] [0%                          ] fused_triton_op_compile_1024.nsys-rep[1/1] [6%                          ] fused_triton_op_compile_1024.nsys-rep[1/1] [========41%                 ] fused_triton_op_compile_1024.nsys-rep[1/1] [===========53%              ] fused_triton_op_compile_1024.nsys-rep[1/1] [========================100%] fused_triton_op_compile_1024.nsys-rep[1/1] [========================100%] fused_triton_op_compile_1024.nsys-rep
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'fused', 'backend': 'triton_op', 'width': 'wide', 'compile': True, 'tokens': 4096, 'rows': 8192, 'config': 'fused_triton_op_compile', 'gpu_ms': {'n': 5, 'median': 75.06169891357422, 'min': 71.80806732177734, 'p10': 71.80806732177734, 'p90': 76.03366088867188, 'max': 76.03366088867188, 'std': 1.6084059461984077}, 'cpu_launch_ms': 35.450311843305826, 'peak_mem_gb': 0.5440163612365723}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/fused_triton_op_compile_1024.nsys-rep

@@ -1,0 +1,24 @@
+{
+ "model": "pixart_sigma",
+ "size": 1024,
+ "batch": 1,
+ "mode": "fp8",
+ "backend": null,
+ "width": null,
+ "compile": false,
+ "tokens": 4096,
+ "rows": 8192,
+ "config": "fp8",
+ "gpu_ms": {
+  "n": 5,
+  "median": 130.7243194580078,
+  "min": 125.36825561523438,
+  "p10": 125.36825561523438,
+  "p90": 131.527587890625,
+  "max": 131.527587890625,
+  "std": 2.277023844525455
+ },
+ "cpu_launch_ms": 89.57211603410542,
+ "peak_mem_gb": 1.1926097869873047,
+ "iters": 5
+}

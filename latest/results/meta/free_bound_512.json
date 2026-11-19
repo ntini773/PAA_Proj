@@ -1,0 +1,26 @@
+{
+ "model": "pixart_sigma",
+ "size": 512,
+ "batch": 1,
+ "mode": "fused",
+ "backend": "free",
+ "width": "wide",
+ "compile": false,
+ "tokens": 1024,
+ "rows": 2048,
+ "config": "free_bound",
+ "gpu_ms": {
+  "n": 5,
+  "median": 43.11824035644531,
+  "min": 42.53916931152344,
+  "p10": 42.53916931152344,
+  "p90": 45.20054244995117,
+  "max": 45.20054244995117,
+  "std": 0.9199085173958259
+ },
+ "cpu_launch_ms": 43.097174959257245,
+ "peak_mem_gb": 0.4247608184814453,
+ "fused_calls": 1430,
+ "fallback_calls": 0,
+ "iters": 5
+}

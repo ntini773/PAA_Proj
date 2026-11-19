@@ -1,0 +1,39 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+
+local layer error (relative L2 of Linear output, mean over 286 layers and 5 timesteps)
+  w4a16 (activations kept) 0.0587   w16a4 0.0599   w4a4 0.0841
+  activation error share of the w4a4 squared error: 0.50
+
+| group | layers | w4a16 | w16a4 | w4a4 | act max/rms |
+|---|---|---|---|---|---|
+| transformer_blocks.*.attn2.to_v | 28 | 0.0853 | 0.0998 | 0.1309 | 16 |
+| transformer_blocks.*.attn1.to_v | 28 | 0.0813 | 0.0850 | 0.1176 | 18 |
+| caption_projection.linear_1 | 1 | 0.0815 | 0.0836 | 0.1163 | 38 |
+| transformer_blocks.*.attn2.to_q | 28 | 0.0758 | 0.0767 | 0.1091 | 60 |
+| caption_projection.linear_2 | 1 | 0.0760 | 0.0770 | 0.1072 | 21 |
+| transformer_blocks.*.attn1.to_out.* | 28 | 0.0685 | 0.0686 | 0.0970 | 12 |
+| transformer_blocks.*.attn1.to_q | 28 | 0.0652 | 0.0648 | 0.0920 | 18 |
+| transformer_blocks.*.ff.net.* | 28 | 0.0622 | 0.0613 | 0.0877 | 56 |
+| proj_out | 1 | 0.0598 | 0.0541 | 0.0807 | 30 |
+| transformer_blocks.*.attn1.to_k | 28 | 0.0530 | 0.0520 | 0.0744 | 18 |
+| transformer_blocks.*.ff.net.*.proj | 28 | 0.0500 | 0.0477 | 0.0694 | 22 |
+| adaln_single.emb.timestep_embedder.linear_1 | 1 | 0.0420 | 0.0174 | 0.0513 | 1 |
+| transformer_blocks.*.attn2.to_out.* | 28 | 0.0299 | 0.0295 | 0.0421 | 56 |
+| transformer_blocks.*.attn2.to_k | 28 | 0.0175 | 0.0173 | 0.0246 | 16 |
+| adaln_single.linear | 1 | 0.0201 | 0.0136 | 0.0242 | 25 |
+| adaln_single.emb.timestep_embedder.linear_2 | 1 | 0.0195 | 0.0127 | 0.0213 | 15 |
+
+transformer output relative L2 vs bf16 (mean over 6 prompts)
+| variant | t=999 | t=750 | t=500 | t=250 | t=50 |
+|---|---|---|---|---|---|
+| w4a16 | 0.0665 | 0.0665 | 0.0688 | 0.0945 | 0.1564 |
+| w16a4 | 0.0675 | 0.0674 | 0.0750 | 0.1075 | 0.3147 |
+| w4a4 | 0.0999 | 0.0963 | 0.0952 | 0.1428 | 0.3424 |
+
+w4a4 relative L2 per prompt (mean over timesteps)
+  0.1550  A Japanese girl walking along a path, surrounded by blooming
+  0.1546  A close-up portrait of an elderly fisherman with deep wrinkl
+  0.1570  A busy night market in Tokyo in the rain, neon signs reflect
+  0.1551  A red fox sleeping on a mossy log in a misty pine forest at 
+  0.1570  A futuristic glass city on a cliff above the ocean at sunset
+  0.1533  A wooden table with a bowl of ramen, chopsticks, steam risin

@@ -1,0 +1,20 @@
+W1120 01:18:07.490000 345842 site-packages/torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W1120 01:18:07.596000 345842 site-packages/torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  2.60it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  3.90it/s]
+USDT:2026-11-20 01:18:14 345842:345842 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-20 01:18:15 345842:345842 SyncActivityProfilerHandler.cpp:46] profiler_stop
+module+be=triton 256px batch 1: forward 85.09 ms, GPU busy 10.33 ms (12%), 3720 kernels, CPU launch 85.12 ms
+| stage | span ms | busy ms | gap ms | cpu ms | calls | kernels | mean kernel us | launch-bound |
+|---|---|---|---|---|---|---|---|---|
+| quant | 32.61 | 2.47 | 30.14 | 34.67 | 202 | 1484 | 1.7 | yes |
+| attn2 | 32.19 | 4.00 | 28.19 | 32.42 | 28 | 1411 | 2.8 | yes |
+| gemm | 25.22 | 4.90 | 20.32 | 27.33 | 286 | 1430 | 3.4 | yes |
+| attn1 | 24.92 | 2.73 | 22.20 | 25.15 | 28 | 1053 | 2.6 | yes |
+| ff | 17.15 | 2.40 | 14.75 | 17.38 | 28 | 725 | 3.3 | yes |
+| adaln | 1.32 | 0.08 | 1.23 | 1.33 | 1 | 50 | 1.7 | yes |
+| norm1 | 1.00 | 0.09 | 0.91 | 1.25 | 28 | 29 | 3.1 | yes |
+| norm2 | 0.98 | 0.09 | 0.89 | 1.20 | 28 | 28 | 3.1 | yes |
+| caption_proj | 0.69 | 0.08 | 0.61 | 0.70 | 1 | 30 | 2.6 | yes |
+| patch_embed | 0.24 | 0.02 | 0.22 | 0.26 | 1 | 7 | 3.1 | yes |
+kernel classes ms: {'elementwise': 3.57, 'fp4_gemm': 2.8, 'copy': 1.43, 'attention': 1.4, 'reduce': 0.87, 'layernorm': 0.18, 'other': 0.09, 'bf16_gemm': 0.0}

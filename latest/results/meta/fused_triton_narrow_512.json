@@ -1,0 +1,26 @@
+{
+ "model": "pixart_sigma",
+ "size": 512,
+ "batch": 1,
+ "mode": "fused",
+ "backend": "triton",
+ "width": "narrow",
+ "compile": false,
+ "tokens": 1024,
+ "rows": 2048,
+ "config": "fused_triton_narrow",
+ "gpu_ms": {
+  "n": 5,
+  "median": 76.8076171875,
+  "min": 74.18975830078125,
+  "p10": 74.18975830078125,
+  "p90": 77.11727905273438,
+  "max": 77.11727905273438,
+  "std": 1.0999793924937427
+ },
+ "cpu_launch_ms": 76.7731280066073,
+ "peak_mem_gb": 0.6657156944274902,
+ "fused_calls": 1280,
+ "fallback_calls": 150,
+ "iters": 5
+}

@@ -1,0 +1,7 @@
+config,layer,size,kernels_total,quant_kernels,quant_time_us,gemm_time_us,quant_dram_mb,gemm_dram_mb,ideal_mb,dram_vs_ideal,quant_dram_pct_peak,quant_sm_pct_peak,quant_occupancy_pct,quant_l2_hit_pct,quant_l1_hit_pct,quant_l2_mb,quant_ld_sectors_per_req,quant_st_sectors_per_req
+fused_cuda_swizzled,fc1,1024,10,9,0.3,0.1,0.0,0.0,24.18,0.0,71.6,35.8,90.4,17.0,37.7,393.92,2.16,2.27
+fused_cuda_swizzled,qkv,1024,10,9,0.1,0.0,0.0,0.0,24.18,0.0,61.2,31.0,83.9,17.6,27.9,163.53,3.21,2.95
+fused_triton,fc1,1024,12,11,0.3,0.1,0.0,0.0,24.18,0.0,69.5,38.4,90.0,17.3,35.8,397.48,2.06,2.18
+fused_triton,qkv,1024,12,11,0.1,0.0,0.0,0.0,24.18,0.0,55.7,38.9,83.3,18.4,24.0,167.08,2.8,2.6
+stock,fc1,1024,50,49,1.3,0.1,0.0,0.0,24.18,0.0,79.3,22.1,86.2,11.2,13.7,2060.32,4.17,4.28
+stock,qkv,1024,50,49,1.1,0.0,0.0,0.0,24.18,0.0,79.4,18.9,84.8,10.3,8.2,1829.98,5.54,5.17

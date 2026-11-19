@@ -1,0 +1,9 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-d741.qdstrm'
+[1/1] [0%                          ] fused_cuda_swizzled_512.nsys-repProcessing events...
+[1/1] [0%                          ] fused_cuda_swizzled_512.nsys-rep[1/1] [=16%                        ] fused_cuda_swizzled_512.nsys-rep[1/1] [=====30%                    ] fused_cuda_swizzled_512.nsys-rep[1/1] [=========44%                ] fused_cuda_swizzled_512.nsys-rep[1/1] [===========51%              ] fused_cuda_swizzled_512.nsys-rep[1/1] [========================100%] fused_cuda_swizzled_512.nsys-rep[1/1] [========================100%] fused_cuda_swizzled_512.nsys-rep
+{'model': 'pixart_sigma', 'size': 512, 'batch': 1, 'mode': 'fused', 'backend': 'cuda_swizzled', 'width': 'wide', 'compile': False, 'tokens': 1024, 'rows': 2048, 'config': 'fused_cuda_swizzled', 'gpu_ms': {'n': 5, 'median': 43.201473236083984, 'min': 42.51484680175781, 'p10': 42.51484680175781, 'p90': 45.549598693847656, 'max': 45.549598693847656, 'std': 1.0525616555501998}, 'cpu_launch_ms': 43.170626973733306, 'peak_mem_gb': 0.41814279556274414, 'fused_calls': 1430, 'fallback_calls': 0}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/fused_cuda_swizzled_512.nsys-rep

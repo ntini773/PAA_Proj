@@ -1,0 +1,201 @@
+{
+ "prompts": [
+  "A Japanese girl walking along a path, surrounded by blooming oriental cherries, pink petals slowly falling down to the ground.",
+  "A close-up portrait of an elderly fisherman with deep wrinkles, weathered skin and a grey beard, soft window light, 85mm photo.",
+  "A busy night market in Tokyo in the rain, neon signs reflected on wet streets, crowds with umbrellas, cinematic.",
+  "A red fox sleeping on a mossy log in a misty pine forest at dawn, highly detailed fur.",
+  "A futuristic glass city on a cliff above the ocean at sunset, flying vehicles, detailed architecture, wide shot.",
+  "A wooden table with a bowl of ramen, chopsticks, steam rising, and a handwritten menu that reads OPEN LATE."
+ ],
+ "per_prompt": [
+  {
+   "w4a16": {
+    "mae": 0.09041186422109604,
+    "psnr": 17.503770873395645,
+    "lpips": 0.4060307741165161
+   },
+   "w16a4": {
+    "mae": 0.0896444246172905,
+    "psnr": 17.556310022846905,
+    "lpips": 0.5696775317192078
+   },
+   "w4a4_emulated": {
+    "mae": 0.10933225601911545,
+    "psnr": 16.071355449019674,
+    "lpips": 0.5421136617660522
+   },
+   "stock_torchao": {
+    "mae": 0.10725485533475876,
+    "psnr": 16.507832785269937,
+    "lpips": 0.6087303161621094
+   },
+   "stock_vs_emulated": {
+    "mae": 0.11644115298986435,
+    "psnr": 15.527588160964953,
+    "lpips": 0.5175781846046448
+   }
+  },
+  {
+   "w4a16": {
+    "mae": 0.09358610957860947,
+    "psnr": 16.719234708708257,
+    "lpips": 0.3317035734653473
+   },
+   "w16a4": {
+    "mae": 0.07833098620176315,
+    "psnr": 18.234649252866898,
+    "lpips": 0.3497053384780884
+   },
+   "w4a4_emulated": {
+    "mae": 0.09603198617696762,
+    "psnr": 16.507359326913203,
+    "lpips": 0.40479937195777893
+   },
+   "stock_torchao": {
+    "mae": 0.0802886039018631,
+    "psnr": 18.071291876844576,
+    "lpips": 0.36048805713653564
+   },
+   "stock_vs_emulated": {
+    "mae": 0.09011579304933548,
+    "psnr": 16.85716290205273,
+    "lpips": 0.345080703496933
+   }
+  },
+  {
+   "w4a16": {
+    "mae": 0.1158185824751854,
+    "psnr": 13.943588183721744,
+    "lpips": 0.4423501491546631
+   },
+   "w16a4": {
+    "mae": 0.10332083702087402,
+    "psnr": 15.642159668217129,
+    "lpips": 0.4713970422744751
+   },
+   "w4a4_emulated": {
+    "mae": 0.14455050230026245,
+    "psnr": 12.616093818769746,
+    "lpips": 0.5293360352516174
+   },
+   "stock_torchao": {
+    "mae": 0.14698760211467743,
+    "psnr": 12.491896355252422,
+    "lpips": 0.5481797456741333
+   },
+   "stock_vs_emulated": {
+    "mae": 0.11444371938705444,
+    "psnr": 14.42519283689437,
+    "lpips": 0.41419970989227295
+   }
+  },
+  {
+   "w4a16": {
+    "mae": 0.1550755351781845,
+    "psnr": 13.365716900445815,
+    "lpips": 0.5757753849029541
+   },
+   "w16a4": {
+    "mae": 0.10507598519325256,
+    "psnr": 16.55231721033532,
+    "lpips": 0.4761693477630615
+   },
+   "w4a4_emulated": {
+    "mae": 0.14497597515583038,
+    "psnr": 14.010844664897231,
+    "lpips": 0.5937639474868774
+   },
+   "stock_torchao": {
+    "mae": 0.138741135597229,
+    "psnr": 14.109682001473818,
+    "lpips": 0.5462775826454163
+   },
+   "stock_vs_emulated": {
+    "mae": 0.0767696350812912,
+    "psnr": 18.19081306138022,
+    "lpips": 0.4143106937408447
+   }
+  },
+  {
+   "w4a16": {
+    "mae": 0.0952104702591896,
+    "psnr": 16.90931756691335,
+    "lpips": 0.443539559841156
+   },
+   "w16a4": {
+    "mae": 0.08023840934038162,
+    "psnr": 18.01451488435687,
+    "lpips": 0.5178796052932739
+   },
+   "w4a4_emulated": {
+    "mae": 0.09377708286046982,
+    "psnr": 16.768442795549458,
+    "lpips": 0.5443458557128906
+   },
+   "stock_torchao": {
+    "mae": 0.0920032188296318,
+    "psnr": 16.97721155058324,
+    "lpips": 0.5527069568634033
+   },
+   "stock_vs_emulated": {
+    "mae": 0.0799870640039444,
+    "psnr": 17.86313137014278,
+    "lpips": 0.4094206690788269
+   }
+  },
+  {
+   "w4a16": {
+    "mae": 0.11304517835378647,
+    "psnr": 14.665332999297448,
+    "lpips": 0.4269312918186188
+   },
+   "w16a4": {
+    "mae": 0.11938008666038513,
+    "psnr": 14.272941556192514,
+    "lpips": 0.4573238790035248
+   },
+   "w4a4_emulated": {
+    "mae": 0.12949390709400177,
+    "psnr": 13.866922959463238,
+    "lpips": 0.5119355916976929
+   },
+   "stock_torchao": {
+    "mae": 0.12583957612514496,
+    "psnr": 14.012304650942028,
+    "lpips": 0.4943726062774658
+   },
+   "stock_vs_emulated": {
+    "mae": 0.10823172330856323,
+    "psnr": 14.799408533431482,
+    "lpips": 0.38758689165115356
+   }
+  }
+ ],
+ "mean": {
+  "w4a16": {
+   "mae": 0.11052462334434192,
+   "psnr": 15.517826872080377,
+   "lpips": 0.43772178888320923
+  },
+  "w16a4": {
+   "mae": 0.09599845483899117,
+   "psnr": 16.712148765802606,
+   "lpips": 0.4736921240886052
+  },
+  "w4a4_emulated": {
+   "mae": 0.11969361826777458,
+   "psnr": 14.973503169102093,
+   "lpips": 0.5210490773121516
+  },
+  "stock_torchao": {
+   "mae": 0.11518583198388417,
+   "psnr": 15.361703203394335,
+   "lpips": 0.5184592107931772
+  },
+  "stock_vs_emulated": {
+   "mae": 0.09766484797000885,
+   "psnr": 16.277216144144422,
+   "lpips": 0.414696142077446
+  }
+ }
+}

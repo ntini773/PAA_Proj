@@ -1,0 +1,9 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-3a03.qdstrm'
+[1/1] [0%                          ] fused_cuda_row_1024.nsys-repProcessing events...
+[1/1] [0%                          ] fused_cuda_row_1024.nsys-rep[1/1] [==18%                       ] fused_cuda_row_1024.nsys-rep[1/1] [14%                         ] fused_cuda_row_1024.nsys-rep[1/1] [====26%                     ] fused_cuda_row_1024.nsys-rep[1/1] [=======38%                  ] fused_cuda_row_1024.nsys-rep[1/1] [===========50%              ] fused_cuda_row_1024.nsys-rep[1/1] [========================100%] fused_cuda_row_1024.nsys-rep[1/1] [========================100%] fused_cuda_row_1024.nsys-rep
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'fused', 'backend': 'cuda_row', 'width': 'wide', 'compile': False, 'tokens': 4096, 'rows': 8192, 'config': 'fused_cuda_row', 'gpu_ms': {'n': 5, 'median': 98.28883361816406, 'min': 95.60502624511719, 'p10': 95.60502624511719, 'p90': 99.11548614501953, 'max': 99.11548614501953, 'std': 1.2970567251654674}, 'cpu_launch_ms': 76.23922708444297, 'peak_mem_gb': 0.5931153297424316, 'fused_calls': 1430, 'fallback_calls': 0}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/fused_cuda_row_1024.nsys-rep

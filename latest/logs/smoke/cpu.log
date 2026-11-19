@@ -1,0 +1,17 @@
+== test_fused_linear.py
+PASS  fused linear == dequantized reference
+PASS  fused linear close to bf16 linear (fp4 error)
+PASS  shared quantize: 3 outputs
+PASS  shared quantize equals three separate layers
+PASS  shared quantize runs the quantize op once
+PASS  concat output shapes
+PASS  concat close to separate (one shared weight scale)
+PASS  static scale equals dynamic when amax matches
+PASS  static scale is really used (other amax changes the result)
+PASS  too-small static scale saturates (error grows)
+PASS  fake quantize shapes/dtypes equal real
+PASS  eager: one quantize op per site
+PASS  compiled: one quantize op per site (patch bypass bug would give ~0)
+PASS  compiled output equals eager
+14/14 checks passed
+== test_attention_dfa.py

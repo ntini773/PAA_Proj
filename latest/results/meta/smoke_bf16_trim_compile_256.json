@@ -1,0 +1,25 @@
+{
+ "model": "pixart_sigma",
+ "size": 256,
+ "batch": 1,
+ "mode": "variant",
+ "backend": null,
+ "width": null,
+ "compile": false,
+ "tokens": 256,
+ "rows": 512,
+ "config": "smoke_bf16_trim_compile",
+ "variant": "bf16+trim+compile",
+ "gpu_ms": {
+  "n": 3,
+  "median": 7.946623802185059,
+  "min": 7.887807846069336,
+  "p10": 7.887807846069336,
+  "p90": 8.122207641601562,
+  "max": 8.122207641601562,
+  "std": 0.09957256734194574
+ },
+ "cpu_launch_ms": 7.9103868920356035,
+ "peak_mem_gb": 1.3517036437988281,
+ "iters": 3
+}

@@ -1,0 +1,36 @@
+{
+ "model": "pixart_sigma",
+ "size": 1024,
+ "batch": 1,
+ "mode": "fused",
+ "backend": "triton",
+ "width": "wide",
+ "compile": false,
+ "tokens": 4096,
+ "rows": 8192,
+ "config": "fused_triton_fc1",
+ "gpu_ms": {
+  "n": 3,
+  "median": 200.3502655029297,
+  "min": 185.7423095703125,
+  "p10": 185.7423095703125,
+  "p90": 12554.6416015625,
+  "max": 12554.6416015625,
+  "std": 5827.3149668327615
+ },
+ "cpu_launch_ms": 200.30056405812502,
+ "peak_mem_gb": 0.5931153297424316,
+ "fused_calls": 858,
+ "fallback_calls": 0,
+ "layer": {
+  "name": "transformer_blocks.3.ff.net.0.proj",
+  "in_features": 1152,
+  "out_features": 4608,
+  "input_shape": [
+   2,
+   4096,
+   1152
+  ]
+ },
+ "iters": 3
+}

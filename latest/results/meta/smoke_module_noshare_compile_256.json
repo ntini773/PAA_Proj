@@ -1,0 +1,25 @@
+{
+ "model": "pixart_sigma",
+ "size": 256,
+ "batch": 1,
+ "mode": "variant",
+ "backend": null,
+ "width": null,
+ "compile": false,
+ "tokens": 256,
+ "rows": 512,
+ "config": "smoke_module_noshare_compile",
+ "variant": "module+be=triton+noshare+compile",
+ "gpu_ms": {
+  "n": 3,
+  "median": 31.33193588256836,
+  "min": 31.322463989257812,
+  "p10": 31.322463989257812,
+  "p90": 31.64076805114746,
+  "max": 31.64076805114746,
+  "std": 0.1478679970362478
+ },
+ "cpu_launch_ms": 31.289326027035713,
+ "peak_mem_gb": 0.5335159301757812,
+ "iters": 3
+}

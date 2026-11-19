@@ -1,0 +1,10 @@
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.31s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.17s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.19s/it]
+ 29 tokens  A vintage red bicycle leaning against a stone wall covered in ivy, gol
+ 23 tokens  An astronaut riding a horse across a desert planet with two moons in t
+ 25 tokens  A cozy cabin in a snowy forest at night, warm light in the windows, sm
+ 24 tokens  A close-up of a honeybee on a purple lavender flower, macro photograph
+ 23 tokens  A busy farmers market in southern France, colorful fruit stalls, peopl
+ 25 tokens  A watercolor painting of a lighthouse on a rocky coast during a storm,
+ 22 tokens  A modern kitchen with marble countertops, a bowl of lemons and a windo
+ 27 tokens  A street musician playing a violin in a rainy city alley, reflections 
+saved prompts/embeds_calib.pt 8 prompts

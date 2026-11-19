@@ -1,0 +1,34 @@
+{
+ "model": "pixart_sigma",
+ "size": 1024,
+ "batch": 1,
+ "mode": "stock",
+ "backend": null,
+ "width": null,
+ "compile": false,
+ "tokens": 4096,
+ "rows": 8192,
+ "config": "stock_fc1",
+ "gpu_ms": {
+  "n": 3,
+  "median": 526.9913940429688,
+  "min": 525.3834228515625,
+  "p10": 525.3834228515625,
+  "p90": 48849.83203125,
+  "max": 48849.83203125,
+  "std": 22779.984545746927
+ },
+ "cpu_launch_ms": 523.7733980175108,
+ "peak_mem_gb": 1.5833792686462402,
+ "layer": {
+  "name": "transformer_blocks.3.ff.net.0.proj",
+  "in_features": 1152,
+  "out_features": 4608,
+  "input_shape": [
+   2,
+   4096,
+   1152
+  ]
+ },
+ "iters": 3
+}

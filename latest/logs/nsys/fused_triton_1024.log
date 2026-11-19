@@ -1,0 +1,9 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-3644.qdstrm'
+[1/1] [0%                          ] fused_triton_1024.nsys-repProcessing events...
+[1/1] [0%                          ] fused_triton_1024.nsys-rep[1/1] [14%                         ] fused_triton_1024.nsys-rep[1/1] [====26%                     ] fused_triton_1024.nsys-rep[1/1] [=======39%                  ] fused_triton_1024.nsys-rep[1/1] [===========50%              ] fused_triton_1024.nsys-rep[1/1] [===========51%              ] fused_triton_1024.nsys-rep[1/1] [========================100%] fused_triton_1024.nsys-rep[1/1] [========================100%] fused_triton_1024.nsys-rep
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'fused', 'backend': 'triton', 'width': 'wide', 'compile': False, 'tokens': 4096, 'rows': 8192, 'config': 'fused_triton', 'gpu_ms': {'n': 5, 'median': 100.77276611328125, 'min': 98.09410858154297, 'p10': 98.09410858154297, 'p90': 101.64470672607422, 'max': 101.64470672607422, 'std': 1.2808080383920604}, 'cpu_launch_ms': 78.27865309081972, 'peak_mem_gb': 0.5931153297424316, 'fused_calls': 1430, 'fallback_calls': 0}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/fused_triton_1024.nsys-rep

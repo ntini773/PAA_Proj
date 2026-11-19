@@ -1,0 +1,24 @@
+{
+ "model": "pixart_sigma",
+ "size": 1024,
+ "batch": 1,
+ "mode": "fused",
+ "backend": "cuda_swizzled",
+ "width": "wide",
+ "compile": true,
+ "tokens": 4096,
+ "rows": 8192,
+ "config": "fused_cuda_swizzled_compile",
+ "gpu_ms": {
+  "n": 5,
+  "median": 74.95785522460938,
+  "min": 71.43778991699219,
+  "p10": 71.43778991699219,
+  "p90": 75.50579071044922,
+  "max": 75.50579071044922,
+  "std": 1.6656096048724451
+ },
+ "cpu_launch_ms": 35.406778100878,
+ "peak_mem_gb": 0.5440163612365723,
+ "iters": 5
+}

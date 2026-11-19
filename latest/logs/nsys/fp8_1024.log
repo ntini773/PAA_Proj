@@ -1,0 +1,9 @@
+Unable to import `torchao` Tensor objects. This may affect loading checkpoints serialized with `torchao`
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/data/cs3406/team13/.tmp/nsys-report-e928.qdstrm'
+[1/1] [0%                          ] fp8_1024.nsys-repProcessing events...
+[1/1] [0%                          ] fp8_1024.nsys-rep[1/1] [=15%                        ] fp8_1024.nsys-rep[1/1] [=====29%                    ] fp8_1024.nsys-rep[1/1] [=========43%                ] fp8_1024.nsys-rep[1/1] [===========51%              ] fp8_1024.nsys-rep[1/1] [========================100%] fp8_1024.nsys-rep[1/1] [========================100%] fp8_1024.nsys-rep
+{'model': 'pixart_sigma', 'size': 1024, 'batch': 1, 'mode': 'fp8', 'backend': None, 'width': None, 'compile': False, 'tokens': 4096, 'rows': 8192, 'config': 'fp8', 'gpu_ms': {'n': 5, 'median': 130.7243194580078, 'min': 125.36825561523438, 'p10': 125.36825561523438, 'p90': 131.527587890625, 'max': 131.527587890625, 'std': 2.277023844525455}, 'cpu_launch_ms': 89.57211603410542, 'peak_mem_gb': 1.1926097869873047}
+Generated:
+	/data/cs3406/team13/PAA_Proj/rtx5000_next/results/nsys/fp8_1024.nsys-rep

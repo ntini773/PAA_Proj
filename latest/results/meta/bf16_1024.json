@@ -1,0 +1,24 @@
+{
+ "model": "pixart_sigma",
+ "size": 1024,
+ "batch": 1,
+ "mode": "bf16",
+ "backend": null,
+ "width": null,
+ "compile": false,
+ "tokens": 4096,
+ "rows": 8192,
+ "config": "bf16",
+ "gpu_ms": {
+  "n": 5,
+  "median": 105.17581176757812,
+  "min": 97.75398254394531,
+  "p10": 97.75398254394531,
+  "p90": 106.23446655273438,
+  "max": 106.23446655273438,
+  "std": 3.164078312169113
+ },
+ "cpu_launch_ms": 12.884348165243864,
+ "peak_mem_gb": 1.404900074005127,
+ "iters": 5
+}
