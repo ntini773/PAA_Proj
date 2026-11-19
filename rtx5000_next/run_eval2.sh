@@ -28,7 +28,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-STAGES="E01 E02 E03 E04 E05 E06 E07 E08 E09 E10 E11 E12 E13 ${WITH_MODELS:+E14} E15"   # E14 (new models) only with WITH_MODELS=1
+STAGES="E01 E02 E03 E04 E05 E06 E07 E08 E09 E10 E11 E12 E13 ${WITH_MODELS:+E14} E15 E16"   # E14 (new models) only with WITH_MODELS=1
 desc() { case $1 in
   E01) echo "calibration prompt embeddings (T5 encode of prompts_calib.json)  ~5 min";;
   E02) echo "microbenchmarks: FP4 GEMM shapes, attention backends  ~5 min";;
@@ -45,6 +45,7 @@ desc() { case $1 in
   E13) echo "traffic ledger and whole-forward roofline refresh (CPU)  ~1 min";;
   E14) echo "smoke of the new models (Sana 0.6B, SD3.5 Medium, FLUX)  ~15 min";;
   E15) echo "package results  ~1 min";;
+  E16) echo "real-prompt quality of the NVFP4 variants measured against stock NVFP4 (not bf16)  ~20 min";;
 esac; }
 
 if [ $LIST -eq 1 ]; then for s in $STAGES; do echo "$s  $(desc $s)"; done; exit 0; fi
@@ -90,11 +91,18 @@ quality_variants() {
 e11() { for s in $SIZES; do $PY quality/run_quality.py --size $s --steps $STEPS --embeds $EMBEDS ${CLIP:+--clip $CLIP} $CLIPARG \
           --variants $(quality_variants | tr '\n' ' ') || return 1; done; }
 e12() { local best="module+be=cuda_swizzled+static+concat+trim+xcudnn"
-        $PY bench/pipeline_e2e.py --size 1024 --images 4 --steps $STEPS --t5 --variants bf16 bf16+compile stock_compile $best+compile \
+        $PY bench/pipeline_e2e.py --size 1024 --images 4 --steps $STEPS --t5 --variants bf16 bf16+compile stock+compile $best+compile \
           $best+dfa0.1+compile $best+licfg0.2-0.8+compile $best+dfa0.1+licfg0.2-0.8+compile; }
 e13() { for s in $SIZES; do $PY analysis/traffic_ledger.py --size $s || return 1; done; $PY analysis/roofline_whole_forward.py; }
 e14() { for m in "sana_600m 1024" "sd35_medium 1024" "flux_schnell 1024"; do set -- $m; $PY model_smoke.py --model $1 --size $2 || return 1; done; }
 e15() { tar czf results_eval2.tgz results logs prompts/embeds_calib.pt; }
+# E16: once weights are NVFP4, LPIPS against bf16 is dominated by the quantization itself (0.37-0.56). Comparing against stock NVFP4
+# shows what each optimization adds on top. bf16 is included as the distance of full precision from stock NVFP4.
+e16() { local best="module+be=cuda_swizzled+static+concat"
+        for s in $SIZES; do $PY quality/run_quality.py --size $s --steps $STEPS --embeds $EMBEDS ${CLIP:+--clip $CLIP} $CLIPARG \
+          --reference stock --out results/quality_vs_stock/$s \
+          --variants bf16 w4a16 module+be=cuda_swizzled $best $best+selective $best+trim+xcudnn $best+selective+trim+xcudnn \
+          $best+trim+xcudnn+dfa0.1 $best+trim+xcudnn+licfg0.2-0.8 $best+trim+xcudnn+dfa0.1+licfg0.2-0.8 || return 1; done; }
 
 for s in $STAGES; do
   fn=$(echo $s | tr 'E' 'e')
