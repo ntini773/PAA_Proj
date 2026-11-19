@@ -26,7 +26,7 @@ bash run_eval2.sh          # all stages in order, each to completion; resume wit
 | E08 | Per-stage timing: GPU busy, gaps, kernel counts, CPU launch time | tells launch-bound stages from memory-bound ones | `timing/profile_stages.py`, `analysis/analyze_stages.py` | todo |
 | E09 | nsys with stage ranges and kernel launch tables | the independent check of E08 (`nvtx_gpu_proj_sum`, `cuda_kern_exec_sum`) | `profiling/nsys_step.sh` | todo |
 | E10 | DiTFastAttn plans at three error thresholds | the attention compression itself | `ditfast/make_plans.py` | DONE 11-20 01:29 |
-| E11 | Real-prompt quality of every variant, with time per image | the speed-vs-quality trade-off for each optimization | `quality/run_quality.py` | FAILED 11-20 01:48 |
+| E11 | Real-prompt quality of every variant, with time per image | the speed-vs-quality trade-off for each optimization | `quality/run_quality.py` | FAILED 11-20 01:52 |
 | E12 | End-to-end time: T5, steps, VAE for the headline variants | what a user waits for | `bench/pipeline_e2e.py` | todo |
 | E13 | Traffic ledger and whole-forward roofline | memory-movement budget and distance from the roofs | `analysis/traffic_ledger.py`, `analysis/roofline_whole_forward.py` | todo |
 | E14 | Smoke of Sana 0.6B, SD3.5 Medium, FLUX | finds adapter bugs before the next window | `model_smoke.py` | todo |
