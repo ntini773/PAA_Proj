@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 PY=${PY:-python}
 export CUDA_VISIBLE_DEVICES=""
 fail=0
-for t in test_fused_linear.py test_attention_dfa.py test_sampler.py test_ledger_metrics.py; do
+for t in test_fused_linear.py test_attention_dfa.py test_sampler.py test_ledger_metrics.py test_variants.py; do
   echo "== $t"
   $PY $t 2>&1 | grep -E "^(PASS|FAIL|SKIP)|checks passed|Traceback|Error" || true
   [ "${PIPESTATUS[0]}" -eq 0 ] || fail=1

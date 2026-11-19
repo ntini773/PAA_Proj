@@ -1,6 +1,10 @@
-"""Refresh the Status column of PROGRESS.md from results/.done and results/.fail markers.
+"""Refresh the Status column of the trackers from results/.done and results/.fail markers.
 
     python progress_report.py
+
+Trackers: PROGRESS.md (first experiment round: N, K, S, P, R, Q, T, V, M rows) and PROGRESS_EVAL2.md (eval2: E rows).
+A row is any table line starting with `| <Letter><2 digits> |`; its last cell becomes `todo`, `DONE <time>` or `FAILED <time>`.
+Both files are rewritten in place; a counts marker `<!-- counts -->...<!-- /counts -->` is kept up to date.
 """
 import pathlib
 import re
@@ -8,14 +12,14 @@ import time
 
 ROOT = pathlib.Path(__file__).resolve().parent
 DONE, FAIL = ROOT / "results" / ".done", ROOT / "results" / ".fail"
+TRACKERS = ["PROGRESS.md", "PROGRESS_EVAL2.md"]
 
 
 def stamp(p):
     return time.strftime("%m-%d %H:%M", time.localtime(p.stat().st_mtime))
 
 
-def main():
-    md = ROOT / "PROGRESS.md"
+def update(md):
     out, counts = [], dict(done=0, failed=0, todo=0)
     for line in md.read_text().splitlines():
         m = re.match(r"^\| ([A-Z]\d{2}) \|", line)
@@ -36,7 +40,14 @@ def main():
     text = re.sub(r"<!-- counts -->.*?<!-- /counts -->",
                   f"<!-- counts -->{counts['done']} done, {counts['failed']} failed, {counts['todo']} todo<!-- /counts -->", text)
     md.write_text(text)
-    print(counts)
+    return counts
+
+
+def main():
+    for name in TRACKERS:
+        md = ROOT / name
+        if md.exists():
+            print(name, update(md))
 
 
 if __name__ == "__main__":

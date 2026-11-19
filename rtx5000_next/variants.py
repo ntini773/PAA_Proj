@@ -9,12 +9,13 @@ Name grammar: <base>[+modifier]...        e.g.  module+static+concat+dfa0.1+licf
                 stock_tk  torchao NVFP4 with its own fused Triton quantize kernel (needs the mslk package)
                 w4a16     real torchao NVFP4 weights, activations left in bf16 (act_quant_kwargs=None)
                 module    our FusedNVFP4Linear stack (fused_linear.py)
-  modifiers   static      static activation scales from results/static_scales.json (calibrate_static_scales.py)
+  modifiers   static      static activation scales from results/static_scales_<size>.json (calibrate_static_scales.py --size <size>)
               noshare     do not share the Q/K/V quantize          concat   one GEMM for Q/K/V and for K/V
               selective   keep cross-attn K/V, caption, adaln and proj_out in bf16
               be=<name>   quantize backend: triton (default) | cuda_swizzled | cuda_row | torchref
               trim        cross-attention keeps only the real text tokens (exact)
-              kvds<f>     self-attention K/V pooling factor        flash | cudnn | efficient | sage2 | sage3   SDPA backend
+              kvds<f>     self-attention K/V pooling factor        flash | cudnn | efficient | sage2 | sage3   self-attention backend
+              xcudnn | xefficient   cross-attention backend (the masked cross-attention otherwise falls to the efficient kernel)
               dfa<delta>  DiTFastAttn plan from results/dfa_plans/pixart_<size>_d<delta>.json (ditfast/plan_search.py)
               licfg<lo>-<hi>  guidance only for denoise steps with lo <= i/steps < hi
               compile     torch.compile on every transformer block
@@ -35,6 +36,12 @@ REPO = {256: "PixArt-alpha/PixArt-Sigma-XL-2-256x256", 512: "PixArt-alpha/PixArt
 STATIC_PATH = RESULTS / "static_scales.json"
 
 
+def static_path(size):
+    """results/static_scales_<size>.json written by calibrate_static_scales.py, else the generic file."""
+    p = RESULTS / f"static_scales_{size}.json"
+    return p if p.exists() else STATIC_PATH
+
+
 def plan_path(size, delta):
     return RESULTS / "dfa_plans" / f"pixart_{size}_d{delta}.json"
 
@@ -51,6 +58,7 @@ class Variant:
     trim: bool = False
     kv_ds: int = 1
     attn: str = "default"
+    attn_cross: str = "default"
     dfa_delta: float = None
     interval: tuple = None
     compile: bool = False
@@ -75,6 +83,8 @@ def parse(name):
             v.compile = True
         elif t in ("flash", "cudnn", "efficient", "sage2", "sage3", "math"):
             v.attn = t
+        elif t in ("xcudnn", "xefficient"):
+            v.attn_cross = t[1:]
         elif t.startswith("be="):
             v.backend = t[3:]
         elif m := re.fullmatch(r"kvds(\d+)", t):
@@ -115,11 +125,12 @@ def weights_only(transformer):
     return n
 
 
-def load_static_amax(margin=1.0):
+def load_static_amax(size, margin=1.0):
     import json
-    if not STATIC_PATH.exists():
-        raise SystemExit(f"{STATIC_PATH} missing: run calibrate_static_scales.py first")
-    return {k: float(a) * margin for k, a in json.loads(STATIC_PATH.read_text())["amax"].items()}
+    p = static_path(size)
+    if not p.exists():
+        raise SystemExit(f"{p} missing: run calibrate_static_scales.py --size {size} first")
+    return {k: float(a) * margin for k, a in json.loads(p.read_text())["amax"].items()}
 
 
 def pad16(n):
@@ -171,12 +182,12 @@ def build(name, size):
     if v.base == "w4a16":
         report["weights_only_layers"] = weights_only(tr)
     if v.base == "module":
-        static = load_static_amax() if v.static else None
+        static = load_static_amax(size) if v.static else None
         report.update(fl.convert_pixart(tr, backend=v.backend, static_amax=static, shared_qkv=v.share, concat=v.concat,
                                         selective=v.selective))
-    cfg = ap.AttnConfig(backend=v.attn, kv_ds=v.kv_ds)
+    cfg = ap.AttnConfig(backend=v.attn, backend_cross=v.attn_cross, kv_ds=v.kv_ds)
     use_dfa = v.dfa_delta is not None
-    if v.base == "module" or v.trim or v.kv_ds > 1 or v.attn != "default" or use_dfa:
+    if v.base == "module" or v.trim or v.kv_ds > 1 or v.attn != "default" or v.attn_cross != "default" or use_dfa:
         ap.install_attention(tr, cfg, use_dfa=use_dfa)
     if use_dfa:
         import ditfast.attention as dfa

@@ -36,8 +36,10 @@ def main():
     a.add_argument("--embeds", default="prompts/embeds_calib.pt")
     a.add_argument("--n", type=int, default=8)
     a.add_argument("--allow-eval-prompts", action="store_true")
-    a.add_argument("--out", default=str(STATIC_PATH))
+    a.add_argument("--out", default=None, help="default: results/static_scales_<size>.json")
     a = a.parse_args()
+    if a.out is None:
+        a.out = str(STATIC_PATH.with_name(f"static_scales_{a.size}.json"))
 
     emb = pathlib.Path(a.embeds)
     if not emb.exists():

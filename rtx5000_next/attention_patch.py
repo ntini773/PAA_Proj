@@ -34,7 +34,8 @@ _BACKENDS = {
 
 @dataclasses.dataclass
 class AttnConfig:
-    backend: str = "default"      # default | flash | efficient | cudnn | math | sage2 | sage3
+    backend: str = "default"      # self-attention: default | flash | efficient | cudnn | math | sage2 | sage3
+    backend_cross: str = "default"  # cross-attention (masked; flash cannot take a mask): default | cudnn | efficient
     text_len: int = 0             # 0 = keep all text tokens
     kv_ds: int = 1                # K/V token-grid pooling factor for self-attention
     sage_on_cross: bool = False   # Sage kernels take no mask; cross-attention stays on torch SDPA unless True
@@ -71,9 +72,10 @@ def sdpa(q, k, v, mask, cfg, is_self):
             mask = mask[..., :cfg.text_len]
     if is_self and cfg.kv_ds > 1:
         k, v = pool_kv(k, v, cfg.kv_ds)
-    if cfg.backend in ("sage2", "sage3") and (is_self or cfg.sage_on_cross) and mask is None:
-        return _sage(q, k, v, cfg.backend)
-    ctx = sdpa_kernel(_BACKENDS[cfg.backend]) if cfg.backend in _BACKENDS else contextlib.nullcontext()
+    backend = cfg.backend if is_self else cfg.backend_cross
+    if backend in ("sage2", "sage3") and (is_self or cfg.sage_on_cross) and mask is None:
+        return _sage(q, k, v, backend)
+    ctx = sdpa_kernel(_BACKENDS[backend]) if backend in _BACKENDS else contextlib.nullcontext()
     with ctx:
         return F.scaled_dot_product_attention(q, k, v, attn_mask=mask, dropout_p=0.0, is_causal=False)
 
