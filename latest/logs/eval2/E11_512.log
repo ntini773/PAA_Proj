@@ -14,3 +14,36 @@ w4a16                                            696.2 ms/img  LPIPS 0.2829  SSI
 Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  4.81it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.20it/s]
 module+be=cuda_swizzled                          608.4 ms/img  LPIPS 0.3827  SSIM 0.519  CLIP 29.4
 Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  4.99it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.46it/s]
+module+be=cuda_swizzled+static+concat            245.4 ms/img  LPIPS 0.4191  SSIM 0.503  CLIP 28.0
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  3.24it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.85it/s]
+module+be=cuda_swizzled+selective                262.7 ms/img  LPIPS 0.3198  SSIM 0.601  CLIP 28.6
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  3.46it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  5.18it/s]
+bf16+trim                                        251.4 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 30.0
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00, 16.75it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 24.90it/s]
+bf16+xcudnn                                      273.0 ms/img  LPIPS 0.0748  SSIM 0.860  CLIP 30.0
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 100.75it/s]
+bf16+trim+xcudnn                                 531.0 ms/img  LPIPS 0.0748  SSIM 0.860  CLIP 30.0
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  4.89it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.31it/s]
+bf16+kvds2                                       349.0 ms/img  LPIPS 0.8338  SSIM 0.074  CLIP 9.7
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  4.47it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  6.69it/s]
+bf16+dfa0.05                                     574.0 ms/img  LPIPS 0.1015  SSIM 0.829  CLIP 29.6
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  5.01it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.50it/s]
+bf16+dfa0.1                                      632.1 ms/img  LPIPS 0.1306  SSIM 0.805  CLIP 29.8
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 31.03it/s]
+bf16+dfa0.2                                      281.9 ms/img  LPIPS 0.3015  SSIM 0.654  CLIP 29.5
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  5.05it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.56it/s]
+bf16+licfg0.2-0.8                                489.3 ms/img  LPIPS 0.1760  SSIM 0.757  CLIP 29.5
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  5.03it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.53it/s]
+bf16+licfg0.3-0.7                                191.8 ms/img  LPIPS 0.3562  SSIM 0.585  CLIP 28.5
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  5.07it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.58it/s]
+module+be=cuda_swizzled+static+concat+trim+xcudnn    471.5 ms/img  LPIPS 0.4015  SSIM 0.508  CLIP 28.2
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  5.13it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.68it/s]
+module+be=cuda_swizzled+static+concat+trim+xcudnn+dfa0.1    512.0 ms/img  LPIPS 0.3939  SSIM 0.529  CLIP 28.4
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  3.04it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.56it/s]
+module+be=cuda_swizzled+static+concat+trim+xcudnn+licfg0.2-0.8    177.6 ms/img  LPIPS 0.3867  SSIM 0.539  CLIP 30.0
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  4.87it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.28it/s]
+module+be=cuda_swizzled+static+concat+trim+xcudnn+dfa0.1+licfg0.2-0.8    419.7 ms/img  LPIPS 0.3866  SSIM 0.540  CLIP 29.2
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  5.14it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.69it/s]
+bf16+sage2                                       313.1 ms/img  LPIPS 0.0913  SSIM 0.855  CLIP 30.1
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...:  67%|██████▋   | 2/3 [00:00<00:00,  4.69it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.01it/s]
+run_eval2.sh: line 90: 503445 Killed                  $PY quality/run_quality.py --size $s --steps $STEPS --embeds $EMBEDS ${CLIP:+--clip $CLIP} $CLIPARG --variants $(quality_variants | tr '\n' ' ')

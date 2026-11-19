@@ -8,3 +8,15 @@ Unable to import `torchao` Tensor objects. This may affect loading checkpoints s
   warnings.warn(msg)
 bf16                                            1898.6 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 28.9
 Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.51it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.50it/s]
+stock                                           9325.5 ms/img  LPIPS 0.5644  SSIM 0.426  CLIP 30.1
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  6.37it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  6.37it/s]
+w4a16                                           2048.3 ms/img  LPIPS 0.4190  SSIM 0.528  CLIP 29.7
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00, 31.11it/s]
+module+be=cuda_swizzled                         2383.4 ms/img  LPIPS 0.5506  SSIM 0.439  CLIP 30.2
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  8.17it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  8.16it/s]
+module+be=cuda_swizzled+static+concat           1790.4 ms/img  LPIPS 0.5530  SSIM 0.436  CLIP 30.3
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  5.67it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  5.67it/s]
+module+be=cuda_swizzled+selective               2321.4 ms/img  LPIPS 0.5250  SSIM 0.486  CLIP 29.1
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.71it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  7.70it/s]
+bf16+trim                                       1849.6 ms/img  LPIPS 0.0000  SSIM 1.000  CLIP 28.9
+Loading pipeline components...:   0%|          | 0/3 [00:00<?, ?it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.33it/s]Loading pipeline components...: 100%|██████████| 3/3 [00:00<00:00,  4.33it/s]
