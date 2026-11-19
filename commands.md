@@ -64,7 +64,14 @@ Use `pixi run` in front of each if `python` is not the pixi python (or set `PY=.
 | E14 | new-model smoke | `python model_smoke.py --model <sana_600m\|sd35_medium\|flux_schnell> --size 1024` | 15 min |
 | E15 | package | `tar czf results_eval2.tgz results logs prompts/embeds_calib.pt` | 1 min |
 
-Optional installs for the Sage attention variants (CPU build, may fail with CUDA 13; the stages skip them if absent): `pip install sageattention --no-build-isolation` (Sage2), the `sageattention3_blackwell` folder of https://github.com/thu-ml/SageAttention (Sage FP4). For `stock_tk`: `pip install --pre mslk`.
+Optional installs for the Sage attention variants (CPU build, may fail with CUDA 13; the stages skip them if absent). **`pip install sageattention` gives only the old 1.0.6 (Triton INT8); Sage 2.x is not on PyPI and must be built from source:**
+
+```bash
+python -m pip uninstall -y sageattention
+git clone https://github.com/thu-ml/SageAttention.git ~/SageAttention && cd ~/SageAttention
+TORCH_CUDA_ARCH_LIST="12.0" python -m pip install -e . --no-build-isolation    # builds for sm_120 only, so it is faster
+```
+Then `python bench/attention_backends.py` and look at the `pixart_self_1024 sage2` row. Sage FP4 is the `sageattention3_blackwell` folder of the same repo (head dim 64/128 only, so not usable on PixArt's 72). `stock_tk` needs the real MSLK from https://github.com/meta-pytorch/MSLK (the PyPI `mslk` 0.0.0 is empty).
 
 ## Saving results while the runs go (so nothing is lost if the GPU session ends)
 
