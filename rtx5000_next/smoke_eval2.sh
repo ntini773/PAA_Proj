@@ -4,7 +4,8 @@
 # Each line prints PASS / FAIL / WARN. FAIL = fix before running run_eval2.sh (the failing log is shown). WARN = an optional
 # piece is missing (Sage attention, mslk, CUDA kernels) and the matching variants will be skipped or fail on their own.
 cd "$(dirname "$0")"
-PY=${PY:-python}
+source ./pyenv.sh   # finds a python with torch (with or without `pixi run`); exits with a message if none
+echo "python: $PY"
 # SKIP_CUDA=1: skip the CUDA-extension checks (e.g. a laptop with nvcc < 12.8). SKIP_MODELS=1: skip the new-model smoke.
 have_nvcc() { [ -z "$SKIP_CUDA" ] && command -v nvcc > /dev/null; }
 mkdir -p logs/smoke results/.done

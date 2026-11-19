@@ -32,6 +32,8 @@ Most of this code was written without being able to run it (no sm_120 nvcc local
 | 22 | 11-20 | local setup | pixi env has no `pip`; matplotlib missing for plot code paths | the env is built from `pixi.toml` pypi pins only | `uv pip install --python <env python> matplotlib`; `smoke_eval2.sh` reports a missing import as FAIL | local | The smoke test must import everything the stages import. |
 | 23 | 11-20 | tracker design | A change to `PROGRESS.md` would block `git pull` on the server: `progress_report.py` rewrites that tracked file there | status is written into a tracked file | eval2 uses a new `PROGRESS_EVAL2.md`; `progress_report.py` updates both; `PROGRESS.md` is not touched by this work | review | Do not write run state into files that are also under version control and edited by the other side. |
 
+| 24 | 11-20 | `smoke_eval2.sh`, `tests_cpu/run_cpu_checks.sh`, `tests_gpu/run_gpu_checks.sh` on the server | `python: command not found` (script run without `pixi run`), yet the CPU and GPU check lines printed **PASS** | Scripts defaulted `PY=python`. The test runners piped output through `grep ... \|\| true` and then read `${PIPESTATUS[0]}`, which after `\|\| true` belongs to `true`, so a crashed run counted as success | `pyenv.sh` finds a python that imports torch (PATH, then the pixi env beside the repo) or exits with a message; runners capture output and exit code and pass a file only when python exits 0 **and** prints its "checks passed" line | server | A check that cannot fail is not a check. Make the pass condition positive (the summary line is present), never "no error text seen". Test the failure path of a test runner. |
+
 ## Open risks (code that has not run on the server)
 
 | Area | Risk | How it will show |

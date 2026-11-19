@@ -11,7 +11,7 @@
 # results/.fail/<ID>; logs: logs/eval2/<ID>.log. progress_report.py refreshes PROGRESS.md.
 # Env: PY (python), SIZES="512 1024", STEPS=14, EMBEDS, CLIP (default openai/clip-vit-large-patch14), NO_CLIP=1.
 cd "$(dirname "$0")"
-PY=${PY:-python}
+source ./pyenv.sh   # finds a python with torch (with or without `pixi run`)
 SIZES=${SIZES:-"512 1024"}
 STEPS=${STEPS:-14}
 EMBEDS=${EMBEDS:-prompts/embeds_pixart.pt}
