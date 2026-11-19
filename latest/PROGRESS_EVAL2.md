@@ -2,7 +2,7 @@
 
 Plan, reasons and findings: [../eval2-pipeline.md](../eval2-pipeline.md). Bugs: [BUGS.md](BUGS.md). Commands: [../commands.md](../commands.md).
 `run_eval2.sh` writes the markers; `python progress_report.py` refreshes the Status column (this file is separate from PROGRESS.md on purpose, so the server's local edits to PROGRESS.md never block a `git pull`).
-Counts: <!-- counts -->4 done, 1 failed, 10 todo<!-- /counts -->
+Counts: <!-- counts -->5 done, 1 failed, 9 todo<!-- /counts -->
 
 ## Order on the server
 
@@ -17,7 +17,7 @@ bash run_eval2.sh          # all stages in order, each to completion; resume wit
 | ID | Test | Why | Script | Status |
 |---|---|---|---|---|
 | E01 | Encode 8 calibration prompts with the PixArt T5 | static scales and DiTFastAttn plans must be tuned on prompts other than the evaluation prompts | `prompts/make_prompt_embeds.py --prompts prompts/prompts_calib.json` | DONE 11-20 01:27 |
-| E02 | FP4 GEMM efficiency vs shape; attention backends (flash, cuDNN, Sage) at PixArt, SD3.5, FLUX shapes | compute-side limits before any end-to-end run: does concat help the GEMM, which attention kernel is fastest, is Sage usable | `bench/fp4_gemm_shapes.py`, `bench/attention_backends.py` | todo |
+| E02 | FP4 GEMM efficiency vs shape; attention backends (flash, cuDNN, Sage) at PixArt, SD3.5, FLUX shapes | compute-side limits before any end-to-end run: does concat help the GEMM, which attention kernel is fastest, is Sage usable | `bench/fp4_gemm_shapes.py`, `bench/attention_backends.py` | DONE 11-20 01:52 |
 | E03 | Real w4a16 vs w4a4: transformer error and image quality | the quality price of the activation quantize step with no emulation | `precision/real_w4a16_vs_w4a4.py` | DONE 11-20 01:37 |
 | E04 | Static activation scales per size (and amax drift across denoise steps) | removes the amax pass (memory traffic); drift shows where it is unsafe | `calibrate_static_scales.py` | DONE 11-20 01:28 |
 | E05 | Step time, fair baselines: bf16, fp8, stock, stock_tk, all compiled | the speedup claim needs compiled baselines and torchao's own fused kernel | `profiling/run_step_matrix.sh` with EVAL2_BASELINES | todo |

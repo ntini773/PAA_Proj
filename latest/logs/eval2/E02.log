@@ -1,0 +1,82 @@
+W1120 01:52:26.610000 421392 site-packages/torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W1120 01:52:26.715000 421392 site-packages/torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+| site | tokens/image | images | M | fp4 TFLOP/s | bf16 TFLOP/s | fp4 speedup |
+|---|---|---|---|---|---|---|
+| qkv_sep (1152->1152) | 1024 | 1 | 2048 | 156 | 127 | 1.22 |
+| qkv_sep (1152->1152) | 1024 | 2 | 4096 | 280 | 165 | 1.69 |
+| qkv_sep (1152->1152) | 1024 | 4 | 8192 | 391 | 154 | 2.54 |
+| qkv_sep (1152->1152) | 1024 | 8 | 16384 | 505 | 200 | 2.52 |
+| qkv_sep (1152->1152) | 4096 | 1 | 8192 | 391 | 154 | 2.54 |
+| qkv_sep (1152->1152) | 4096 | 2 | 16384 | 505 | 201 | 2.52 |
+| qkv_sep (1152->1152) | 4096 | 4 | 32768 | 568 | 188 | 3.02 |
+| qkv_sep (1152->1152) | 4096 | 8 | 65536 | 575 | 187 | 3.08 |
+| qkv_concat (1152->3456) | 1024 | 1 | 2048 | 361 | 188 | 1.92 |
+| qkv_concat (1152->3456) | 1024 | 2 | 4096 | 472 | 202 | 2.33 |
+| qkv_concat (1152->3456) | 1024 | 4 | 8192 | 535 | 213 | 2.52 |
+| qkv_concat (1152->3456) | 1024 | 8 | 16384 | 544 | 210 | 2.58 |
+| qkv_concat (1152->3456) | 4096 | 1 | 8192 | 523 | 208 | 2.51 |
+| qkv_concat (1152->3456) | 4096 | 2 | 16384 | 534 | 205 | 2.60 |
+| qkv_concat (1152->3456) | 4096 | 4 | 32768 | 562 | 188 | 2.99 |
+| qkv_concat (1152->3456) | 4096 | 8 | 65536 | 535 | 188 | 2.84 |
+| kv_concat (1152->2304) | 1024 | 1 | 2048 | 277 | 162 | 1.71 |
+| kv_concat (1152->2304) | 1024 | 2 | 4096 | 391 | 187 | 2.09 |
+| kv_concat (1152->2304) | 1024 | 4 | 8192 | 492 | 195 | 2.52 |
+| kv_concat (1152->2304) | 1024 | 8 | 16384 | 527 | 201 | 2.62 |
+| kv_concat (1152->2304) | 4096 | 1 | 8192 | 494 | 196 | 2.53 |
+| kv_concat (1152->2304) | 4096 | 2 | 16384 | 534 | 202 | 2.65 |
+| kv_concat (1152->2304) | 4096 | 4 | 32768 | 555 | 196 | 2.82 |
+| kv_concat (1152->2304) | 4096 | 8 | 65536 | 549 | 194 | 2.83 |
+| fc1 (1152->4608) | 1024 | 1 | 2048 | 389 | 188 | 2.07 |
+| fc1 (1152->4608) | 1024 | 2 | 4096 | 494 | 194 | 2.55 |
+| fc1 (1152->4608) | 1024 | 4 | 8192 | 518 | 204 | 2.54 |
+| fc1 (1152->4608) | 1024 | 8 | 16384 | 557 | 203 | 2.74 |
+| fc1 (1152->4608) | 4096 | 1 | 8192 | 522 | 206 | 2.53 |
+| fc1 (1152->4608) | 4096 | 2 | 16384 | 558 | 200 | 2.79 |
+| fc1 (1152->4608) | 4096 | 4 | 32768 | 543 | 190 | 2.85 |
+| fc1 (1152->4608) | 4096 | 8 | 65536 | 543 | 188 | 2.89 |
+| fc2 (4608->1152) | 1024 | 1 | 2048 | 375 | 179 | 2.10 |
+| fc2 (4608->1152) | 1024 | 2 | 4096 | 559 | 176 | 3.18 |
+| fc2 (4608->1152) | 1024 | 4 | 8192 | 664 | 182 | 3.65 |
+| fc2 (4608->1152) | 1024 | 8 | 16384 | 737 | 171 | 4.31 |
+| fc2 (4608->1152) | 4096 | 1 | 8192 | 663 | 182 | 3.64 |
+| fc2 (4608->1152) | 4096 | 2 | 16384 | 718 | 167 | 4.31 |
+| fc2 (4608->1152) | 4096 | 4 | 32768 | 690 | 168 | 4.11 |
+| fc2 (4608->1152) | 4096 | 8 | 65536 | 707 | 168 | 4.20 |
+| shape | backend | ms | TFLOP/s | rel L2 vs fp32 | note |
+|---|---|---|---|---|---|
+| pixart_self_512 | default | 0.099 | 98 | 0.0022 |  |
+| pixart_self_512 | flash | 0.104 | 93 | 0.0022 |  |
+| pixart_self_512 | cudnn | 0.124 | 78 | 0.0022 |  |
+| pixart_self_512 | efficient | 0.232 | 42 | 0.0022 |  |
+| pixart_self_512 | sage2 | nan | nan | - | AssertionError: headdim should be in [64, 96, 128]. |
+| pixart_self_512 | sage3 | nan | nan | - | ModuleNotFoundError: No module named 'sageattn3' |
+| pixart_self_1024 | default | 1.046 | 148 | 0.0023 |  |
+| pixart_self_1024 | flash | 1.060 | 146 | 0.0023 |  |
+| pixart_self_1024 | cudnn | 1.352 | 114 | 0.0023 |  |
+| pixart_self_1024 | efficient | 3.050 | 51 | 0.0023 |  |
+| pixart_self_1024 | sage2 | nan | nan | - | AssertionError: headdim should be in [64, 96, 128]. |
+| pixart_self_1024 | sage3 | nan | nan | - | ModuleNotFoundError: No module named 'sageattn3' |
+| pixart_cross_T300 | default | 0.371 | 31 | 0.0018 |  |
+| pixart_cross_T300 | flash | 0.370 | 31 | 0.0018 |  |
+| pixart_cross_T300 | cudnn | 0.371 | 31 | 0.0018 |  |
+| pixart_cross_T300 | efficient | 0.370 | 31 | 0.0018 |  |
+| pixart_cross_T300 | sage2 | 0.370 | 31 | 0.0018 | mask: torch fallback |
+| pixart_cross_T300 | sage3 | 0.370 | 31 | 0.0018 | mask: torch fallback |
+| pixart_cross_T64 | default | 0.134 | 18 | 0.0018 |  |
+| pixart_cross_T64 | flash | 0.134 | 18 | 0.0018 |  |
+| pixart_cross_T64 | cudnn | 0.134 | 18 | 0.0018 |  |
+| pixart_cross_T64 | efficient | 0.134 | 18 | 0.0018 |  |
+| pixart_cross_T64 | sage2 | 0.134 | 18 | 0.0018 | mask: torch fallback |
+| pixart_cross_T64 | sage3 | 0.134 | 18 | 0.0018 | mask: torch fallback |
+| sd35_medium_joint | default | 1.204 | 200 | 0.0023 |  |
+| sd35_medium_joint | flash | 1.231 | 196 | 0.0023 |  |
+| sd35_medium_joint | cudnn | 1.289 | 187 | 0.0023 |  |
+| sd35_medium_joint | efficient | 2.649 | 91 | 0.0023 |  |
+| sd35_medium_joint | sage2 | 1.165 | 207 | 0.0146 |  |
+| sd35_medium_joint | sage3 | nan | nan | - | ModuleNotFoundError: No module named 'sageattn3' |
+| flux_joint | default | 2.783 | 188 | 0.0023 |  |
+| flux_joint | flash | 2.849 | 183 | 0.0023 |  |
+| flux_joint | cudnn | 2.540 | 205 | 0.0023 |  |
+| flux_joint | efficient | 6.448 | 81 | 0.0023 |  |
+| flux_joint | sage2 | 2.504 | 208 | 0.0134 |  |
+| flux_joint | sage3 | nan | nan | - | ModuleNotFoundError: No module named 'sageattn3' |
