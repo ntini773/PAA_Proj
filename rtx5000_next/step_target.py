@@ -21,7 +21,10 @@ def parse():
     p.add_argument("--model", default="pixart_sigma")
     p.add_argument("--size", type=int, default=512)
     p.add_argument("--batch", type=int, default=1)
-    p.add_argument("--mode", choices=["bf16", "fp8", "stock", "fused"], required=True)
+    p.add_argument("--mode", choices=["bf16", "fp8", "stock", "fused"], default="bf16")
+    p.add_argument("--variant", default="", help="eval2 variant string (variants.py), e.g. module+static+concat+compile")
+    p.add_argument("--embeds", default="prompts/embeds_pixart.pt")
+    p.add_argument("--stage-ranges", action="store_true", help="NVTX ranges per stage (norm1, attn1, ..., quant, gemm) for nsys")
     p.add_argument("--backend", choices=["triton", "triton_op", "cuda_row", "cuda_swizzled", "free"], default="triton")
     p.add_argument("--width", choices=["narrow", "wide"], default="wide")
     p.add_argument("--compile", action="store_true")
@@ -36,9 +39,32 @@ def parse():
     return p.parse_args()
 
 
+class VariantRunner:
+    """Adapter so a variants.py variant runs through the same timing / nsys / ncu code as the legacy modes."""
+
+    def __init__(self, built, fwd, size, batch):
+        self.transformer, self.blocks = built.pipe.transformer, list(built.pipe.transformer.transformer_blocks)
+        self.tokens = (size // 16) ** 2
+        self.rows = 2 * batch * self.tokens
+        self._fwd = fwd
+
+    def forward(self, t=None):
+        return self._fwd()
+
+
 def main():
     a = parse()
-    r = build(a.model, a.size, a.batch, "nvfp4" if a.mode in ("stock", "fused") else a.mode)
+    if a.variant:  # eval2 path: the variant string says everything (quantization, attention, compile)
+        import variants as vr
+        from common import load_prompt_embeds
+        built = vr.build(a.variant, a.size)
+        r = VariantRunner(built, vr.make_forward(built, load_prompt_embeds(a.embeds), a.size, a.batch), a.size, a.batch)
+        a.mode, a.compile = "variant", False  # compile is part of the variant string
+        if a.stage_ranges:
+            from timing.stages import StageRecorder, install
+            install(r.transformer, StageRecorder(use_nvtx=True))
+    else:
+        r = build(a.model, a.size, a.batch, "nvfp4" if a.mode in ("stock", "fused") else a.mode)
     tr = r.transformer
     if a.list_layers:
         for n, m in tr.named_modules():
@@ -94,7 +120,7 @@ def main():
 
     res = dict(model=a.model, size=a.size, batch=a.batch, mode=a.mode, backend=a.backend if a.mode == "fused" else None,
                width=a.width if a.mode == "fused" else None, compile=a.compile, tokens=r.tokens, rows=r.rows,
-               config=a.config or a.mode)
+               config=a.config or (a.variant or a.mode), variant=a.variant)
     with torch.no_grad():
         for _ in range(a.warmup):
             r.forward()

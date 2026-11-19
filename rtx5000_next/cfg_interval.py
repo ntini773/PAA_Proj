@@ -28,7 +28,8 @@ def _latents(pipe, n, size, seeds, device, dtype):
 
 
 @torch.no_grad()
-def sample(pipe, items, size, steps=14, seeds=None, guidance=4.5, interval=None, dfa_active=False, output="np", timing=False):
+def sample(pipe, items, size, steps=14, seeds=None, guidance=4.5, interval=None, dfa_active=False, output="np", timing=False,
+           on_step=None):
     tr, sch, vae = pipe.transformer, pipe.scheduler, pipe.vae
     device = next(tr.parameters()).device if len(list(tr.parameters())) else next(tr.buffers()).device
     dtype = tr.dtype if hasattr(tr, "dtype") else torch.bfloat16
@@ -61,6 +62,8 @@ def sample(pipe, items, size, steps=14, seeds=None, guidance=4.5, interval=None,
         if dfa_active:
             dfa.STATE.begin_step(i)
             dfa.STATE.cfg_pair = use_cfg
+        if on_step is not None:
+            on_step(i)
         if cuda:
             s_ev = torch.cuda.Event(enable_timing=True)
             s_ev.record()
