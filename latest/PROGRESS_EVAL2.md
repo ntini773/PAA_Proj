@@ -2,7 +2,7 @@
 
 Plan, reasons and findings: [../eval2-pipeline.md](../eval2-pipeline.md). Bugs: [BUGS.md](BUGS.md). Commands: [../commands.md](../commands.md).
 `run_eval2.sh` writes the markers; `python progress_report.py` refreshes the Status column (this file is separate from PROGRESS.md on purpose, so the server's local edits to PROGRESS.md never block a `git pull`).
-Counts: <!-- counts -->2 done, 0 failed, 13 todo<!-- /counts -->
+Counts: <!-- counts -->3 done, 0 failed, 12 todo<!-- /counts -->
 
 ## Order on the server
 
@@ -25,7 +25,7 @@ bash run_eval2.sh          # all stages in order, each to completion; resume wit
 | E07 | Step time, attention options on the best stack | text trim, cuDNN, Sage, K/V pooling, each against the same stack | `profiling/run_step_matrix.sh` with EVAL2_ATTENTION | todo |
 | E08 | Per-stage timing: GPU busy, gaps, kernel counts, CPU launch time | tells launch-bound stages from memory-bound ones | `timing/profile_stages.py`, `analysis/analyze_stages.py` | todo |
 | E09 | nsys with stage ranges and kernel launch tables | the independent check of E08 (`nvtx_gpu_proj_sum`, `cuda_kern_exec_sum`) | `profiling/nsys_step.sh` | todo |
-| E10 | DiTFastAttn plans at three error thresholds | the attention compression itself | `ditfast/make_plans.py` | todo |
+| E10 | DiTFastAttn plans at three error thresholds | the attention compression itself | `ditfast/make_plans.py` | DONE 11-20 01:29 |
 | E11 | Real-prompt quality of every variant, with time per image | the speed-vs-quality trade-off for each optimization | `quality/run_quality.py` | todo |
 | E12 | End-to-end time: T5, steps, VAE for the headline variants | what a user waits for | `bench/pipeline_e2e.py` | todo |
 | E13 | Traffic ledger and whole-forward roofline | memory-movement budget and distance from the roofs | `analysis/traffic_ledger.py`, `analysis/roofline_whole_forward.py` | todo |
