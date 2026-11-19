@@ -24,6 +24,9 @@ import torch, diffusers, torchao, transformers, lpips, sentencepiece, matplotlib
 print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0), torch.cuda.get_device_capability(0))
 assert torch.cuda.is_available()
 EOF
+if [ -z "$SKIP_CUDA" ]; then
+  command -v ninja > /dev/null && ok "ninja found ($(command -v ninja))" || fail "ninja not found: CUDA kernels cannot build (python -m pip install ninja)"
+fi
 for tool in nvcc nsys ncu; do command -v $tool > /dev/null && ok "$tool found" || warn "$tool not found (needed for CUDA kernels / nsys / ncu stages)"; done
 if $PY -c "import sageattention as s; assert hasattr(s, 'sageattn')" 2> /dev/null; then
   if $PY -c "import sageattention as s; assert hasattr(s, 'sageattn_qk_int8_pv_fp8_cuda')" 2> /dev/null; then ok "sageattention 2.x installed (INT8/FP8 kernels)"
