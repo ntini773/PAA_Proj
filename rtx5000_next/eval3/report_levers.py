@@ -17,8 +17,11 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--quality", nargs="*", default=["noise_floor_512", "levers_512", "round2_512", "round2_1024"])
-    ap.add_argument("--since", default="2026-11-27", help="only step rows after this date (the server run)")
+    ap.add_argument("--since", default=None, help="only step rows after this time; default: results/eval3/CLEAN_SINCE, else 2026-11-27")
     a = ap.parse_args()
+    if a.since is None:
+        f = ROOT / "results" / "eval3" / "CLEAN_SINCE"
+        a.since = f.read_text().strip() if f.exists() else "2026-11-27"
     rows = [json.loads(l) for l in (ROOT / "results" / "step_target.jsonl").read_text().splitlines() if l.strip()]
     by, errs = {}, []
     for r in rows:

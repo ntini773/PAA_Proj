@@ -58,9 +58,11 @@ def record(tr):
         x = args[0]
         gemms.append((int(x.numel() // x.shape[-1]), int(m.in_features), int(m.out_features)))
 
-    def sdpa(q, k, v, *a, **kw):
+    def sdpa(*a, **kw):  # diffusers calls it with query=, key=, value= keywords; PixArt's patch passes them positionally
+        q = a[0] if len(a) > 0 else kw["query"]
+        k = a[1] if len(a) > 1 else kw["key"]
         attns.append((int(q.shape[0]), int(q.shape[1]), int(q.shape[2]), int(k.shape[2]), int(q.shape[3])))
-        return orig(q, k, v, *a, **kw)
+        return orig(*a, **kw)
 
     for m in tr.modules():
         if isinstance(m, nn.Linear):

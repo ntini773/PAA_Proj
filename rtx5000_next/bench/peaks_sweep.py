@@ -52,6 +52,19 @@ def copy_bw():
 
 
 def fp4_row(m, k, n):
+    """Pure block-scaled GEMM: torch._scaled_mm on pre-quantized operands, exactly the call FusedNVFP4Linear makes. No output scaling,
+    no bias, no quantize. This is the GEMM roof. (fp4_linear_row below includes torchao's extra output-scale pass; using it as a roof made
+    measured GEMM kernels look 1.5x faster than the 'roof' in the first roofline run.)"""
+    import fused_linear as fl
+    w = torch.randn(n, k, device="cuda", dtype=BF)
+    x = torch.randn(m, k, device="cuda", dtype=BF)
+    wq, ws, _ = fl.quantize_weight(w)
+    aq, as_, _ = fl.quantize_weight(x)
+    f4, f8 = torch.float4_e2m1fn_x2, torch.float8_e4m3fn
+    return med(lambda: torch._scaled_mm(aq.view(f4), wq.t().view(f4), as_.view(f8), ws.view(f8), out_dtype=BF))
+
+
+def fp4_linear_row(m, k, n):
     from torchao.prototype.mx_formats.inference_workflow import NVFP4DynamicActivationNVFP4WeightConfig
     from torchao.prototype.mx_formats.nvfp4_tensor import NVFP4Tensor, per_tensor_amax_to_scale
     from torchao.quantization import quantize_
@@ -79,6 +92,8 @@ def gemm_rows(ms_list, quick):
                 try:
                     ms = fp4_row(m, k, n)
                     row.update(fp4_ms=ms, fp4_tflops=2 * m * k * n / ms / 1e9)
+                    ms2 = fp4_linear_row(m, k, n)
+                    row.update(fp4_linear_ms=ms2, fp4_linear_tflops=2 * m * k * n / ms2 / 1e9)
                 except Exception as e:  # noqa: BLE001
                     row["fp4_error"] = repr(e)[:120]
                 rows.append(row)

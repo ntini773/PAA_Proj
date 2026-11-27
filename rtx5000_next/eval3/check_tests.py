@@ -9,7 +9,7 @@ import json
 import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DOC = ROOT.parent / "docs" / "EVAL3_TESTS.md"
+DOC = ROOT / "results" / "eval3" / "EVAL3_TESTS.md"   # generated on the server, untracked (a tracked copy conflicted on git pull)
 
 
 def _load(p):
@@ -74,7 +74,9 @@ def quality_no_failures(p):
 def round2_repeats(_):
     from collections import Counter
     rows = [json.loads(l) for l in (ROOT / "results" / "step_target.jsonl").read_text().splitlines() if l.strip()]
-    c = Counter((r.get("config"), r.get("size")) for r in rows if "graph_ms" in r and r.get("time", "") >= "2026-11-27")
+    f = R / "CLEAN_SINCE"  # written by hand at the start of the clean run: rows before it ran beside another GPU job
+    since = f.read_text().strip() if f.exists() else "2026-11-27"
+    c = Counter((r.get("config"), r.get("size")) for r in rows if "graph_ms" in r and r.get("time", "") >= since)
     need = ["mod_final_compile", "fp8_sage2_compile", "mod_trim_xcudnn_sage2_compile", "stock_compile"]
     short = [f"{k}@{s}" for k in need for s in (512, 1024) if c[(k, s)] < 3]
     return (not short, f"fewer than 3 repeats: {short}" if short else "")
@@ -158,7 +160,7 @@ def main():
         n += box == "[x]"
         L.append(f"| {box} | {t['id']} | {t['group']} | {t['model']} | {t['what']} | `{t['cmd']}` | {note} |")
     L.append(f"\n{n} of {len(tests)} ticked.")
-    DOC.parent.mkdir(exist_ok=True)
+    DOC.parent.mkdir(parents=True, exist_ok=True)
     DOC.write_text("\n".join(L) + "\n")
     print(f"{n} of {len(tests)} ticked -> {DOC}")
 
