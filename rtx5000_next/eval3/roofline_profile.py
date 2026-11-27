@@ -171,22 +171,23 @@ def shape_roof(peaks, k, n, kind):
     return (max(rows), "shape") if rows else (glob, "global")
 
 
-def sol(peaks, gemms, attns, base, mods, quant_sites):
+def sol(peaks, fp4_gemms, bf16_gemms, attns, base, mods, quant_sites):
+    """fp4_gemms / bf16_gemms: lists of (M, K, N) as the variant really runs them (concat = one GEMM with the summed N;
+    selective layers stay in bf16_gemms). quant_sites: (M, K) once per quantize call (shared Q/K/V = one site)."""
     bw = peaks["best"]["copy_gbs"] * 1e9
     out = dict(modeled={})
     if base in ("bf16", "stock", "module", "w4a16"):
-        kind = "bf16" if base == "bf16" else "fp4"
         t_g, fl_g, by_g, src = 0.0, 0.0, 0.0, collections.Counter()
-        agg = collections.Counter(gemms)
-        for (m, k, n), cnt in agg.items():
-            roof, how = shape_roof(peaks, k, n, kind)
-            src[how] += cnt
-            flops = 2 * m * k * n
-            byts = (2 * (m * k + k * n + m * n)) if kind == "bf16" else (FP4_B * (m * k + k * n) + 2 * m * n)
-            t_g += cnt * max(flops / (roof * 1e12), byts / bw)
-            fl_g += cnt * flops
-            by_g += cnt * byts
-        out["gemm"] = dict(sol_ms=t_g * 1e3, gflop=fl_g / 1e9, gbyte=by_g / 1e9, roof_source=dict(src), kind=kind)
+        for kind, gemms in (("fp4", fp4_gemms), ("bf16", bf16_gemms)):
+            for (m, k, n), cnt in collections.Counter(gemms).items():
+                roof, how = shape_roof(peaks, k, n, kind)
+                src[f"{kind}:{how}"] += cnt
+                flops = 2 * m * k * n
+                byts = (2 * (m * k + k * n + m * n)) if kind == "bf16" else (FP4_B * (m * k + k * n) + 2 * m * n)
+                t_g += cnt * max(flops / (roof * 1e12), byts / bw)
+                fl_g += cnt * flops
+                by_g += cnt * byts
+        out["gemm"] = dict(sol_ms=t_g * 1e3, gflop=fl_g / 1e9, gbyte=by_g / 1e9, roof_source=dict(src), kind="mixed" if fp4_gemms and bf16_gemms else ("fp4" if fp4_gemms else "bf16"))
     else:
         out["gemm"] = None  # fp8: no roof measured
     sage = any(t.startswith("sage") for t in mods)
@@ -227,27 +228,49 @@ def run_one(model, size, variant, iters):
             fwd0()
         del tr0, fwd0
         free()
-        tr, fwd, built = build_pixart(variant, size) if pixart else build_other(model, variant, size)
-        quant_sites = []
-        hooks = []
+        quant_sites, fp4_gemms, bf16_gemms = [], [], []
         if base == "module":
+            # The module stack changes the GEMM list (concat merges Q/K/V into one GEMM, selective keeps layers in bf16) and the number
+            # of quantize calls (shared Q/K/V quantize once). Hooks do not fire inside compiled blocks, so record the workload on an
+            # UNCOMPILED copy of the same variant with the default attention (Sage bypasses F.sdpa; attention comes from the twin).
+            wl = "+".join(t for t in variant.split("+") if t not in ("compile", "xcudnn", "cudnn", "xefficient") and not t.startswith("sage"))
+            tw, fw, bw_ = build_pixart(wl, size) if pixart else build_other(model, wl, size)
+            hs = []
+
             def qh(m, args):
                 x = args[0]
-                quant_sites.append((int(x.numel() // x.shape[-1]), int(m.K)))
-            hooks = [m.register_forward_pre_hook(qh) for m in tr.modules() if isinstance(m, fl.FusedNVFP4Linear)]
-            fwd()  # uncompiled blocks fire the hooks; compiled blocks do not, so also keep the per-linear fallback below
-            for h in hooks:
+                M = int(x.numel() // x.shape[-1])
+                quant_sites.append((M, int(m.K)))
+                if m.concat:
+                    fp4_gemms.append((M, int(m.K), int(sum(m.sizes))))
+                else:
+                    fp4_gemms.extend((M, int(m.K), int(n)) for n in m.sizes)
+
+            def lh(m, args):
+                x = args[0]
+                bf16_gemms.append((int(x.numel() // x.shape[-1]), int(m.in_features), int(m.out_features)))
+            for m in tw.modules():
+                if isinstance(m, fl.FusedNVFP4Linear):
+                    hs.append(m.register_forward_pre_hook(qh))
+                elif isinstance(m, nn.Linear):
+                    hs.append(m.register_forward_pre_hook(lh))
+            fw()
+            for h in hs:
                 h.remove()
+            del tw, fw, bw_
+            free()
         elif base == "stock":
+            fp4_gemms = list(gemms)
             quant_sites = [(m, k) for (m, k, _n) in gemms]
-        if not quant_sites and base == "module":
-            quant_sites = [(m, k) for (m, k, _n) in gemms]  # compiled: one quantize per GEMM input (upper bound for shared sites)
+        elif base == "bf16":
+            bf16_gemms = list(gemms)
+        tr, fwd, built = build_pixart(variant, size) if pixart else build_other(model, variant, size)
         for _ in range(3):  # warm-up: compile, caches
             fwd()
         torch.cuda.synchronize()
         prof = profile_kernels(fwd, iters)
         prof["wall_ms"] = wall_ms(fwd)
-    s = sol(peaks, gemms, attns, base, mods, quant_sites)
+    s = sol(peaks, fp4_gemms, bf16_gemms, attns, base, mods, quant_sites)
     flags = []
     cls_sum = prof["sum_ms"]
     for key, cls in (("gemm", "gemm"), ("attention", "attention"), ("quant_floor", "our_quant")):

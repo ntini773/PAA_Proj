@@ -59,6 +59,19 @@ run() {
   if [ -n "$SET" ] && ! echo " $SET " | grep -q " $id "; then return 0; fi
   if [ -f results/eval3/.done/$id ] && [ -z "$FORCE" ] && [ -z "$ONLY" ]; then echo "[$id] already done (FORCE=1 to rerun)"; return 0; fi
   echo "[$(date +%H:%M:%S)] $id: $(desc $id)"
+  # GPU guard: a stage that needs the GPU must not start while another process uses it (it caused the wave 2 OOM and spoils timings).
+  # Stages W100-W102 and W203 do not need the GPU. Waits up to 10 min for the other job, then marks the stage failed.
+  case $id in W100|W101|W102|W203) ;; *)
+    if [ $DRY -eq 0 ]; then
+      for i in $(seq 1 60); do
+        used=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null | head -1)
+        [ -z "$used" ] || [ "$used" -lt 2000 ] && break
+        [ $i -eq 1 ] && echo "  GPU busy (${used} MiB in use, other jobs: $(nvidia-smi --query-compute-apps=pid,used_memory --format=csv,noheader | tr '\n' ';')), waiting up to 10 min"
+        sleep 10
+      done
+      if [ -n "$used" ] && [ "$used" -ge 2000 ]; then echo "  GPU still busy: $id not started"; touch results/eval3/.fail/$id; return 0; fi
+    fi;;
+  esac
   if [ $DRY -eq 1 ]; then declare -f "$1" | sed '1,2d;$d' | sed 's/^/    /'; return 0; fi
   local log=logs/eval3/$id.log
   if "$@" > $log 2>&1; then touch results/eval3/.done/$id; rm -f results/eval3/.fail/$id
