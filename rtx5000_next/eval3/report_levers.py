@@ -16,7 +16,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--quality", nargs="*", default=["noise_floor_512", "levers_512"])
+    ap.add_argument("--quality", nargs="*", default=["noise_floor_512", "levers_512", "round2_512", "round2_1024"])
     ap.add_argument("--since", default="2026-11-27", help="only step rows after this date (the server run)")
     a = ap.parse_args()
     rows = [json.loads(l) for l in (ROOT / "results" / "step_target.jsonl").read_text().splitlines() if l.strip()]

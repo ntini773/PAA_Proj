@@ -10,8 +10,18 @@ EVAL2_ATTENTION="bf16_trim_compile module_best_trim module_best_xcudnn module_be
 # eval3: module stack WITHOUT static scale (static is dropped from the method for image quality)
 EVAL3_LEVERS="mod_base_compile mod_concat_compile mod_noshare_compile mod_sel_compile mod_trim_compile mod_trim_xcudnn_compile mod_trim_xcudnn_sage2_compile bf16_trim_xcudnn_compile bf16_sage2_compile bf16_trim_compile"
 
+# eval3 round 2: combinations suggested by the first lever results (Sage2 is the big attention lever; selective is the quality lever)
+EVAL3_COMBOS="bf16_trim_xcudnn_sage2_compile fp8_sage2_compile fp8_trim_xcudnn_sage2_compile mod_final_compile mod_final_nosel_compile stock_sage2_compile"
+EVAL3_KEY="bf16_compile fp8_compile stock_compile mod_base_compile mod_trim_xcudnn_compile mod_trim_xcudnn_sage2_compile bf16_sage2_compile"
+
 cfg_args() {
   case "$1" in
+    bf16_trim_xcudnn_sage2_compile) echo "--variant bf16+trim+xcudnn+sage2+compile";;
+    fp8_sage2_compile) echo "--variant fp8+sage2+compile";;
+    fp8_trim_xcudnn_sage2_compile) echo "--variant fp8+trim+xcudnn+sage2+compile";;
+    stock_sage2_compile) echo "--variant stock+sage2+compile";;
+    mod_final_compile) echo "--variant module+be=cuda_swizzled+concat+selective+trim+xcudnn+sage2+compile";;
+    mod_final_nosel_compile) echo "--variant module+be=cuda_swizzled+trim+xcudnn+sage2+compile";;
     mod_base_compile) echo "--variant module+be=cuda_swizzled+compile";;
     mod_concat_compile) echo "--variant module+be=cuda_swizzled+concat+compile";;
     mod_noshare_compile) echo "--variant module+be=cuda_swizzled+noshare+compile";;

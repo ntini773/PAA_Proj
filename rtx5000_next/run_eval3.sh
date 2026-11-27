@@ -22,11 +22,13 @@ while [ $# -gt 0 ]; do
   case $1 in
     --only) ONLY=$2; shift 2;; --from) FROM=$2; shift 2;; --dry-run) DRY=1; shift;; --list) LIST=1; shift;;
     --setup) SET="W100 W101 W102 W103"; shift;; --wave1) SET="W100 W101 W102 W103 W104 W105 W106"; shift;;
-    --queue) SET="W106 W107 W108 W109"; shift;;   # GPU-only queue that needs no new model downloads; run it in the background with nohup
+    --queue) SET="W106 W107 W108 W109"; shift;;
+    --queue2) SET="W110 W112 W111"; shift;;
+    --wave2) SET="W200 W201 W202 W203"; shift;;   # needs W104 (roofs) done; SD3.5 and FLUX weights for their rows (MODELS="pixart_sigma:512" for PixArt only)   # round 2: the cheap stages first, the 1024 px quality run last   # GPU-only queue that needs no new model downloads; run it in the background with nohup
     *) echo "unknown argument $1"; exit 2;;
   esac
 done
-STAGES="W100 W101 W102 W103 W104 W105 W106 W107 W108 W109"
+STAGES="W100 W101 W102 W103 W104 W105 W106 W107 W108 W109 W110 W111 W112 W200 W201 W202 W203"
 desc() { case $1 in
   W100) echo "preflight: GPU, packages, tools, disk, HF cache (models, metric weights)  ~1 min";;
   W101) echo "downloads: metric weights (CLIP, PickScore, LPIPS, FID); PixArt sizes; with WITH_MODELS=1 SD3.5-M and FLUX schnell incl. text encoders  ~5-40 min, network";;
@@ -37,6 +39,13 @@ desc() { case $1 in
   W106) echo "baseline step times 512 and 1024, 3 repeats: bf16c, fp8c, stockc (stock_tk c is skipped unless mslk works: STOCK_TK=1)  ~20 min";;
   W107) echo "microbenchmarks: FP4 GEMM at real shapes, attention backends (flash/cudnn/efficient/sage2), idle GPU  ~5 min";;
   W108) echo "lever step times 512 and 1024 (no static scale): base, concat, noshare, selective, trim, xcudnn, sage2, bf16 attention variants  ~25 min";;
+  W200) echo "T-conv/T-cover: NVFP4 conversion + per-layer bit-exactness vs torchao: PixArt 512, SD3.5-M, FLUX schnell (MODELS env limits)  ~10 min";;
+  W201) echo "T-assume: PixArt premises (memory bound, FP4 beats bf16, attention share, mask, CFG, error vs fp8) on each model  ~15 min";;
+  W202) echo "T-roof/T-attn: per-class kernel time vs speed of light, PixArt 512+1024 (incl. sage check), SD3.5-M, FLUX  ~20 min";;
+  W203) echo "roofline report + figures + consistency checks (CPU)  ~1 min";;
+  W110) echo "round 2 step times 512+1024 (3 repeats): key rows again + new combos (fp8+sage2, final stack, stock+sage2)  ~20 min";;
+  W111) echo "round 2 quality at 1024px (NQ1024 prompts x 2 seeds): bf16/fp8/stock/final stack with and without sage2, selective  ~35 min";;
+  W112) echo "round 2 quality at 512px for the new combos (fp8+sage2, final stack)  ~12 min";;
   W109) echo "lever quality at ${SIZE_Q}px, $NPROMPTS prompts x $SEEDS seeds, paired CI vs stock  ~30 min";;
 esac; }
 if [ $LIST -eq 1 ]; then for s in $STAGES; do echo "$s  $(desc $s)"; done; exit 0; fi
@@ -71,6 +80,32 @@ w106() { local cfgs="bf16_compile fp8_compile stock_compile${STOCK_TK:+ stock_tk
          for rep in 1 2 3; do CONFIGS="$cfgs" SIZES="512 1024" ITERS=30 bash profiling/run_step_matrix.sh || return 1; done; }
 w107() { $PY bench/fp4_gemm_shapes.py && $PY bench/attention_backends.py; }
 w108() { CONFIGS="$EVAL3_LEVERS" SIZES="512 1024" ITERS=30 bash profiling/run_step_matrix.sh; }
+MODELS=${MODELS:-"pixart_sigma:512 sd35_medium:1024 flux_schnell:1024"}   # model:size pairs for wave 2
+each_model() {  # each_model fn: run "fn model size" for every pair; one failing model does not stop the others; exit 1 if any failed
+  local rc=0 p; for p in $MODELS; do "$@" ${p%%:*} ${p##*:} || rc=1; done; return $rc; }
+w200() { each_model w200_one; }
+w200_one() { $PY eval3/model_check.py --model $1 --size $2 --backend cuda_swizzled; }
+w201() { each_model w201_one; }
+w201_one() { $PY eval3/assume_check.py --model $1 --size $2; }
+w202() { local P="module+be=cuda_swizzled" rc=0
+         for s in 512 1024; do
+           $PY eval3/roofline_profile.py --model pixart_sigma --size $s --variants bf16+compile fp8+compile stock+compile $P+compile \
+             $P+concat+selective+trim+xcudnn+compile bf16+sage2+compile $P+concat+selective+trim+xcudnn+sage2+compile || rc=1
+         done
+         for p in $MODELS; do case $p in pixart_sigma:*) ;; *)
+           $PY eval3/roofline_profile.py --model ${p%%:*} --size ${p##*:} --variants bf16+compile fp8+compile stock+compile module+compile || rc=1;; esac; done
+         return $rc; }
+w203() { $PY eval3/roofline_report.py; }
+NQ1024=${NQ1024:-20}
+w110() { for rep in 1 2 3; do CONFIGS="$EVAL3_KEY $EVAL3_COMBOS" SIZES="512 1024" ITERS=30 bash profiling/run_step_matrix.sh || return 1; done; }
+w111() { local M="module+be=cuda_swizzled"
+         $PY eval3/quality_grid.py --size 1024 --embeds prompts/embeds_showcase.pt --n-prompts $NQ1024 --seeds $SEEDS --steps $STEPS --batch 4 \
+           --controls none --tag round2_1024 --variants bf16+compile stock fp8+compile bf16+trim+xcudnn+sage2+compile fp8+trim+xcudnn+sage2+compile \
+           $M+concat+trim+xcudnn+compile $M+trim+xcudnn+sage2+compile $M+concat+selective+trim+xcudnn+sage2+compile; }
+w112() { local M="module+be=cuda_swizzled"
+         $PY eval3/quality_grid.py --size $SIZE_Q --embeds prompts/embeds_showcase.pt --n-prompts $NPROMPTS --seeds $SEEDS --steps $STEPS \
+           --controls none --tag round2_$SIZE_Q --variants stock fp8+sage2+compile fp8+trim+xcudnn+sage2+compile stock+sage2+compile \
+           $M+trim+xcudnn+sage2+compile $M+concat+selective+trim+xcudnn+sage2+compile; }
 w109() { local M="module+be=cuda_swizzled"
          $PY eval3/quality_grid.py --size $SIZE_Q --embeds prompts/embeds_showcase.pt --n-prompts $NPROMPTS --seeds $SEEDS --steps $STEPS \
            --controls none --tag levers_$SIZE_Q --variants stock \
