@@ -12,6 +12,8 @@ import statistics
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from common import RESULTS as RES  # noqa: E402  (honours EVAL3_RESULTS)
 
 
 def main():
@@ -20,9 +22,9 @@ def main():
     ap.add_argument("--since", default=None, help="only step rows after this time; default: results/eval3/CLEAN_SINCE, else 2026-11-27")
     a = ap.parse_args()
     if a.since is None:
-        f = ROOT / "results" / "eval3" / "CLEAN_SINCE"
+        f = RES / "eval3" / "CLEAN_SINCE"
         a.since = f.read_text().strip() if f.exists() else "2026-11-27"
-    rows = [json.loads(l) for l in (ROOT / "results" / "step_target.jsonl").read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for l in (RES / "step_target.jsonl").read_text().splitlines() if l.strip()]
     by, errs = {}, []
     for r in rows:
         if r.get("time", "") < a.since or "layer" in r or not r.get("config"):
@@ -50,7 +52,7 @@ def main():
         print(f"{c:40s} {cells[0]:>26s} {cells[1]:>26s}")
     print("(speedup is vs bf16_compile at the same size)")
     for tag in a.quality:
-        p = ROOT / "results" / "eval3" / "quality" / tag / "summary.json"
+        p = RES / "eval3" / "quality" / tag / "summary.json"
         if not p.exists():
             continue
         d = json.loads(p.read_text())
@@ -62,7 +64,7 @@ def main():
             print(f"FAILED {n}: {e}")
     if errs:
         print("\ngraph errors:", *sorted(set(errs)), sep="\n  ")
-    md = ROOT / "results" / "eval3" / "quality" / (a.quality[-1]) / "summary.md"
+    md = RES / "eval3" / "quality" / (a.quality[-1]) / "summary.md"
     if md.exists():
         print("\n--- paired differences vs stock (from summary.md) ---")
         txt = md.read_text()

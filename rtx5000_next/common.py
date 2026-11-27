@@ -9,7 +9,8 @@ import time
 logging.getLogger("torch.utils._pytree").setLevel(logging.ERROR)  # torchao import notice, harmless
 
 ROOT = pathlib.Path(__file__).resolve().parent
-RESULTS = ROOT / "results"
+# EVAL3_RESULTS redirects every result file (the eval3 smoke run writes to results_smoke/ so its tiny runs never mix with real ones)
+RESULTS = pathlib.Path(os.environ["EVAL3_RESULTS"]).resolve() if os.environ.get("EVAL3_RESULTS") else ROOT / "results"
 
 
 def _find_code_dir():
@@ -26,9 +27,19 @@ for _p in (str(CODE), str(ROOT)):
     sys.path.insert(0, _p)
 
 
+def gpu_name():
+    """Name of GPU 0 if torch is already imported and CUDA is up, else None (never imports torch: CPU scripts stay light)."""
+    t = sys.modules.get("torch")
+    try:
+        return t.cuda.get_device_name(0) if t is not None and t.cuda.is_available() else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def append_jsonl(name, rec):
     RESULTS.mkdir(exist_ok=True)
     rec = {**rec, "time": time.strftime("%Y-%m-%d %H:%M:%S")}
+    rec.setdefault("gpu", gpu_name())  # eval3 cross-GPU table (reviewer point 5): every result row says which GPU made it
     with open(RESULTS / name, "a") as f:
         f.write(json.dumps(rec) + "\n")
 

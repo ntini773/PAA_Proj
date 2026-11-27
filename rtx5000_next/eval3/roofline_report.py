@@ -17,7 +17,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-D = pathlib.Path(__file__).resolve().parent.parent / "results" / "eval3" / "roofline"
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+from common import RESULTS  # noqa: E402  (honours EVAL3_RESULTS)
+
+D = RESULTS / "eval3" / "roofline"
 
 
 def eff(sol, meas):

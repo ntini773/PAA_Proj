@@ -8,8 +8,13 @@ import glob
 import json
 import pathlib
 
+import sys
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DOC = ROOT / "results" / "eval3" / "EVAL3_TESTS.md"   # generated on the server, untracked (a tracked copy conflicted on git pull)
+sys.path.insert(0, str(ROOT))
+from common import RESULTS as RES  # noqa: E402  (honours EVAL3_RESULTS)
+
+DOC = RES / "eval3" / "EVAL3_TESTS.md"   # generated on the server, untracked (a tracked copy conflicted on git pull)
 
 
 def _load(p):
@@ -35,7 +40,7 @@ def quality_has_controls(p):
 
 
 def baseline_repeats(_):
-    rows = [json.loads(l) for l in (ROOT / "results" / "step_target.jsonl").read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for l in (RES / "step_target.jsonl").read_text().splitlines() if l.strip()]
     from collections import Counter
     c = Counter((r.get("config"), r.get("size")) for r in rows if r.get("config") in ("bf16_compile", "fp8_compile", "stock_compile", "stock_tk_compile") and "graph_ms" in r)
     short = [k for k in [(cfg, s) for cfg in ("bf16_compile", "fp8_compile", "stock_compile") for s in (512, 1024)] if c[k] < 3]
@@ -47,7 +52,7 @@ def exists(_):
 
 
 MODELS = ("pixart_sigma", "sd35_medium", "flux_schnell")
-R = ROOT / "results" / "eval3"
+R = RES / "eval3"
 
 
 def _by_model(sub):
@@ -59,7 +64,7 @@ def _by_model(sub):
 
 
 def lever_rows(_):
-    rows = [json.loads(l) for l in (ROOT / "results" / "step_target.jsonl").read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for l in (RES / "step_target.jsonl").read_text().splitlines() if l.strip()]
     need = ["mod_base_compile", "mod_concat_compile", "mod_trim_xcudnn_sage2_compile", "bf16_sage2_compile"]
     have = {(r.get("config"), r.get("size")) for r in rows if "graph_ms" in r}
     miss = [f"{c}@{s}" for c in need for s in (512, 1024) if (c, s) not in have]
@@ -73,7 +78,7 @@ def quality_no_failures(p):
 
 def round2_repeats(_):
     from collections import Counter
-    rows = [json.loads(l) for l in (ROOT / "results" / "step_target.jsonl").read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for l in (RES / "step_target.jsonl").read_text().splitlines() if l.strip()]
     f = R / "CLEAN_SINCE"  # written by hand at the start of the clean run: rows before it ran beside another GPU job
     since = f.read_text().strip() if f.exists() else "2026-11-27"
     c = Counter((r.get("config"), r.get("size")) for r in rows if "graph_ms" in r and r.get("time", "") >= since)
@@ -138,6 +143,14 @@ CHECKS = {f.__name__: f for f in (preflight_no_fail, peaks_complete, quality_has
 def status(t):
     if t["check"] == "pending":
         return "[ ]", "no checker yet"
+    if t["check"].startswith("verify:"):  # the same per-stage checker the unattended run uses (eval3/verify_run.py)
+        import eval3.verify_run as vr
+        try:
+            ok, why = vr.chk(t["check"].split(":", 1)[1], vr.K())
+        except Exception as e:  # noqa: BLE001
+            return "[!]", f"check error {type(e).__name__}: {str(e)[:80]}"
+        not_run = any(w in why for w in ("missing", "too few", "no rows"))
+        return ("[x]", "") if ok else ("[ ]" if not_run else "[!]", why[:120])
     hits = glob.glob(str(ROOT.parent / "rtx5000_next" / t["result"])) or glob.glob(str(ROOT / t["result"]))
     if not hits:
         return "[ ]", "no result yet"
