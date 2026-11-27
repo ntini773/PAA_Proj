@@ -1,0 +1,19 @@
+[
+ {"id":"T00","group":"setup","model":"all","what":"Server ready: GPU is Blackwell, packages, tools, models in cache","cmd":"bash run_eval3.sh --only W100","result":"results/eval3/preflight.json","check":"preflight_no_fail"},
+ {"id":"T01","group":"setup","model":"all","what":"Every variant name used parses","cmd":"bash run_eval3.sh --only W102","result":"results/eval3/.done/W102","check":"exists"},
+ {"id":"T02","group":"T-roof","model":"all","what":"Roofs from sweep: FP4, bf16, attention per head dim, bandwidth","cmd":"bash run_eval3.sh --only W104","result":"results/eval3/peaks_sweep.json","check":"peaks_complete"},
+ {"id":"T03","group":"T-qual","model":"pixart_sigma","what":"Noise floor and controls (bf16 eager vs compiled vs other seed vs fp8 vs stock), paired CIs","cmd":"bash run_eval3.sh --only W105","result":"results/eval3/quality/noise_floor_512/summary.json","check":"quality_has_controls"},
+ {"id":"T04","group":"T-step","model":"pixart_sigma","what":"Baseline step times 512/1024 with 3 repeats (bf16c, fp8c, stockc, stock_tk c)","cmd":"bash run_eval3.sh --only W106","result":"results/step_target.jsonl","check":"baseline_repeats"},
+ {"id":"T10","group":"T-assume","model":"pixart_sigma, sd35_medium, flux_schnell, sana_600m","what":"Premises checked per model (memory bound, FP4 beats bf16, attention share, mask, CFG, noise floor)","cmd":"wave 2","result":"results/eval3/assume/*.json","check":"pending"},
+ {"id":"T11","group":"T-conv","model":"sd35_medium, flux_schnell, sana_600m","what":"NVFP4 conversion; per-layer bit-exact vs torchao; skipped layers listed","cmd":"wave 2","result":"results/eval3/convert/*.json","check":"pending"},
+ {"id":"T12","group":"T-cover","model":"all","what":"Share of linears/FLOPs that run in FP4","cmd":"wave 2","result":"results/eval3/convert/*.json","check":"pending"},
+ {"id":"T20","group":"T-attn","model":"pixart_sigma","what":"Attention share 256/512/1024 and backend sweep (flash, cudnn, efficient, sage2) with rel L2; trim vs xcudnn separated","cmd":"wave 2","result":"results/eval3/attn/*.json","check":"pending"},
+ {"id":"T21","group":"T-attn","model":"sd35_medium, flux_schnell","what":"Attention share and backend sweep at head dim 64 / 128","cmd":"wave 2","result":"results/eval3/attn/*.json","check":"pending"},
+ {"id":"T30","group":"T-step","model":"pixart_sigma","what":"Step-time matrix of levers (concat, shared-QKV, selective, trim, xcudnn, licfg, dfa; static as ablation)","cmd":"wave 2","result":"results/step_target.jsonl","check":"pending"},
+ {"id":"T31","group":"T-step","model":"sd35_medium, flux_schnell","what":"Step time bf16c / fp8c / stockc / module at 512, 1024","cmd":"wave 2","result":"results/eval3/models/*.json","check":"pending"},
+ {"id":"T40","group":"T-roof","model":"pixart_sigma","what":"Per-stage and whole-forward roofline, stock vs ours, 512 and 1024 (nsys leaf kernels, ncu DRAM bytes on one block)","cmd":"wave 2","result":"results/eval3/roofline/*.json","check":"pending"},
+ {"id":"T41","group":"T-roof","model":"sd35_medium, flux_schnell","what":"Whole-forward and one-block roofline","cmd":"wave 2","result":"results/eval3/roofline/*.json","check":"pending"},
+ {"id":"T50","group":"T-qual","model":"pixart_sigma","what":"Quality grid of levers, 31 prompts x 2 seeds at 512, key variants at 1024; LPIPS, CLIP, preference score, FID/KID","cmd":"wave 3","result":"results/eval3/quality/*","check":"pending"},
+ {"id":"T51","group":"T-qual","model":"sd35_medium, flux_schnell","what":"Quality of NVFP4 vs bf16 (16 and 8 prompts) with noise floor","cmd":"wave 3","result":"results/eval3/quality/*","check":"pending"},
+ {"id":"T60","group":"T-e2e","model":"pixart_sigma, sd35_medium","what":"End-to-end time: text encoder + steps + VAE, headline variants","cmd":"wave 3","result":"results/eval3/e2e/*.json","check":"pending"}
+]
