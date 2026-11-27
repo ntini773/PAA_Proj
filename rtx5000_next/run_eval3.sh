@@ -22,10 +22,11 @@ while [ $# -gt 0 ]; do
   case $1 in
     --only) ONLY=$2; shift 2;; --from) FROM=$2; shift 2;; --dry-run) DRY=1; shift;; --list) LIST=1; shift;;
     --setup) SET="W100 W101 W102 W103"; shift;; --wave1) SET="W100 W101 W102 W103 W104 W105 W106"; shift;;
+    --queue) SET="W106 W107 W108 W109"; shift;;   # GPU-only queue that needs no new model downloads; run it in the background with nohup
     *) echo "unknown argument $1"; exit 2;;
   esac
 done
-STAGES="W100 W101 W102 W103 W104 W105 W106"
+STAGES="W100 W101 W102 W103 W104 W105 W106 W107 W108 W109"
 desc() { case $1 in
   W100) echo "preflight: GPU, packages, tools, disk, HF cache (models, metric weights)  ~1 min";;
   W101) echo "downloads: metric weights (CLIP, PickScore, LPIPS, FID); PixArt sizes; with WITH_MODELS=1 SD3.5-M and FLUX schnell incl. text encoders  ~5-40 min, network";;
@@ -33,7 +34,10 @@ desc() { case $1 in
   W103) echo "T5 embeddings for calibration and showcase prompts (needs the GPU for about 2 min)  ~5 min";;
   W104) echo "roofs: M/N/K sweep of FP4 and bf16 GEMM, flash attention per head dim, bandwidth (idle GPU)  ~5 min";;
   W105) echo "noise floor + controls: bf16 eager vs compiled vs other seed vs fp8 vs stock, $NPROMPTS prompts x $SEEDS seeds at ${SIZE_Q}px  ~25-40 min";;
-  W106) echo "baseline step times 512 and 1024, 3 repeats: bf16c, fp8c, stockc, stock_tk c  ~25 min";;
+  W106) echo "baseline step times 512 and 1024, 3 repeats: bf16c, fp8c, stockc (stock_tk c is skipped unless mslk works: STOCK_TK=1)  ~20 min";;
+  W107) echo "microbenchmarks: FP4 GEMM at real shapes, attention backends (flash/cudnn/efficient/sage2), idle GPU  ~5 min";;
+  W108) echo "lever step times 512 and 1024 (no static scale): base, concat, noshare, selective, trim, xcudnn, sage2, bf16 attention variants  ~25 min";;
+  W109) echo "lever quality at ${SIZE_Q}px, $NPROMPTS prompts x $SEEDS seeds, paired CI vs stock  ~30 min";;
 esac; }
 if [ $LIST -eq 1 ]; then for s in $STAGES; do echo "$s  $(desc $s)"; done; exit 0; fi
 
@@ -63,8 +67,16 @@ w103() { $PY prompts/make_prompt_embeds.py --prompts prompts/prompts_calib.json 
 w104() { $PY bench/peaks_sweep.py; }
 w105() { $PY eval3/quality_grid.py --size $SIZE_Q --embeds prompts/embeds_showcase.pt --n-prompts $NPROMPTS --seeds $SEEDS --steps $STEPS \
            --tag noise_floor_$SIZE_Q; }
-w106() { local cfgs="bf16_compile fp8_compile stock_compile stock_tk_compile"
+w106() { local cfgs="bf16_compile fp8_compile stock_compile${STOCK_TK:+ stock_tk_compile}"
          for rep in 1 2 3; do CONFIGS="$cfgs" SIZES="512 1024" ITERS=30 bash profiling/run_step_matrix.sh || return 1; done; }
+w107() { $PY bench/fp4_gemm_shapes.py && $PY bench/attention_backends.py; }
+w108() { CONFIGS="$EVAL3_LEVERS" SIZES="512 1024" ITERS=30 bash profiling/run_step_matrix.sh; }
+w109() { local M="module+be=cuda_swizzled"
+         $PY eval3/quality_grid.py --size $SIZE_Q --embeds prompts/embeds_showcase.pt --n-prompts $NPROMPTS --seeds $SEEDS --steps $STEPS \
+           --controls none --tag levers_$SIZE_Q --variants stock \
+           $M+compile $M+concat+compile $M+noshare+compile $M+concat+selective+compile $M+concat+trim+compile \
+           $M+concat+trim+xcudnn+compile $M+concat+trim+xcudnn+sage2+compile \
+           bf16+sage2+compile bf16+trim+xcudnn+compile bf16+licfg0.2-0.8+compile $M+concat+trim+xcudnn+licfg0.2-0.8+compile; }
 
 for s in $STAGES; do run $s $(echo $s | tr 'W' 'w'); done
 echo "finished. Failed stages: $(ls results/eval3/.fail 2>/dev/null | tr '\n' ' ')"

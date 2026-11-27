@@ -7,8 +7,20 @@ EVAL2_BASELINES="bf16_compile fp8_compile stock_compile stock_tk stock_tk_compil
 EVAL2_MODULE="module_triton module_triton_compile module_noshare_compile module_static_compile module_concat_compile module_selective_compile module_cuda_compile module_best_compile"
 EVAL2_ATTENTION="bf16_trim_compile module_best_trim module_best_xcudnn module_best_sel_xcudnn module_best_cudnn module_best_sage2 module_best_kvds2"
 
+# eval3: module stack WITHOUT static scale (static is dropped from the method for image quality)
+EVAL3_LEVERS="mod_base_compile mod_concat_compile mod_noshare_compile mod_sel_compile mod_trim_compile mod_trim_xcudnn_compile mod_trim_xcudnn_sage2_compile bf16_trim_xcudnn_compile bf16_sage2_compile bf16_trim_compile"
+
 cfg_args() {
   case "$1" in
+    mod_base_compile) echo "--variant module+be=cuda_swizzled+compile";;
+    mod_concat_compile) echo "--variant module+be=cuda_swizzled+concat+compile";;
+    mod_noshare_compile) echo "--variant module+be=cuda_swizzled+noshare+compile";;
+    mod_sel_compile) echo "--variant module+be=cuda_swizzled+concat+selective+compile";;
+    mod_trim_compile) echo "--variant module+be=cuda_swizzled+concat+trim+compile";;
+    mod_trim_xcudnn_compile) echo "--variant module+be=cuda_swizzled+concat+trim+xcudnn+compile";;
+    mod_trim_xcudnn_sage2_compile) echo "--variant module+be=cuda_swizzled+concat+trim+xcudnn+sage2+compile";;
+    bf16_trim_xcudnn_compile) echo "--variant bf16+trim+xcudnn+compile";;
+    bf16_sage2_compile) echo "--variant bf16+sage2+compile";;
     bf16) echo "--mode bf16";;
     fp8) echo "--mode fp8";;
     stock) echo "--mode stock";;

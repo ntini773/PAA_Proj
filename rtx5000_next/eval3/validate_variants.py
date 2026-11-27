@@ -11,7 +11,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 import variants as vr  # noqa: E402
 
 
-def main(names):
+def main(names):  # names may also be a config list: pass variant strings, not config names
     bad = 0
     for n in names:
         base = n.replace("@seedshift", "")
